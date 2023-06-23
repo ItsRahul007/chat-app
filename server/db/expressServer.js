@@ -3,10 +3,11 @@ const connectMongo = require("./connectDB");
 const app = express();
 const port = 4000;
 connectMongo();
+app.use(express.json());
 
 function expressData(){
     //Avalible routes
-    app.use("/users")
+    app.use("/auth", require("./routes/users"));
     
     app.listen(port, () => {
         console.log(`app listen on http://localhost:${port}`);

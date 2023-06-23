@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
@@ -7,12 +7,12 @@ const UserSchema = new Schema({
         require: true
     },
     email:{
-        type: email,
+        type: String,
         require: true,
         unique: true
     },
     password:{
-        type: password,
+        type: String,
         require: true
     }
 });
