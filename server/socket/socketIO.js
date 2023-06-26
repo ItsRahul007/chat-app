@@ -8,6 +8,7 @@ const users = {};
 const socket = () => {
 
   io.on("connection", socket => {
+    // when a new user join throwing a function named "user-join"
     socket.on("new-user-join", name => {
       users[socket.id] = name;
       socket.broadcast.emit("user-join", name);
