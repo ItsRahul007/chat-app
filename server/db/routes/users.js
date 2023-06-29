@@ -78,6 +78,7 @@ router.post("/login", [
 
         try {
             let user = await UserSchema.findOne({ email });
+            // If the email dosn't exists then sending status 400 and array of errors
             if (!user) {
                 return res.status(400).json({ errors: "Sorry no user exist with this email." });
             };
@@ -107,7 +108,7 @@ router.post("/login", [
 
 
 // ROUT: 3 Get login user details using: POST "/auth/getuser" LOGIN REQUIRED
-router.post("/getuser", fetchUser,
+router.post("/getuser", fetchUser, // Fetch user is the middleware function who comfirm the auth token and set the user id into req.user.id
     async (req, res) => {
         try {
             const userId = req.user.id;
@@ -120,5 +121,22 @@ router.post("/getuser", fetchUser,
         }
     }
 );
+
+
+// ROUT: 4 Updating the user details using: PUT "/auth/getallusers" LOGIN REQUIRED
+//TODO
+
+
+// ROUT: 5 Get all user names using: POST "/auth/getallusers" LOGIN REQUIRED
+router.get("/getallusers", fetchUser, async (req, res) => {
+    try {
+        const allUsers = await UserSchema.find().select("name");
+        res.json(allUsers);        
+    } 
+    catch (error) {
+        res.json({ error });
+        console.log(error);
+    }
+});
 
 module.exports = router;
