@@ -33,7 +33,6 @@ router.post("/signup", [
             const salt = await bcrypt.genSalt(10);
             // hashing password and adding salt with it
             const secPas = await bcrypt.hash(req.body.password, salt);
-            console.log(secPas);
 
             //store the values in db
             const user = await UserSchema.create({
@@ -123,8 +122,28 @@ router.post("/getuser", fetchUser, // Fetch user is the middleware function who 
 );
 
 
-// ROUT: 4 Updating the user details using: PUT "/auth/getallusers" LOGIN REQUIRED
-//TODO
+// ROUT: 4 Updating the user details using: PUT "/auth/updateuser" LOGIN REQUIRED
+router.put("/updateuser", fetchUser, async (req, res) => {
+    const {name, password} = req.body;
+    const updates = {};
+    const userId = req.user.id;
+
+    // Setting the update values inside updates object
+    if(name) updates.name = name;
+    if(password) {
+        const salt = await bcrypt.genSalt(10);
+        // hashing password and adding salt with it
+        const secPas = await bcrypt.hash(req.body.password, salt);
+        updates.password = secPas;
+    };
+
+    // If user dosn't exites
+    const isUser = await UserSchema.findById(userId);
+    if(!isUser) return res.status(404).send("User Not Found");
+
+    const user = await UserSchema.findByIdAndUpdate(userId, {$set: updates}, {new : true});
+    res.send(user);
+});
 
 
 // ROUT: 5 Get all user names using: POST "/auth/getallusers" LOGIN REQUIRED
