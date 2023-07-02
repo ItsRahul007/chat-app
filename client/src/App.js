@@ -1,14 +1,19 @@
+import { Route, Routes } from "react-router-dom";
+import Home from "./components/chat/Home";
 import Login from "./components/authentication/Login";
-// import MiddleComp from "./components/chat/MiddleComp";
-// import RightComp from "./components/chat/RightComp";
-
+import Signup from "./components/authentication/Signup";
 
 function App() {
   return (
-    <div>
-      <Login/>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/signup" element={<Signup/>}/>
+      </Routes>
+      
+    </>
   );
-}
-// style={{display: "flex", minHeight: "100vh", minWidth: "100vw"}}
+};
+
 export default App;

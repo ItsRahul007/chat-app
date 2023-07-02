@@ -1,0 +1,174 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+
+.log{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(to right, #f23412, #f5ac18);
+}
+
+.log h1{
+    font-size: 55px;
+    margin: 15px 0;
+    color: #fff;
+}
+
+.log > p{
+    color: rgba(255, 255, 255, 0.781);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 13px;
+}
+
+.noAccount{
+    color: #fff;
+}
+
+.noAccount a{
+    color: #832029;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.noAccount a:hover{
+    text-decoration: underline;
+}
+
+.inputs{
+    height: 40px;
+    width: 220px;
+    font-size: 17px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    color: #832029;
+    padding-left: 20px;
+    background: rgba(266, 266, 266, 0.6);
+}
+
+input::placeholder{
+    color: rgb(99, 95, 95);
+}
+
+.login-other{
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-other span{
+    display: block;
+    font-size: 16px;
+    margin-bottom: 17px;
+    margin-right: 10px;
+    color: #fff;
+}
+
+.login-other button{
+    padding: 8px;
+    margin: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+}
+
+.login-other i{
+    font-size: 28px;
+    color: white;
+    transition: color .5s;
+}
+
+.login-other i:hover{    
+    color: #832029;
+}
+
+/* -----------------------------------------signup----------------------------------------- */
+.signup{
+    display: flex;
+    color: #fff;
+}
+
+.sign h1{
+    margin: 50px 0;
+    margin-left: 18px;
+}
+
+.btnn{
+    background-color: #832029;
+    font-size: 15px;
+    height: 30px;
+    width: 100px;
+    border: none;
+    border-radius: 5px;
+    margin: 10px 60px;
+    transition: background .6s;
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: #632026;
+}
+
+.signup-form, .login-form {
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 30px;
+}
+
+.v1, .v2{
+    height: 150px;
+    width: 6px;
+    background-color: rgb(34, 33, 33);
+}
+
+.column{
+    margin: 0 90px;
+}
+
+.column span{
+    display: block;
+    font-size: 30px;
+    font-weight: 500;
+    margin-left: -10px;
+}
+
+.other-option{
+    margin: 0 30px;
+}
+
+.other-option h2{
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.other-option div{
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+}
+
+.other-option div a{
+    font-size: 26px;
+    margin: 15px 0;
+    color: #fff;
+    text-decoration: none;
+}
+
+.other-option div i{
+    margin: 0 3px;
+    transition: color .6s;
+    color: #fff;
+}
+
+.other-option div a:hover i{
+    color: #832029;
+}
