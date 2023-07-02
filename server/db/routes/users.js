@@ -150,7 +150,7 @@ router.put("/updateuser", fetchUser, async (req, res) => {
 router.get("/getallusers", fetchUser, async (req, res) => {
     try {
         const allUsers = await UserSchema.find().select("name");
-        res.json(allUsers);        
+        res.json(allUsers);
     } 
     catch (error) {
         res.json({ error });
