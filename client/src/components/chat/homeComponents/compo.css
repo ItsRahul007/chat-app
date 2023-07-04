@@ -1,0 +1,69 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.left-comp{
+    height: 97.2vh;
+    width: 75px;
+    background: #36404a;
+    color: #97a2af;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+}
+
+.left-comp div{
+    position: absolute;
+}
+
+.logo{
+    top: 20px;
+}
+
+.logo img{
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.buttons{
+    top: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.buttons a{
+    padding: 20px;
+    border-radius: 48%;
+}
+
+.buttons a:hover{
+    background: #e9edf119;
+    transition: ease .5s;
+}
+
+.buttons img, .log-out img{
+    width: 18px;
+    height: 18px;
+}
+
+.log-out{
+    bottom: 60px;
+}
+
+.log-out button{
+    background: transparent;
+    cursor: pointer;
+    border: none;
+    padding: 20px;
+    border-radius: 48%;
+    transition: ease .5s;
+}
+
+.log-out button:hover{
+    background: #e9edf119;
+}
