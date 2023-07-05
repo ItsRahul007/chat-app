@@ -3,9 +3,10 @@
     padding: 0;
 }
 
+/* -------------------------------------Left Comp------------------------------------- */
 .left-comp{
-    height: 97.2vh;
-    width: 75px;
+    height: 94.3vh;
+    width: 65px;
     background: #36404a;
     color: #97a2af;
     display: flex;
@@ -30,10 +31,10 @@
 }
 
 .buttons{
-    top: 200px;
+    top: 120px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 10px;
 }
 
 .buttons a{
@@ -42,7 +43,7 @@
 }
 
 .buttons a:hover{
-    background: #e9edf119;
+    background: #e9edf10c;
     transition: ease .5s;
 }
 
@@ -66,4 +67,18 @@
 
 .log-out button:hover{
     background: #e9edf119;
+}
+
+/* -------------------------------------Mid Comp------------------------------------- */
+.mid-comp{
+    height: 97vh;
+    width: 400px;
+    background-color: #303841;
+}
+
+/* -------------------------------------Right Comp------------------------------------- */
+.right-comp{
+    height: 97vh;
+    width: 1000px;
+    background-color: #262e35;
 }

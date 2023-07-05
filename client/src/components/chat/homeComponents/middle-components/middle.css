@@ -1,0 +1,44 @@
+.chat-comp{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.chat-comp > div{
+    width: 90%;
+    float: left;
+    padding-top: 20px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #72c976;
+}
+
+.search{
+    position: relative;
+}
+
+.search img{
+    width: 33px;
+    position: absolute;
+    top: 25px;
+    left: 10px;
+    transition: ease .5s;
+}
+
+.search input{
+    border: 2px solid #454f5a;
+    border-radius: 5px;
+    background: #37404a;
+    height: 40px;
+    width: 350px;
+    padding: 0.375rem 0 0.375rem 3rem;
+    transition:  ease .5s;
+    color: white;
+}
+
+.search:hover input{    
+    border: 2px solid #72c976;
+}

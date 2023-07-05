@@ -2,7 +2,7 @@ import React from 'react'
 
 function RightComp() {
   return (
-    <div>RightComp</div>
+    <div className='right-comp'>RightComp</div>
   )
 }
 

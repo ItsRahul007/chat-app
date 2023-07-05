@@ -1,4 +1,4 @@
-// Left component for providing buttons like settings, profile, chat, logout
+// Left component for providing buttons like settings, profile, chat, logout etc.
 import React from 'react';
 import "./compo.css";
 import { Link } from 'react-router-dom';
