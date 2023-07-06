@@ -1,7 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import "./middle.css";
-import blackSearch from "../../../../png/blackSearch.png"
-import limeSearch from "../../../../png/limeSearch.png"
+import blackSearch from "../../../../png/blackSearch.png";
+import limeSearch from "../../../../png/limeSearch.png";
+import kankana from "./kankana.jpg";
+import myImage from "./myImage2-min.jpg"
 
 function Chat() {
     const con = useRef(null);
@@ -9,13 +11,12 @@ function Chat() {
     useEffect(() => {
         con.current.addEventListener("mouseenter", (e)=>{
             img.current.src = limeSearch;
-        })
+        });
 
         con.current.addEventListener("mouseleave", (e)=>{
             img.current.src = blackSearch;       
-        })
-    })
-    
+        });
+    });
 
     return (
         <div className='chat-comp'>
@@ -24,8 +25,34 @@ function Chat() {
                 <img ref={img} src={blackSearch} alt='search'/>
                 <input type='search' placeholder='Search Chat' />
             </div>
-            <div className='chat-persons'>
-
+            <div className='chat-list'>
+                <ul>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                </ul>
             </div>
         </div>
     );

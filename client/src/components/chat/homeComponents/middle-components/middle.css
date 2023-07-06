@@ -25,7 +25,7 @@
     position: absolute;
     top: 25px;
     left: 10px;
-    transition: ease .5s;
+    transition: ease .7s;
 }
 
 .search input{
@@ -34,11 +34,59 @@
     background: #37404a;
     height: 40px;
     width: 350px;
+    font-size: 14px;
     padding: 0.375rem 0 0.375rem 3rem;
-    transition:  ease .5s;
+    transition:  ease .7s;
     color: white;
+}
+
+.search input::placeholder{
+    color: rgba(255, 255, 255, 0.242);
 }
 
 .search:hover input{    
     border: 2px solid #72c976;
+}
+
+.chat-list{
+    height: 100%;
+    overflow: hidden;
+}
+
+.chat-list ul li{
+    list-style: none;
+    display: flex;
+    margin: 10px 0;
+    padding: 10px;
+    gap: 20px;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.profile-img{
+    height: 45px;
+    width: 45px;
+    font-size: 18px;
+    background-color: #72c976;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.profile-img img{
+    height: 43px;
+    transform: scale(2);
+}
+
+.name-msg .name{
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.name-msg .msg{
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.365);
 }

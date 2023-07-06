@@ -42,6 +42,10 @@
     border-radius: 48%;
 }
 
+.buttons .chat{
+    background-color: #303841;
+}
+
 .buttons a:hover{
     background: #e9edf10c;
     transition: ease .5s;
