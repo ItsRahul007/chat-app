@@ -1,3 +1,4 @@
+/* -------------------------------------chat compo------------------------------------- */
 .chat-comp{
     height: 100%;
     width: 100%;
@@ -50,7 +51,16 @@
 
 .chat-list{
     height: 100%;
-    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.chat-list::-webkit-scrollbar{
+    width: 5px;
+}
+
+.chat-list::-webkit-scrollbar-thumb{
+    background-color: rgba(255, 252, 252, 0.413);
+    border-radius: 20px;
 }
 
 .chat-list ul li{
@@ -61,6 +71,7 @@
     gap: 20px;
     color: white;
     border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+    cursor: pointer;
 }
 
 .profile-img{
@@ -85,7 +96,7 @@
     margin-bottom: 4px;
 }
 
-.name-msg .msg{
+.name-msg .last-msg{
     font-size: 14px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.365);

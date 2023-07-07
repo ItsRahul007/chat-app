@@ -29,11 +29,11 @@ function Chat() {
                 <ul>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
-                            <div className='msg'>What's up bro</div>
+                            <div className='last-msg'>What's up bro</div>
                         </span>
                     </li>
                     <li>
@@ -42,14 +42,314 @@ function Chat() {
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
-                            <div className='msg'>What's up bro</div>
+                            <div className='last-msg'>What's up bro</div>
                         </span>
                     </li>
                     <li>
                         <span className='profile-img' style={{background: "red"}}>Bo</span>
                         <span className='name-msg'>
                             <div className='name'>Boga Chaudhuri</div>
-                            <div className='msg'>Ki re vai ki kor6is</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={myImage} alt='profile-picture' />
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Rahul Ghosh</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img'>
+                            <img src={kankana}></img>
+                        </span>
+                        <span className='name-msg'>
+                            <div className='name'>Kankana Mondal</div>
+                            <div className='last-msg'>What's up bro</div>
+                        </span>
+                    </li>
+                    <li>
+                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='name-msg'>
+                            <div className='name'>Boga Chaudhuri</div>
+                            <div className='last-msg'>Ki re vai ki kor6is</div>
                         </span>
                     </li>
                 </ul>
