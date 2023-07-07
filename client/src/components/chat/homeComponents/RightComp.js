@@ -33,10 +33,19 @@ function RightComp() {
         <div className='msg-box msg-left'>hey whatsup</div>
         <div className='msg-box msg-right'>fine! what about you man?</div>
         <div className='msg-box msg-left'>hey whatsup bro</div>
+        <div className='msg-box msg-left'>hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro </div>
       </div>
       <div className='msg-sender'>
-        <textarea type='text'/>
-        <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt=''/>
+        <textarea type='text' placeholder='Type your message here...' />
+        <button className='attach'>
+        <i class="fa-regular fa-face-smile-beam"></i>
+        </button>
+        <button className='attach'>
+          <i className="ri-attachment-line"></i>
+        </button>
+        <button className='btn-send'>
+          <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt='' />
+        </button>
       </div>
     </div>
   )
