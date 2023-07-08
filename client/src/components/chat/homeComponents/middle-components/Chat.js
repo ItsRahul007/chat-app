@@ -3,7 +3,7 @@ import "./middle.css";
 import blackSearch from "../../../../png/blackSearch.png";
 import limeSearch from "../../../../png/limeSearch.png";
 import kankana from "./kankana.jpg";
-import myImage from "./myImage2-min.jpg"
+import myImage from "./myImage2-min.jpg";
 
 function Chat() {
     const con = useRef(null);
@@ -38,7 +38,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -54,7 +54,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -63,7 +63,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -79,7 +79,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -88,7 +88,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -104,7 +104,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -113,7 +113,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -129,7 +129,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -138,7 +138,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -154,7 +154,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -163,7 +163,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -179,7 +179,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -188,7 +188,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -204,7 +204,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -213,7 +213,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -229,7 +229,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -238,7 +238,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -254,7 +254,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -263,7 +263,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -279,7 +279,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -288,7 +288,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -304,7 +304,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -313,7 +313,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>
@@ -329,7 +329,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={myImage} alt='profile-picture' />
+                            <img src={myImage} alt='profile' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Rahul Ghosh</div>
@@ -338,7 +338,7 @@ function Chat() {
                     </li>
                     <li>
                         <span className='profile-img'>
-                            <img src={kankana}></img>
+                            <img src={kankana} alt='' />
                         </span>
                         <span className='name-msg'>
                             <div className='name'>Kankana Mondal</div>

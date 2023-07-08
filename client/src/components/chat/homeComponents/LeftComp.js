@@ -4,6 +4,7 @@ import "./compo.css";
 import { Link } from 'react-router-dom';
 
 function LeftComp({ changeCompo }) {
+  // Adding all Link tags inside ref
   const ref = useRef([]);
 
   // Changing components and also changing the colors
@@ -11,10 +12,10 @@ function LeftComp({ changeCompo }) {
     changeCompo(name);
 
     for(let elem in ref.current){
-      ref.current[elem].style.background = 'transparent';
+      ref.current[elem].classList.remove("clicked-button");
     };
 
-    ref.current[i].style.background = '#303841';
+    ref.current[i].classList.add("clicked-button");
   };
 
 
@@ -24,7 +25,7 @@ function LeftComp({ changeCompo }) {
         <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/logo.svg' alt='logo' />
       </div>
       <div className='buttons'>
-        <Link to="/" ref={el => ref.current[0] = el} className='chat' onClick={() => clicked('chat', 0)}>
+        <Link to="/" ref={el => ref.current[0] = el} className='clicked-button' onClick={() => clicked('chat', 0)}>
           <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/home.svg' alt='Home' />
         </Link>
 

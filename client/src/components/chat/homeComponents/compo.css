@@ -42,10 +42,6 @@
     border-radius: 48%;
 }
 
-.buttons .chat{
-    background-color: #303841;
-}
-
 .buttons a:hover{
     background: #e9edf10c;
     transition: ease .5s;
@@ -54,6 +50,14 @@
 .buttons img, .log-out img{
     width: 18px;
     height: 18px;
+}
+
+.buttons .clicked-button{
+    background: #303841;
+}
+
+.buttons .clicked-button:hover{
+    background-color: #303841;
 }
 
 .log-out{
