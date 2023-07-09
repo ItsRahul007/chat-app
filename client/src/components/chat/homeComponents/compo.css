@@ -147,6 +147,7 @@
     margin: 10px;
     padding: 15px;
     border-radius: 16px;
+    position: relative;
 }
 
 .msg-right{
@@ -157,6 +158,29 @@
 .msg-left{
     align-self: flex-start;
     background: #4b5561;
+}
+
+.options{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 200px;
+    height: 130px;
+    left: 450px;
+    gap: 6px;
+}
+
+.options button{
+    height: 30px;
+    border-radius: 10px;
+    width: 130px;
+    background-color: transparent;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid black;
 }
 
 .msg-sender{
@@ -185,6 +209,7 @@
     background-color: transparent;
     border: none;
     color: rgba(255, 255, 255, 0.482);
+    cursor: pointer;
 }
 
 .attach i{
@@ -196,6 +221,7 @@
     height: 38px;
     width: 38px;
     border: none;
+    cursor: pointer;
 }
 
 .btn-send img{

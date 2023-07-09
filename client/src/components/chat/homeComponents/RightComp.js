@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 
 function RightComp() {
+  const [message, setMessage] = useState('');
+
+  const emoji_btn = useRef(null);
+  const smile_face = useRef(null);
+  const emoji_piker = useRef(null);
+
+  useEffect(() => {
+
+    // When hover on emoji emoji piker will visible
+    emoji_piker.current.style.display = "none";
+    emoji_btn.current.addEventListener("mouseenter", () => {
+      smile_face.current.style.display = "none";
+      emoji_piker.current.style.display = "block";
+
+    });
+
+    // When mouse leave emoji piker would vanised
+    emoji_btn.current.addEventListener("mouseleave", () => {
+      smile_face.current.style.display = "block";
+      emoji_piker.current.style.display = "none";
+    });
+  });
+
+  // Emoji piker clicked function
+  function pickEmoji(e){
+    setMessage(message + e.emoji);
+  };
+
+
   return (
     <div className='right-comp'>
       <div className='chat-head'>
@@ -14,6 +43,7 @@ function RightComp() {
         </span>
       </div>
       <div className='chat-section'>
+
         <div className='msg-box msg-left'>hey whatsup</div>
         <div className='msg-box msg-right'>fine! what about you man?</div>
         <div className='msg-box msg-left'>hey whatsup</div>
@@ -34,14 +64,27 @@ function RightComp() {
         <div className='msg-box msg-left'>hey whatsup</div>
         <div className='msg-box msg-right'>fine! what about you man?</div>
         <div className='msg-box msg-left'>hey whatsup bro</div>
-        <div className='msg-box msg-left'>hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro </div>
+
+        <div className='msg-box msg-left'>
+          <span className='options'>
+            <button>Edit</button>
+            <button>Delete for me</button>
+            <button>Delete for everyone</button>
+          </span>
+          hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro 
+        </div>
       </div>
+
       <div className='msg-sender'>
-        <textarea type='text' placeholder='Type your message here...' />
-        <button className='attach'>
-          <i className="fa-regular fa-face-smile-beam"></i>
-          {/* <EmojiPicker theme='dark'/> */}
-        </button>
+        <textarea type='text' placeholder='Type your message here...' value={message} onChange={e => setMessage(e.target.value)} />
+
+        <div className='attach' ref={emoji_btn}>
+          <i className="fa-regular fa-face-smile-beam" ref={smile_face}></i>
+          <div ref={emoji_piker} style={{display: "none"}}>
+            <EmojiPicker theme='dark' height={600} onEmojiClick={pickEmoji}/>
+          </div>
+        </div>
+
         <button className='attach'>
           <i className="ri-attachment-line"></i>
         </button>
@@ -50,7 +93,7 @@ function RightComp() {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default RightComp;
