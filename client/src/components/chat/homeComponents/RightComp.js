@@ -1,4 +1,5 @@
 import React from 'react';
+import EmojiPicker from 'emoji-picker-react';
 
 function RightComp() {
   return (
@@ -38,7 +39,8 @@ function RightComp() {
       <div className='msg-sender'>
         <textarea type='text' placeholder='Type your message here...' />
         <button className='attach'>
-        <i class="fa-regular fa-face-smile-beam"></i>
+          <i className="fa-regular fa-face-smile-beam"></i>
+          {/* <EmojiPicker theme='dark'/> */}
         </button>
         <button className='attach'>
           <i className="ri-attachment-line"></i>

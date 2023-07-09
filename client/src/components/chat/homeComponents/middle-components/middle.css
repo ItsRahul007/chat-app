@@ -1,156 +1,190 @@
 /* -------------------------------------chat compo------------------------------------- */
-.chat-comp{
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+.chat-comp {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.chat-comp > div{
-    width: 90%;
-    float: left;
-    padding-top: 20px;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #72c976;
+.chat-comp > div {
+  width: 90%;
+  float: left;
+  padding-top: 20px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #72c976;
 }
 
-.search{
-    position: relative;
+.search {
+  position: relative;
 }
 
-.search img{
-    width: 33px;
-    position: absolute;
-    top: 25px;
-    left: 10px;
-    transition: ease .7s;
+.search img {
+  width: 33px;
+  position: absolute;
+  top: 25px;
+  left: 10px;
+  transition: ease 0.7s;
 }
 
-.search input{
-    border: 2px solid #454f5a;
-    border-radius: 5px;
-    background: #37404a;
-    height: 40px;
-    width: 350px;
-    font-size: 14px;
-    padding: 0.375rem 0 0.375rem 3rem;
-    transition:  ease .7s;
-    color: white;
-    outline: none;
+.search input {
+  border: 2px solid #454f5a;
+  border-radius: 5px;
+  background: #37404a;
+  height: 40px;
+  width: 350px;
+  font-size: 14px;
+  padding: 0.375rem 0 0.375rem 3rem;
+  transition: ease 0.7s;
+  color: white;
+  outline: none;
 }
 
-.search input:focus{
-    border: 2px solid #72c976;
+.search input:focus {
+  border: 2px solid #72c976;
 }
 
-.search input::placeholder{
-    color: rgba(255, 255, 255, 0.242);
+.search input::placeholder {
+  color: rgba(255, 255, 255, 0.242);
 }
 
-.search:hover input{    
-    border: 2px solid #72c976;
+.search:hover input {
+  border: 2px solid #72c976;
 }
 
-.chat-list{
-    height: 100%;
-    overflow-y: scroll;
+.chat-list {
+  height: 100%;
+  overflow-y: scroll;
 }
 
-.chat-list::-webkit-scrollbar{
-    width: 5px;
+.chat-list::-webkit-scrollbar {
+  width: 5px;
 }
 
-.chat-list::-webkit-scrollbar-thumb{
-    background-color: rgba(255, 252, 252, 0.413);
-    border-radius: 20px;
+.chat-list::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 252, 252, 0.413);
+  border-radius: 20px;
 }
 
-.chat-list ul li{
-    list-style: none;
-    display: flex;
-    margin: 10px 0;
-    padding: 10px;
-    gap: 20px;
-    color: white;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.13);
-    cursor: pointer;
+.chat-list ul li {
+  list-style: none;
+  display: flex;
+  margin: 10px 0;
+  padding: 10px;
+  gap: 20px;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+  cursor: pointer;
 }
 
-.profile-img{
-    height: 45px;
-    width: 45px;
-    font-size: 18px;
-    background-color: #72c976;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+.profile-img {
+  height: 45px;
+  width: 45px;
+  font-size: 18px;
+  background-color: #72c976;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
-.profile-img img{
-    height: 43px;
-    transform: scale(2);
+.profile-img img {
+  height: 43px;
+  transform: scale(2);
 }
 
-.name-msg .name{
-    font-size: 15px;
-    margin-bottom: 4px;
+.name-msg .name {
+  font-size: 15px;
+  margin-bottom: 4px;
 }
 
-.name-msg .last-msg{
-    font-size: 14px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.365);
+.name-msg .last-msg {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.365);
 }
 
 /* -------------------------------------profile compo------------------------------------- */
-.profile-con{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    align-items: center;
+.profile-con {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
 }
 
 .profile-con > span {
-    margin: 20px 0 10px 45px;
-    color: #72c976;
-    font-size: 22px;
-    font-weight: 500;
-    width: 100%;
-    float: left;
+  margin: 20px 0 10px 45px;
+  color: #72c976;
+  font-size: 22px;
+  font-weight: 500;
+  width: 100%;
+  float: left;
 }
 
-.user-profile{
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: white;
-    gap: 7px;
+.user-profile {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  gap: 7px;
 }
 
-.user-profile .profile-img{
-    height: 100px;
-    width: 100px;
+.user-profile .profile-img {
+  height: 100px;
+  width: 100px;
 }
 
-.user-profile .profile-img img{
-    height: 180px;
-    transform: scale(1);
+.user-profile .profile-img img {
+  height: 180px;
+  transform: scale(1);
 }
 
-.user-profile .user-name{
-    font-size: 17px;
-    margin-top: 10px;
+.user-profile .user-name {
+  font-size: 17px;
+  margin-top: 10px;
 }
 
-.user-profile .user-about{
-    font-size: 15px;
-    color: rgba(255, 255, 255, 0.379);
+.user-profile .user-about {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.379);
 }
 
-/* -------------------------------------profile compo------------------------------------- */
+.update-user {
+  height: 60%;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.update-user > span {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.521);
+  margin-bottom: 20px;
+}
+
+.update-user > div {
+  display: grid;
+  grid-template-columns: repeat(4, 5.5rem);
+  grid-row-gap: 20px;
+  overflow-y: scroll;
+}
+
+.update-user > div::-webkit-scrollbar {
+  width: 5px;
+}
+
+.update-user > div::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 252, 252, 0.413);
+  border-radius: 20px;
+}
+
+.update-user > div img {
+  height: 70px;
+  width: 70px;
+}
