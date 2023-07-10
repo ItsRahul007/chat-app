@@ -160,7 +160,7 @@
     background: #4b5561;
 }
 
-.options{
+.msg-box span{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -168,19 +168,28 @@
     position: absolute;
     width: 200px;
     height: 130px;
-    left: 450px;
+    top: -20px;
     gap: 6px;
+    z-index: 10;
 }
 
-.options button{
+.msg-box span button{
     height: 30px;
     border-radius: 10px;
     width: 130px;
-    background-color: transparent;
+    background-color: #121cd68c;
     color: white;
     font-weight: 500;
     cursor: pointer;
     border: 1px solid black;
+}
+
+.msg-left span{
+    left: 220px;
+}
+
+.msg-right span{
+    right: 220px;
 }
 
 .msg-sender{

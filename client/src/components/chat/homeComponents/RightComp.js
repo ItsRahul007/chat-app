@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 
 function RightComp() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(''); // For storing typed messages
 
   const emoji_btn = useRef(null);
   const smile_face = useRef(null);
@@ -26,10 +26,25 @@ function RightComp() {
   });
 
   // Emoji piker clicked function
-  function pickEmoji(e){
+  function pickEmoji(e) {
     setMessage(message + e.emoji);
   };
 
+  // For message delete and edit options
+  function options(e) {
+    console.log(e.target.innerHTML);
+
+    if(e.target.innerHTML === 'hey whatsup'){
+      e.target.innerHTML += `<span>
+          <button>Edit</button>
+          <button>Delete for me</button>
+          <button>Delete for everyone</button>
+      </span>`;
+    }
+    else{
+      e.target.innerHTML = 'hey whatsup';
+    }
+  };
 
   return (
     <div className='right-comp'>
@@ -44,9 +59,9 @@ function RightComp() {
       </div>
       <div className='chat-section'>
 
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-right'>fine! what about you man?</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
+        <div onClick={e => options(e)} className='msg-box msg-left'>hey whatsup</div>
+        <div onClick={options} className='msg-box msg-right'>fine! what about you man?</div>
+        <div onClick={options} className='msg-box msg-left'>hey whatsup</div>
         <div className='msg-box msg-right'>fine! what about you man?</div>
         <div className='msg-box msg-left'>hey whatsup</div>
         <div className='msg-box msg-left'>hey whatsup</div>
@@ -66,12 +81,7 @@ function RightComp() {
         <div className='msg-box msg-left'>hey whatsup bro</div>
 
         <div className='msg-box msg-left'>
-          <span className='options'>
-            <button>Edit</button>
-            <button>Delete for me</button>
-            <button>Delete for everyone</button>
-          </span>
-          hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro 
+          hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro
         </div>
       </div>
 
@@ -80,8 +90,8 @@ function RightComp() {
 
         <div className='attach' ref={emoji_btn}>
           <i className="fa-regular fa-face-smile-beam" ref={smile_face}></i>
-          <div ref={emoji_piker} style={{display: "none"}}>
-            <EmojiPicker theme='dark' height={600} onEmojiClick={pickEmoji}/>
+          <div ref={emoji_piker} style={{ display: "none" }}>
+            <EmojiPicker theme='dark' height={600} onEmojiClick={pickEmoji} />
           </div>
         </div>
 

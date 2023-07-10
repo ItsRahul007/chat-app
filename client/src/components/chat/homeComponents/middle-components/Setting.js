@@ -2,8 +2,10 @@ import React from 'react'
 
 function Setting() {
   return (
-    <div>Setting</div>
+    <div className='setting-comp'>
+      
+    </div>
   )
 }
 
-export default Setting
+export default Setting;
