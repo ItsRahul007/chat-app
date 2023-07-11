@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 
-function RightComp() {
+function RightComp({ openMenu }) {
   const [message, setMessage] = useState(''); // For storing typed messages
 
   const emoji_btn = useRef(null);
@@ -34,14 +34,14 @@ function RightComp() {
   function options(e) {
     console.log(e.target.innerHTML);
 
-    if(e.target.innerHTML === 'hey whatsup'){
+    if (e.target.innerHTML === 'hey whatsup') {
       e.target.innerHTML += `<span>
           <button>Edit</button>
           <button>Delete for me</button>
           <button>Delete for everyone</button>
       </span>`;
     }
-    else{
+    else {
       e.target.innerHTML = 'hey whatsup';
     }
   };
@@ -49,6 +49,9 @@ function RightComp() {
   return (
     <div className='right-comp'>
       <div className='chat-head'>
+        <button className='menu-btn' onClick={openMenu}>
+          <i className="ri-menu-line"></i>
+        </button>
         <span className='user-avatar'>
           <img src='https://media.istockphoto.com/id/1294339577/photo/young-beautiful-woman.jpg?s=612x612&w=0&k=20&c=v41m_jNzYXQtxrr8lZ9dE8hH3CGWh6HqpieWkdaMAAM=' alt='profile' />
         </span>

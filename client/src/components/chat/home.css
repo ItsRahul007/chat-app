@@ -1,0 +1,32 @@
+.home-con{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background: black;
+}
+
+.home-con > div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 97vh;
+    width: 99vw;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.home-con > div .two-compo{
+    display: flex;
+    transition: ease .5s;
+}
+
+@media only screen and (max-width: 910px){
+    .two-compo{
+        position: absolute;
+        left: -500px;
+        z-index: 10;
+    }
+}
