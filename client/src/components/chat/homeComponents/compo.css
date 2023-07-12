@@ -16,6 +16,12 @@
   position: relative;
 }
 
+.left-comp .menu-btn{
+  position: absolute;
+  top: 20px;
+  right: 25px;
+}
+
 .left-comp div {
   position: absolute;
 }
@@ -112,17 +118,17 @@
   position: relative;
 }
 
-.chat-head .menu-btn{
-    height: 40px;
-    width: 40px;
-    color: white;
-    font-size: 20px;
-    font-weight: 600;
-    margin-left: 20px;
-    border: none;
-    border-radius: 50%;
-    background-color: #72c976;
-    display: none;
+.menu-btn {
+  height: 40px;
+  width: 40px;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 20px;
+  border: none;
+  border-radius: 50%;
+  background-color: #72c976;
+  display: none;
 }
 
 .user-avatar {
@@ -184,38 +190,6 @@
   background: #4b5561;
 }
 
-.msg-box span {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  width: 200px;
-  height: 130px;
-  top: -20px;
-  gap: 6px;
-  z-index: 10;
-}
-
-.msg-box span button {
-  height: 30px;
-  border-radius: 10px;
-  width: 130px;
-  background-color: #121cd68c;
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px solid black;
-}
-
-.msg-left span {
-  left: 220px;
-}
-
-.msg-right span {
-  right: 220px;
-}
-
 .msg-sender {
   display: flex;
   height: 10%;
@@ -262,12 +236,44 @@
 }
 
 @media only screen and (max-width: 910px) {
-    /* --------------------right compo------------------ */
-    .chat-head .menu-btn{
-        display: inline;
-    }
+  /* --------------------left compo------------------ */
+  .logo{
+    top: 80px;
+  }
 
-    .chat-head .user-avatar{
-        margin-left: 0px;
-    }
+  .buttons{
+    top: 150px;
+  }
+
+  /* --------------------right compo------------------ */
+  .menu-btn {
+    display: inline;
+  }
+
+  .chat-head .user-avatar {
+    margin-left: 0px;
+  }
+}
+
+
+@media only screen and (max-width: 665px) {
+  .mid-comp{
+    min-width: 300px;
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .msg-box{
+    min-width: 150px;
+    max-width: 300px;
+    font-size: 15px;
+  }
+}
+
+@media only screen and (max-width: 390px) {
+  .msg-box{
+    min-width: 100px;
+    max-width: 250px;
+    font-size: 13px;
+  }
 }

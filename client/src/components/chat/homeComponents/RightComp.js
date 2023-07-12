@@ -30,20 +30,9 @@ function RightComp({ openMenu }) {
     setMessage(message + e.emoji);
   };
 
-  // For message delete and edit options
-  function options(e) {
-    console.log(e.target.innerHTML);
-
-    if (e.target.innerHTML === 'hey whatsup') {
-      e.target.innerHTML += `<span>
-          <button>Edit</button>
-          <button>Delete for me</button>
-          <button>Delete for everyone</button>
-      </span>`;
-    }
-    else {
-      e.target.innerHTML = 'hey whatsup';
-    }
+  // For delete and edit message options
+  function options() {
+    // TODO: AKTA ALERT TYPE KI6U BANA JEI KHANE OPTION GULO ASBE
   };
 
   return (
@@ -62,7 +51,7 @@ function RightComp({ openMenu }) {
       </div>
       <div className='chat-section'>
 
-        <div onClick={e => options(e)} className='msg-box msg-left'>hey whatsup</div>
+        <div onClick={options} className='msg-box msg-left'>hey whatsup</div>
         <div onClick={options} className='msg-box msg-right'>fine! what about you man?</div>
         <div onClick={options} className='msg-box msg-left'>hey whatsup</div>
         <div className='msg-box msg-right'>fine! what about you man?</div>

@@ -153,38 +153,42 @@
   color: rgba(255, 255, 255, 0.379);
 }
 
-.update-user {
+.user-media {
   height: 60%;
+  width: 97%;
   margin-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.update-user > span {
+.user-media > span {
   font-size: 15px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.521);
   margin-bottom: 20px;
 }
 
-.update-user > div {
+.user-media > div {
+  width: 100%;
+  height: 100%;
+  padding-left: 30px;
   display: grid;
   grid-template-columns: repeat(4, 5.5rem);
-  grid-row-gap: 20px;
+  grid-template-rows: repeat(4, 5.5rem);
   overflow-y: scroll;
 }
 
-.update-user > div::-webkit-scrollbar {
+.user-media > div::-webkit-scrollbar {
   width: 5px;
 }
 
-.update-user > div::-webkit-scrollbar-thumb {
+.user-media > div::-webkit-scrollbar-thumb {
   background-color: rgba(255, 252, 252, 0.413);
   border-radius: 20px;
 }
 
-.update-user > div img {
+.user-media > div img {
   height: 70px;
   width: 70px;
 }
@@ -344,4 +348,19 @@
   width: 80%;
   position: absolute;
   bottom: 40px;
+}
+
+
+@media only screen and (max-width: 665px) {
+  .search input{
+    width: 250px;
+  }
+}
+
+@media only screen and (max-width: 440px) {
+  .user-media > div {
+    display: grid;
+    grid-template-columns: repeat(3, 5.5rem);
+    grid-template-rows: repeat(3, 5.5rem);
+  }
 }

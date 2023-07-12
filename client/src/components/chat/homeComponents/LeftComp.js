@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import "./compo.css";
 import { Link } from 'react-router-dom';
 
-function LeftComp({ changeCompo }) {
+function LeftComp({ changeCompo, closeMenu }) {
   // Adding all Link tags inside ref
   const ref = useRef([]);
 
@@ -21,6 +21,9 @@ function LeftComp({ changeCompo }) {
 
   return (
     <div className='left-comp'>
+      <button className='menu-btn' onClick={closeMenu}>
+        <i class="ri-close-line"></i>
+      </button>
       <div className='logo'>
         <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/logo.svg' alt='logo' />
       </div>

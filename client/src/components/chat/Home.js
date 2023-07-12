@@ -10,6 +10,7 @@ import Setting from './homeComponents/middle-components/Setting';
 
 function Home() {
   const [compo, setCompo] = useState(<Chat />);
+  const [pixle, setPixle] = useState(0);
 
   // Changing components when clicked 
   function changeCompo(name) {
@@ -27,19 +28,27 @@ function Home() {
     }
   };
 
+  // toggling menu
   const twoCompo = useRef(null)
-  function openMenu(){
-    twoCompo.current.style.left = "0px"
-  }
+  function toggleMenu() {
+    if (pixle === 0) {
+      twoCompo.current.style.left = pixle + "px";
+      setPixle(-500)
+    }
+    else {
+      twoCompo.current.style.left = pixle + "px";
+      setPixle(0)
+    }
+  };
 
   return (
     <div className='home-con'>
       <div>
         <div ref={twoCompo} className='two-compo'>
-          <LeftComp changeCompo={changeCompo} />
+          <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} />
           <MiddleComp compo={compo} />
         </div>
-        <RightComp openMenu={openMenu}/>
+        <RightComp openMenu={toggleMenu} />
       </div>
     </div>
   );

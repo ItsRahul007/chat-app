@@ -12,7 +12,7 @@ function Profile() {
         <div className='user-name'>Kankana Mondal</div>
         <div className='user-about'>Hello there. I'm using chat-app</div>
       </div>
-      <div className='update-user'>
+      <div className='user-media'>
         <span>MEDIA</span>
         <div>
           <img src='https://imgv3.fotor.com/images/cover-photo-image/a-beautiful-girl-with-gray-hair-and-lucxy-neckless-generated-by-Fotor-AI.jpg' alt='' />
