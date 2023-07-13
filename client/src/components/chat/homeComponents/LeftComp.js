@@ -2,8 +2,11 @@
 import React, { useRef } from 'react';
 import "./compo.css";
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { sampleFun1 } from '../../../store/slices/exampleSlice';
 
 function LeftComp({ changeCompo, closeMenu }) {
+
   // Adding all Link tags inside ref
   const ref = useRef([]);
 
@@ -18,11 +21,16 @@ function LeftComp({ changeCompo, closeMenu }) {
     ref.current[i].classList.add("clicked-button");
   };
 
+  const dispatch = useDispatch();
+  function logoutFun(e){
+    console.log(e.type);
+    dispatch(sampleFun1(e.type));
+  }
 
   return (
     <div className='left-comp'>
       <button className='menu-btn' onClick={closeMenu}>
-        <i class="ri-close-line"></i>
+        <i className="ri-close-line"></i>
       </button>
       <div className='logo'>
         <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/logo.svg' alt='logo' />
@@ -46,7 +54,7 @@ function LeftComp({ changeCompo, closeMenu }) {
 
       </div>
       <div className='log-out'>
-        <button>
+        <button onClick={logoutFun}>
           <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/logout.svg' alt='Logout' />
         </button>
       </div>
