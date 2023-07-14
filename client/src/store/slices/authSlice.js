@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const exampleSlice = createSlice({
+const authSlice = createSlice({
     name: "example",
     initialState: [],
     reducers:{
-        sampleFun1(state, action){
-            state.push(action.payload);
+        async sampleFun1(state, action){
+            // const 
         },
 
         sampleFun2(state, action){
@@ -17,5 +17,5 @@ const exampleSlice = createSlice({
 });
 
 
-export const {sampleFun1} = exampleSlice.actions;
-export default exampleSlice.reducer;
+// export const {sampleFun1} = authSlice.actions;
+export default authSlice.reducer;

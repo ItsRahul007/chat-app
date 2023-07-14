@@ -1,9 +1,12 @@
 const express = require("express");
 const connectMongo = require("./connectDB");
+const cors = require("cors");
+
 const app = express();
 const port = 4000;
 connectMongo();
 app.use(express.json());
+app.use(cors())
 
 function expressData(){
     //Avalible routes
@@ -15,5 +18,3 @@ function expressData(){
 }
 
 module.exports = expressData;
-
-// TODO: wrap this whole file inside an function and export it and run it on index.js file with nodemon.

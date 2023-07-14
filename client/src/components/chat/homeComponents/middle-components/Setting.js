@@ -6,7 +6,7 @@ function Setting() {
       <div>Settings</div>
       <ul className='collaps'>
         <li>
-          <input type='radio' name='accordian' id='first' checked />
+          <input type='radio' name='accordian' id='first' checked readOnly />
           <label htmlFor='first'>General Info</label>
           <div className='content'>
             <div>
@@ -24,7 +24,7 @@ function Setting() {
           </div>
         </li>
         <li>
-          <input type='radio' name='accordian' id='second' />
+          <input type='radio' name='accordian' id='second' readOnly />
           <label htmlFor='second'>Change Password</label>
           <div className='content'>
             <div>
