@@ -12,6 +12,7 @@
     align-items: center;
     text-align: center;
     background: linear-gradient(to right, #f23412, #f5ac18);
+    position: relative;
 }
 
 .log h1{

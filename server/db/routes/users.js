@@ -51,9 +51,9 @@ router.post("/signup", [
             const authToken = jwt.sign(data, JWT_SEC);
             res.json({ authToken });
 
-        } catch (error) {
-            res.json({ error });
-            console.log(error);
+        } catch (errors) {
+            res.json({ errors });
+            console.log(errors);
         }
     }
 );

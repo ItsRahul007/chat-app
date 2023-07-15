@@ -6,7 +6,7 @@ const app = express();
 const port = 4000;
 connectMongo();
 app.use(express.json());
-app.use(cors())
+app.use(cors('http://localhost:3000'));
 
 function expressData(){
     //Avalible routes
@@ -15,6 +15,6 @@ function expressData(){
     app.listen(port, () => {
         console.log(`app listen on http://localhost:${port}`);
     });
-}
+};
 
 module.exports = expressData;
