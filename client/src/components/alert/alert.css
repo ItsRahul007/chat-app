@@ -1,0 +1,28 @@
+
+.alert-compo{
+    height: 50px;
+    width: 300px;
+    margin-right: 70px;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    position: absolute;
+    right: 50px;
+    bottom: 100px;
+    animation: animate .5s ease-in 1;
+    z-index: 1000;
+}
+
+@keyframes animate{
+    0%{
+        margin-right: 10px;
+        opacity: 0%;
+    }
+    100%{
+        margin-right: 70px;
+        opacity: 100%;
+    }
+}
