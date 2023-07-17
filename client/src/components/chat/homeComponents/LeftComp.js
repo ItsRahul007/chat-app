@@ -2,9 +2,10 @@
 import React from 'react';
 import "./compo.css";
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function LeftComp({ changeCompo, closeMenu }) {
+  const navigate = useNavigate();
 
   // Changing components and also changing the colors
   function clicked(e, name, i){
@@ -22,6 +23,7 @@ function LeftComp({ changeCompo, closeMenu }) {
 
   function logoutFun(){
     localStorage.removeItem("authToken");
+    navigate('/login');
   }
 
   return (

@@ -18,7 +18,7 @@ function Singup() {
     dispatch(showAlert(msg));
     setTimeout(() => {
       dispatch(removeAlert());
-    }, 5000);
+    }, 3500);
   };
 
   // Fetching api and sending given credentials

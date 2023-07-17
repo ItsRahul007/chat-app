@@ -14,7 +14,7 @@ function App() {
   // If user not login then navigate user to login page
   const navigate = useNavigate();
   useEffect(() => {
-    !localStorage.getItem("authToken") && navigate("/Login")
+    !localStorage.getItem("authToken")? navigate("/login") : navigate('/')
   },[]);
 
   return (
