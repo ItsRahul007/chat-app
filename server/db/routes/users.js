@@ -7,6 +7,7 @@ const fetchUser = require("../middleware/fetchUser");
 var jwt = require('jsonwebtoken');
 require("dotenv").config();
 const JWT_SEC = process.env.JWT_SEC;
+const pickColor = require('./avatarColor');
 
 // ROUT: 1 Creating a new user using: POST "/auth/signup" NO LOGIN REQUIRED
 router.post("/signup", [
@@ -34,11 +35,15 @@ router.post("/signup", [
             // hashing password and adding salt with it
             const secPas = await bcrypt.hash(req.body.password, salt);
 
+            // picking avatar color randamly
+            const color = pickColor();
+
             //store the values in db
             const user = await UserSchema.create({
                 name: req.body.name,
                 email: req.body.email,
-                password: secPas
+                password: secPas,
+                avatar: color
             });
 
             const data = {
@@ -107,11 +112,14 @@ router.post("/login", [
 
 
 // ROUT: 3 Get login user details using: POST "/auth/getuser" LOGIN REQUIRED
-router.post("/getuser", fetchUser, // Fetch user is the middleware function who comfirm the auth token and set the user id into req.user.id
+router.post("/getuser", fetchUser, // Fetch user is the middleware function who comfirm the auth token and set the user's id into req.user.id
     async (req, res) => {
         try {
             const userId = req.user.id;
             const user = await UserSchema.findById(userId).select("-password");
+
+            if(!user) return res.status(404).send("User Not Found");
+
             res.send(user);
         }
         catch (error) {
@@ -124,24 +132,25 @@ router.post("/getuser", fetchUser, // Fetch user is the middleware function who 
 
 // ROUT: 4 Updating the user details using: PUT "/auth/updateuser" LOGIN REQUIRED
 router.put("/updateuser", fetchUser, async (req, res) => {
-    const {name, password} = req.body;
+    const { name, password, avatar } = req.body;
     const updates = {};
     const userId = req.user.id;
 
     // Setting the update values inside updates object
-    if(name) updates.name = name;
-    if(password) {
+    if (name) updates.name = name;
+    if (password) {
         const salt = await bcrypt.genSalt(10);
         // hashing password and adding salt with it
         const secPas = await bcrypt.hash(req.body.password, salt);
         updates.password = secPas;
     };
+    if (avatar) updates.avatar = avatar;
 
     // If user dosn't exites
     const isUser = await UserSchema.findById(userId);
-    if(!isUser) return res.status(404).send("User Not Found");
+    if (!isUser) return res.status(404).send("User Not Found");
 
-    const user = await UserSchema.findByIdAndUpdate(userId, {$set: updates}, {new : true});
+    const user = await UserSchema.findByIdAndUpdate(userId, { $set: updates }, { new: true });
     res.send(user);
 });
 
@@ -149,9 +158,17 @@ router.put("/updateuser", fetchUser, async (req, res) => {
 // ROUT: 5 Get all user names using: POST "/auth/getallusers" LOGIN REQUIRED
 router.get("/getallusers", fetchUser, async (req, res) => {
     try {
-        const allUsers = await UserSchema.find().select("name");
+        const userId = req.user.id;
+
+        const requestUser = await UserSchema.findById(userId).select("name avatar");
+        const allUsers = await UserSchema.find().select("name avatar")
+        
+        if(!requestUser) return res.status(404).send("User Not Found");
+        const filteredUser = allUsers.filter(user => user === requestUser); // work on that
+        console.log(filteredUser);
+
         res.json(allUsers);
-    } 
+    }
     catch (error) {
         res.json({ error });
         console.log(error);

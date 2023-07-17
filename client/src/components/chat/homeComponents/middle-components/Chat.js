@@ -46,7 +46,7 @@ function Chat() {
                         </span>
                     </li>
                     <li>
-                        <span className='profile-img' style={{background: "red"}}>Bo</span>
+                        <span className='profile-img'>Bo</span>
                         <span className='name-msg'>
                             <div className='name'>Boga Chaudhuri</div>
                             <div className='last-msg'>Ki re vai ki kor6is</div>
