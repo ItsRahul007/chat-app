@@ -17,6 +17,13 @@ const UserSchema = new Schema({
     },
     avatar:{
         type: String
+    },
+    image:{
+        image: String
+    },
+    about:{
+        type: String,
+        require: true
     }
 });
 

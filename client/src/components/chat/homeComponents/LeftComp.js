@@ -14,7 +14,6 @@ function LeftComp({ changeCompo, closeMenu }) {
     let buttons = document.querySelector(".buttons").childNodes;
 
     for(let index = 0; index !== buttons.length; index++){
-      console.log(buttons[index]);
       buttons[index].classList.remove("clicked-button");
     };
 

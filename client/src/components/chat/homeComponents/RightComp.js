@@ -87,7 +87,7 @@ function RightComp({ openMenu }) {
           </div>
         </div>
 
-        <button className='attach'>
+        <button type="file" name="avatar" className='attach'>
           <i className="ri-attachment-line"></i>
         </button>
         <button className='btn-send'>

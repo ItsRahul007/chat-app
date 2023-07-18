@@ -43,7 +43,8 @@ router.post("/signup", [
                 name: req.body.name,
                 email: req.body.email,
                 password: secPas,
-                avatar: color
+                avatar: color,
+                about: "Hello there. I'm using chat-app"
             });
 
             const data = {
@@ -118,7 +119,7 @@ router.post("/getuser", fetchUser, // Fetch user is the middleware function who 
             const userId = req.user.id;
             const user = await UserSchema.findById(userId).select("-password");
 
-            if(!user) return res.status(404).send("User Not Found");
+            if (!user) return res.status(404).send("User Not Found");
 
             res.send(user);
         }
@@ -132,7 +133,7 @@ router.post("/getuser", fetchUser, // Fetch user is the middleware function who 
 
 // ROUT: 4 Updating the user details using: PUT "/auth/updateuser" LOGIN REQUIRED
 router.put("/updateuser", fetchUser, async (req, res) => {
-    const { name, password, avatar } = req.body;
+    const { name, password, avatar, about } = req.body;
     const updates = {};
     const userId = req.user.id;
 
@@ -145,6 +146,7 @@ router.put("/updateuser", fetchUser, async (req, res) => {
         updates.password = secPas;
     };
     if (avatar) updates.avatar = avatar;
+    if (about) updates.about = about;
 
     // If user dosn't exites
     const isUser = await UserSchema.findById(userId);
@@ -155,24 +157,26 @@ router.put("/updateuser", fetchUser, async (req, res) => {
 });
 
 
-// ROUT: 5 Get all user names using: POST "/auth/getallusers" LOGIN REQUIRED
-router.get("/getallusers", fetchUser, async (req, res) => {
-    try {
-        const userId = req.user.id;
+// ROUT: 5 Get all user names and avatar, and also splicing the requested user using: POST "/auth/getallusers" LOGIN REQUIRED
+router.get("/getallusers", fetchUser,
+    async (req, res) => {
+        try {
+            const userId = req.user.id;
 
-        const requestUser = await UserSchema.findById(userId).select("name avatar");
-        const allUsers = await UserSchema.find().select("name avatar")
-        
-        if(!requestUser) return res.status(404).send("User Not Found");
-        const filteredUser = allUsers.filter(user => user === requestUser); // work on that
-        console.log(filteredUser);
+            const requestUser = await UserSchema.findById(userId).select("name avatar image about");
+            const allUsers = await UserSchema.find().select("name avatar image about");
 
-        res.json(allUsers);
-    }
-    catch (error) {
-        res.json({ error });
-        console.log(error);
-    }
-});
+            // If user dosn't exites
+            if (!requestUser) return res.status(404).send("User Not Found");
+            const userIndex = allUsers.indexOf(requestUser);
+            allUsers.splice(userIndex, 1);
+
+            res.json(allUsers);
+        }
+        catch (error) {
+            res.json({ error });
+            console.log(error);
+        }
+    });
 
 module.exports = router;
