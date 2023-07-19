@@ -91,6 +91,10 @@
   overflow: hidden;
 }
 
+.profile-con .profile-img{
+  font-size: 28px;
+}
+
 .profile-img img {
   height: 43px;
   transform: scale(2);

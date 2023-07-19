@@ -2,13 +2,16 @@ import React, { useRef, useEffect } from 'react';
 import "./middle.css";
 import blackSearch from "../../../../png/blackSearch.png";
 import limeSearch from "../../../../png/limeSearch.png";
-import kankana from "./kankana.jpg";
-import myImage from "./myImage2-min.jpg";
+import { useSelector } from 'react-redux';
 
 function AvailableChat() {
   const con = useRef(null);
   const img = useRef(null);
+
+  const allUsersData = useSelector(state => state.user.allUsersData);
+
   useEffect(() => {
+    // changing images on hover
     con.current.addEventListener("mouseenter", (e) => {
       img.current.src = limeSearch;
     });
@@ -26,232 +29,23 @@ function AvailableChat() {
         <input type='search' placeholder='Search Chat' />
       </div>
       <div className='chat-list'>
+        {allUsersData.isLoading && <div>Loading...</div>}
+        {allUsersData.isFailed && <div>some internal server error occurred</div>}
         <ul>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={myImage} alt='profile' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Rahul Ghosh</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>
-              <img src={kankana} alt='' />
-            </span>
-            <span className='name-msg'>
-              <div className='name'>Kankana Mondal</div>
-              <div className='last-msg'>What's up bro</div>
-            </span>
-          </li>
-          <li>
-            <span className='profile-img'>Bo</span>
-            <span className='name-msg'>
-              <div className='name'>Boga Chaudhuri</div>
-              <div className='last-msg'>Ki re vai ki kor6is</div>
-            </span>
-          </li>
+          {allUsersData.data && allUsersData.data.map(data => {
+            const { name, about, avatar, image } = data;
+            return(
+              <li>
+                <span className='profile-img' style={{background: avatar}}>
+                  {image? <img src={image} alt='profile' /> : name.slice(0, 2)}
+                </span>
+                <span className='name-msg'>
+                  <div className='name'>{name}</div>
+                  <div className='last-msg'>{about? about : "Hello there. I'm using chat-app"}</div>
+                </span>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

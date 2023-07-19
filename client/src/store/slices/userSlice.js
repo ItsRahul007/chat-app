@@ -45,10 +45,11 @@ const userSlice = createSlice({
             state.userData.isLoading = true;
         });
         builder.addCase(fetchUser.fulfilled, (state, action) => {
+            state.userData.isLoading = false;
             state.userData.data = action.payload;
         });
         builder.addCase(fetchUser.rejected, (state, action) => {
-            state.userData.isFailed = true;
+            state.userData.isFailed = action.payload;
             console.log(action.payload);
         });
 
@@ -57,11 +58,11 @@ const userSlice = createSlice({
             state.allUsersData.isLoading = true;
         });
         builder.addCase(fetchAllUsers.fulfilled, (state, action) => {
+            state.allUsersData.isLoading = false;
             state.allUsersData.data = action.payload;
         });
         builder.addCase(fetchAllUsers.rejected, (state, action) => {
-            state.allUsersData.isFailed = true;
-            console.log(action.payload);
+            state.allUsersData.isFailed = action.payload;
         });
     },
 });
