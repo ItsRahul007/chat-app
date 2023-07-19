@@ -158,7 +158,7 @@ router.put("/updateuser", fetchUser, async (req, res) => {
 
 
 // ROUT: 5 Get all user names and avatar, and also splicing the requested user using: POST "/auth/getallusers" LOGIN REQUIRED
-router.get("/getallusers", fetchUser,
+router.post("/getallusers", fetchUser,
     async (req, res) => {
         try {
             const userId = req.user.id;

@@ -1,11 +1,21 @@
-import React from 'react';
-import kankana from "./kankana.jpg";
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { showAlert, removeAlert } from '../../../../store/slices/alertSlice';
+import { fetchUser } from '../../../../store/slices/userSlice';
 
 function Profile() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // If auth-token exists then fetching the user else sending user to login page
+  useEffect(()=>{
+    if(localStorage.getItem("authToken")){
+      fetchUser();
+    } 
+    else navigate('/login');
+  }, []);
+  
   // For allert
   function alert(msg) {
     dispatch(showAlert(msg));
@@ -13,33 +23,21 @@ function Profile() {
       dispatch(removeAlert());
     }, 3500);
   };
-
-  //Fetching the user
-  const userData = async ()=>{
-    const data = await fetch('http://localhost:4000/auth/getuser', {
-      headers:{
-        "Content-Type": 'application/json',
-        "auth-token": localStorage.getItem('authToken')
-      }
-    });
-
-    const parsedData = await data.json();
-    return parsedData;
-  };
   
+  const userData = useSelector(state => state.user);
   if(userData.errors) return alert(userData.errors);
   console.log(userData)
-  const {name, about, avatar, image} = userData;
+  // const {name, about, avatar, image} = userData;
 
   return (
     <div className='profile-con'>
       <span>Profile</span>
       <div className='user-profile'>
-        <span className='profile-img' style={{background: avatar}}>
-          {image && <img src={kankana} alt='' />}
+        <span className='profile-img' style={{background: 'blue'}}>
+          {/* {image && <img src={kankana} alt='' />} */}
         </span>
-        <div className='user-name'>{name}</div>
-        <div className='user-about'>{about}</div>
+        <div className='user-name'>name</div>
+        <div className='user-about'>about</div>
       </div>
       <div className='user-media'>
         <span>MEDIA</span>
