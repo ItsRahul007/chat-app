@@ -3,8 +3,11 @@ import React from 'react';
 import "./compo.css";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import clearData from '../../../store/actions/clearData';
+import { useDispatch } from 'react-redux';
 
 function LeftComp({ changeCompo, closeMenu }) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Changing components and also changing the colors
@@ -23,7 +26,8 @@ function LeftComp({ changeCompo, closeMenu }) {
   function logoutFun(){
     localStorage.removeItem("authToken");
     navigate('/login');
-  }
+    dispatch(clearData());
+  };
 
   return (
     <div className='left-comp'>

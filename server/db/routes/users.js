@@ -162,22 +162,19 @@ router.post("/getallusers", fetchUser,
     async (req, res) => {
         try {
             const userId = req.user.id;
-
             const requestUser = await UserSchema.findById(userId).select("name avatar image about");
-            const allUsers = await UserSchema.find().select("name avatar image about");
-            
+
             // If user dosn't exites
             if (!requestUser) return res.status(404).send("User Not Found");
-            const index = allUsers.indexOf(requestUser);
-            console.log(index);
-            allUsers.splice(index, 1);
+            const allUsers = await UserSchema.find().select(`name avatar image about`);
 
             res.json(allUsers);
         }
         catch (error) {
             res.json({ error });
             console.log(error);
-        }
-    });
+        };
+    }
+);
 
 module.exports = router;

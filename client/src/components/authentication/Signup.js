@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showAlert, removeAlert } from '../../store/slices/alertSlice';
 
-function Singup() {
+function Singup({callApi}) {
   const [inputValue, setInputValue] = useState({ name: "", email: '', password: '' });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,6 +40,7 @@ function Singup() {
     const parsedData = await responce.json();
     if (parsedData.authToken) {
       localStorage.setItem("authToken", parsedData.authToken);
+      callApi();
       navigate('/');
     }
     else {

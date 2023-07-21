@@ -9,22 +9,22 @@ import AvailableChat from './homeComponents/middle-components/AvailableChat';
 import Setting from './homeComponents/middle-components/Setting';
 
 function Home() {
-  const [compo, setCompo] = useState(<Chat />);
+  const [compo, setCompo] = useState(<Chat key={'chat'} />);
   const [pixle, setPixle] = useState(0);
 
   // Changing components when clicked 
   function changeCompo(name) {
     if (name === "chat") {
-      setCompo(<Chat />)
+      setCompo(<Chat key={'chat'} />)
     }
     else if (name === "profile") {
-      setCompo(<Profile />)
+      setCompo(<Profile key={"profile"} />)
     }
     else if (name === "avalibleChat") {
-      setCompo(<AvailableChat />)
+      setCompo(<AvailableChat key={'avalibleChat'} />)
     }
     else if (name === "setting") {
-      setCompo(<Setting />)
+      setCompo(<Setting key={'setting'} />)
     }
   };
 
@@ -45,10 +45,10 @@ function Home() {
     <div className='home-con'>
       <div>
         <div ref={twoCompo} className='two-compo'>
-          <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} />
-          <MiddleComp compo={compo} />
+          <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} key={'leftcompo'} />
+          <MiddleComp compo={compo} key={'middlecompo'} />
         </div>
-        <RightComp openMenu={toggleMenu} />
+        <RightComp openMenu={toggleMenu} key={'rightcompo'} />
       </div>
     </div>
   );

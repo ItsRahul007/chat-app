@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showAlert, removeAlert } from '../../store/slices/alertSlice';
 
-function Login() {
+function Login({callApi}) {
   const [inputValue, setInputValue] = useState({name: '', password: ''});
   const { email, password } = inputValue;
   const navigate = useNavigate();
@@ -39,6 +39,7 @@ function Login() {
     const parsedData = await responce.json();
     if (parsedData.authToken) {
       localStorage.setItem("authToken", parsedData.authToken);
+      callApi();
       navigate('/');
     }
     else {

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import clearData from "../actions/clearData";
 
 export const fetchUser = createAsyncThunk('fetchUser', async () => {
     const data = await fetch('http://localhost:4000/auth/getuser', {
@@ -63,6 +64,22 @@ const userSlice = createSlice({
         });
         builder.addCase(fetchAllUsers.rejected, (state, action) => {
             state.allUsersData.isFailed = action.payload;
+        });
+
+        builder.addCase(clearData, () => {
+            return {
+                userData: {
+                    isLoading: false,
+                    data: null,
+                    isFailed: false
+                },
+        
+                allUsersData:{
+                    isLoading: false,
+                    data: null,
+                    isFailed: false
+                }
+            };
         });
     },
 });
