@@ -140,6 +140,7 @@
 .user-profile .profile-img {
   height: 100px;
   width: 100px;
+  font-weight: 600;
 }
 
 .user-profile .profile-img img {
@@ -155,6 +156,7 @@
 .user-profile .user-about {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.379);
+  font-family: 'Lora', serif;
 }
 
 .user-media {
@@ -220,9 +222,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   width: 100%;
+  height: 78%;
   margin: 13px 0;
+  overflow-y: scroll;
+}
+
+.setting-comp ul::-webkit-scrollbar{
+  display: none;
 }
 
 .setting-comp ul li {
@@ -235,10 +242,10 @@
   overflow: hidden;
 }
 
-.setting-comp ul li label {
+.setting-comp ul li > label {
   cursor: pointer;
   font-weight: 500;
-  height: 50px;
+  min-height: 50px;
   margin-left: 20px;
   width: 85%;
   padding: 10px;
@@ -247,7 +254,7 @@
   align-items: center;
 }
 
-.setting-comp ul li label::after {
+.setting-comp ul li > label::after {
   content: "+";
   font-size: 24px;
   font-weight: 500;
@@ -316,7 +323,7 @@
   border: 1px solid #72c976;
 }
 
-.content div span {
+.content div .content-name {
   color: #72c976;
   font-size: 0.8rem;
   font-weight: 600;
@@ -351,9 +358,70 @@
 .setting-comp > button {
   width: 80%;
   position: absolute;
-  bottom: 40px;
+  bottom: 15px;
 }
 
+.collap-img{
+  height: 70px;
+  width: 70px;
+  font-size: 22px;
+  font-weight: 500;
+  position: relative;
+}
+
+.avatar-colors > div{
+  width: 60%;
+  height: 50%;
+  padding-left: 30px;
+  display: grid !important;
+  grid-template-columns: repeat(4, 50px);
+  grid-template-rows: repeat(4, 50px);
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-colors span{
+  height: 40px;
+  width: 40px;
+  border-radius: 52%;
+}
+
+.collap-profile{
+  position: relative;
+}
+
+.collap-profile > div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.872);
+  height: 6px;
+  width: 6px;
+  border-radius: 52px;
+  font-size: 15px;
+  bottom: 8px;
+  right: 125px;
+  z-index: 2000;
+  cursor: pointer;
+}
+
+.collap-profile > div i{
+  cursor: pointer;
+}
+
+.res-msg{
+  margin-top: -22px;
+}
+
+.success{
+  color: #72c976;
+}
+
+.failed{
+  color: rgb(201, 24, 24);
+}
 
 @media only screen and (max-width: 665px) {
   .search input{

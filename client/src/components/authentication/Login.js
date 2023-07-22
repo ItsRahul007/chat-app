@@ -54,7 +54,7 @@ function Login({callApi}) {
       <form className='login-form' autoComplete='off' onSubmit={signupUser}>
 
         <input className='inputs' autoComplete='off' type='email' name='email' value={email} placeholder='Enter your email' required onChange={onChange} />
-        <input className='inputs' autoComplete='off' type='password' name='password' value={password} placeholder='Set your password' required minLength={8} onChange={onChange} />
+        <input className='inputs' autoComplete='off' type='password' name='password' value={password} placeholder='Enter password' required minLength={8} onChange={onChange} />
         <button className='btnn' type='submit'>Login</button>
 
       </form>
