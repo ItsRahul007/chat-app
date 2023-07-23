@@ -1,21 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
 import "./middle.css";
-import blackSearch from "../../../../png/blackSearch.png";
-import limeSearch from "../../../../png/limeSearch.png";
+import blackSearch from "../../../png/blackSearch.png";
+import limeSearch from "../../../png/limeSearch.png";
 import { useSelector } from 'react-redux';
-import removeUser from './removeUser';
+import removeUser from '../micro-compos/removeUser';
 
-function AvailableChat() {
+function AvailableChat({setChatWith}) {
   const [data, setData] = useState(null);
   const con = useRef(null);
   const img = useRef(null);
 
   const allUsersData = useSelector(state => state.user.allUsersData);
   const userData = useSelector(state => state.user.userData);
-
-  // const splice = removeUser(allUsersData.data, userData.data._id);
-  // setData(splice);
-  // console.log(splice);
 
 
   useEffect(() => {
@@ -27,17 +23,16 @@ function AvailableChat() {
     con.current.addEventListener("mouseleave", (e) => {
       img.current.src = blackSearch;
     });
-    // if (allUsersData.data && userData.data._id) {
-    //   const splice = removeUser(allUsersData.data, userData.data._id);
-    //   setData(splice);
-    //   console.log(splice);
-    // }
   }, []);
 
   useEffect(() => {
     const splice = removeUser(allUsersData.data, userData.data._id);
     setData(splice);
   }, [allUsersData.data, userData.data]);
+
+  function clickedChat(data){
+    setChatWith(data)
+  };
 
   return (
     <div className='chat-comp'>
@@ -53,7 +48,7 @@ function AvailableChat() {
           {data && data.map(data => {
             const { name, about, avatar, image, _id } = data;
             return (
-              <li key={_id}>
+              <li key={_id} onClick={()=>clickedChat(data)}>
                 <span className='profile-img' style={{ background: avatar }}>
                   {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
                 </span>

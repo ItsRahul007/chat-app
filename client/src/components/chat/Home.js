@@ -1,27 +1,28 @@
 import React, { useState, useRef } from 'react';
 import './home.css'
-import LeftComp from "./homeComponents/LeftComp";
-import MiddleComp from "./homeComponents/MiddleComp";
-import RightComp from "./homeComponents/RightComp";
-import Chat from './homeComponents/child-components/Chat';
-import Profile from "./homeComponents/child-components/Profile";
-import AvailableChat from './homeComponents/child-components/AvailableChat';
-import Setting from './homeComponents/child-components/Setting';
+import LeftComp from "./parent-compos/LeftComp";
+import MiddleComp from "./parent-compos/MiddleComp";
+import RightComp from "./parent-compos/RightComp";
+import Chat from './child-components/Chat';
+import Profile from "./child-components/Profile";
+import AvailableChat from './child-components/AvailableChat';
+import Setting from './child-components/Setting';
 
 function Home() {
   const [compo, setCompo] = useState(<Chat key={'chat'} />);
   const [pixle, setPixle] = useState(0);
+  const [chatWith, setChatWith] = useState(null);
 
   // Changing components when clicked 
   function changeCompo(name) {
     if (name === "chat") {
-      setCompo(<Chat key={'chat'} />)
+      setCompo(<Chat key={'chat'} setChatWith={setChatWith} />);
     }
     else if (name === "profile") {
       setCompo(<Profile key={"profile"} />)
     }
     else if (name === "avalibleChat") {
-      setCompo(<AvailableChat key={'avalibleChat'} />)
+      setCompo(<AvailableChat key={'avalibleChat'} setChatWith={setChatWith} />)
     }
     else if (name === "setting") {
       setCompo(<Setting key={'setting'} />)
@@ -45,10 +46,10 @@ function Home() {
     <div className='home-con'>
       <div>
         <div ref={twoCompo} className='two-compo'>
-          <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} key={'leftcompo'} />
-          <MiddleComp compo={compo} key={'middlecompo'} />
+          <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} />
+          <MiddleComp compo={compo} />
         </div>
-        <RightComp openMenu={toggleMenu} key={'rightcompo'} />
+        <RightComp openMenu={toggleMenu} chatWith={chatWith} />
       </div>
     </div>
   );

@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 
-function RightComp({ openMenu }) {
+function RightComp({ openMenu, chatWith }) {
   const [message, setMessage] = useState(''); // For storing typed messages
 
   const emoji_btn = useRef(null);
   const smile_face = useRef(null);
   const emoji_piker = useRef(null);
+
+  //For scrolled to message bottom section
+  function scrollBottom(){
+    const bottomMsg = document.getElementById('msg-bottom');
+    bottomMsg.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
 
@@ -23,7 +29,9 @@ function RightComp({ openMenu }) {
       smile_face.current.style.display = "block";
       emoji_piker.current.style.display = "none";
     });
-  });
+
+    chatWith && scrollBottom();
+  }, []);
 
   // Emoji piker clicked function
   function pickEmoji(e) {
@@ -62,19 +70,11 @@ function RightComp({ openMenu }) {
         <div className='msg-box msg-right'>fine! what about you man?</div>
         <div className='msg-box msg-left'>hey whatsup</div>
         <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-right'>fine! what about you man?</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-right'>fine! what about you man?</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-right'>fine! what about you man?</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-right'>fine! what about you man?</div>
-        <div className='msg-box msg-left'>hey whatsup bro</div>
 
         <div className='msg-box msg-left'>
           hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro
         </div>
+        <div id='msg-bottom'></div>
       </div>
 
       <div className='msg-sender'>

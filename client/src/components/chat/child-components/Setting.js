@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser, fetchAllUsers } from '../../../../store/slices/userSlice';
-import Collaps from './Collaps';
+import { fetchUser, fetchAllUsers } from '../../../store/slices/userSlice';
+import Collaps from '../micro-compos/Collaps';
 
 function Setting() {
   const [user, setUser] = useState({ name: '', about: '', email: '', avatar: '', image: '' });

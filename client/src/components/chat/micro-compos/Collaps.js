@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import './middle.css';
-import { showAlert } from '../../../../store/slices/alertSlice';
+import { showAlert } from '../../../store/slices/alertSlice';
 
 function Collaps({ name, about, email, avatar, image, onUserChange, setUser, user, dispatch }) {
 
@@ -14,7 +13,6 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
 
     // Chnage password method
     async function changePassword() {
-        const profileMsg = document.getElementById('profile-msg');
         let obj = {};
         if (password.length < 5 || oldPassword.length < 5) return dispatch(showAlert("Fill the password form"));
         
