@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import './middle.css';
+import { showAlert } from '../../../../store/slices/alertSlice';
 
-function Collaps({ name, about, email, avatar, image, onUserChange, setUser, user }) {
+function Collaps({ name, about, email, avatar, image, onUserChange, setUser, user, dispatch }) {
+
     const [pass, setPass] = useState({ oldPassword: '', password: '', conPassword: '' });
     const { oldPassword, password, conPassword } = pass;
     const colors = ['#72c976', '#454f5a', '#c18138', '#367e4f', '#17b1a4', '#1755b1', '#4116db', '#9616db', '#b913b9', '#b9137c', '#b9133d', '#b91313'];
@@ -11,11 +14,11 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
 
     // Chnage password method
     async function changePassword() {
-        const passMsg = document.getElementById('pas-msg');
+        const profileMsg = document.getElementById('profile-msg');
         let obj = {};
-        if (password !== conPassword) return alert("password didn't matched");
-
-        if (password.length < 5 || oldPassword.length < 5) return alert("Fill the password form");
+        if (password.length < 5 || oldPassword.length < 5) return dispatch(showAlert("Fill the password form"));
+        
+        if (password !== conPassword) return dispatch(showAlert("Given password didn't matched"));
 
         obj.password = password;
         obj.oldPassword = oldPassword;
@@ -33,21 +36,11 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
 
         // If error then sending message
         if (data.errors) {
-            passMsg.classList.add('failed');
-            passMsg.innerText = data.errors;
-            return setTimeout(() => {
-                passMsg.innerText = '';
-                passMsg.classList.remove('failed');
-            }, 3000);
+            dispatch(showAlert(data.errors))
         };
 
         // If success then sending message
-        passMsg.classList.add('success');
-        passMsg.innerText = "Password changed success fully";
-        setTimeout(() => {
-            passMsg.innerText = '';
-            passMsg.classList.remove('success');
-        }, 3000);
+        dispatch(showAlert("Avatar changed success fully"))
     };
 
     function changeColor(choosedColor) {
@@ -71,14 +64,13 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
                             <label htmlFor='chooseFile'><i class="ri-edit-2-fill"></i></label>
                         </div>
                     </div>
-                    <div className='avatar-colors'>
-                        <div>
+                    <div>
+                        <div className='avatar-colors'>
                             {colors.map(e => {
                                 return <span key={e} style={{ background: e }} onClick={() => changeColor(e)}></span>
                             })}
                         </div>
                     </div>
-                    <div className='res-msg' id='gen-msg'></div>
                 </div>
             </li>
             <li>

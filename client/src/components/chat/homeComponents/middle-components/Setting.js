@@ -63,9 +63,11 @@ function Setting() {
   return (
     <div className='setting-comp'>
       <div>Settings</div>
-      <ul className='collaps'>
-        <Collaps name={name} about={about} email={email} avatar={avatar} image={image} onUserChange={onUserChange} setUser={setUser} user={user} />
-      </ul>
+      <span className='collap-compo'>
+        <ul className='collaps'>
+          <Collaps name={name} about={about} email={email} avatar={avatar} image={image} onUserChange={onUserChange} setUser={setUser} user={user} dispatch={dispatch} />
+        </ul>
+      </span>
       <button className='setting-btn' onClick={updateUser}>Save Changes</button>
     </div >
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { showAlert, removeAlert } from '../../store/slices/alertSlice';
+import { showAlert } from '../../store/slices/alertSlice';
 
 function Singup({callApi}) {
   const [inputValue, setInputValue] = useState({ name: "", email: '', password: '' });
@@ -16,9 +16,6 @@ function Singup({callApi}) {
   // For allert
   function alert(msg) {
     dispatch(showAlert(msg));
-    setTimeout(() => {
-      dispatch(removeAlert());
-    }, 3500);
   };
 
   // Fetching api and sending given credentials

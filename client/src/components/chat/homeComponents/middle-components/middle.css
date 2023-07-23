@@ -218,18 +218,22 @@
   float: left;
 }
 
+.setting-comp .collap-compo{
+  width: 100%;
+  height: 78%;
+  overflow-y: scroll;
+}
+
+.setting-comp .collap-compo::-webkit-scrollbar{
+  display: none;
+}
+
 .setting-comp ul {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 78%;
   margin: 13px 0;
-  overflow-y: scroll;
-}
-
-.setting-comp ul::-webkit-scrollbar{
-  display: none;
 }
 
 .setting-comp ul li {
@@ -358,7 +362,7 @@
 .setting-comp > button {
   width: 80%;
   position: absolute;
-  bottom: 15px;
+  bottom: 25px;
 }
 
 .collap-img{
@@ -369,13 +373,13 @@
   position: relative;
 }
 
-.avatar-colors > div{
+.avatar-colors{
   width: 60%;
   height: 50%;
   padding-left: 30px;
   display: grid !important;
   grid-template-columns: repeat(4, 50px);
-  grid-template-rows: repeat(4, 50px);
+  grid-template-rows: repeat(3, 50px);
   justify-content: center;
   align-items: center;
 }

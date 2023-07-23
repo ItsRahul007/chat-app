@@ -148,7 +148,7 @@ router.put("/updateuser", fetchUser, async (req, res) => {
     
     // First checking password the set the password
     if (password && oldPassword) {
-        if(oldPassword !== isUser.password) return res.status(400).json({ errors: "Wrong password." });
+        if(oldPassword !== isUser.password) return res.status(400).json({ errors: "Current password is wrong" });
         const salt = await bcrypt.genSalt(10);
         // hashing password and adding salt with it
         const secPas = await bcrypt.hash(req.body.password, salt);
