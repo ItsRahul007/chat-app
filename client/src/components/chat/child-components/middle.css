@@ -91,7 +91,7 @@
   overflow: hidden;
 }
 
-.profile-con .profile-img{
+.profile-con .profile-img {
   font-size: 28px;
 }
 
@@ -120,12 +120,12 @@
 }
 
 .profile-con > span {
-  margin: 20px 0 10px 45px;
-  color: #72c976;
-  font-size: 22px;
-  font-weight: 500;
-  width: 100%;
+  width: 90%;
   float: left;
+  padding-top: 20px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #72c976;
 }
 
 .user-profile {
@@ -156,7 +156,7 @@
 .user-profile .user-about {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.379);
-  font-family: 'Lora', serif;
+  font-family: "Lora", serif;
 }
 
 .user-media {
@@ -218,13 +218,13 @@
   float: left;
 }
 
-.setting-comp .collap-compo{
+.setting-comp .collap-compo {
   width: 100%;
   height: 78%;
   overflow-y: scroll;
 }
 
-.setting-comp .collap-compo::-webkit-scrollbar{
+.setting-comp .collap-compo::-webkit-scrollbar {
   display: none;
 }
 
@@ -272,7 +272,7 @@
   padding: 0px 2px 4px 2px;
   border-radius: 50%;
   background-color: #454f5a93;
-  transform: scale(.8);
+  transform: scale(0.8);
 }
 
 .setting-comp ul li > input {
@@ -365,7 +365,7 @@
   bottom: 25px;
 }
 
-.collap-img{
+.collap-img {
   height: 70px;
   width: 70px;
   font-size: 22px;
@@ -373,7 +373,7 @@
   position: relative;
 }
 
-.avatar-colors{
+.avatar-colors {
   width: 60%;
   height: 50%;
   padding-left: 30px;
@@ -384,17 +384,17 @@
   align-items: center;
 }
 
-.avatar-colors span{
+.avatar-colors span {
   height: 40px;
   width: 40px;
   border-radius: 52%;
 }
 
-.collap-profile{
+.collap-profile {
   position: relative;
 }
 
-.collap-profile > div{
+.collap-profile > div {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -411,24 +411,24 @@
   cursor: pointer;
 }
 
-.collap-profile > div i{
+.collap-profile > div i {
   cursor: pointer;
 }
 
-.res-msg{
+.res-msg {
   margin-top: -22px;
 }
 
-.success{
+.success {
   color: #72c976;
 }
 
-.failed{
+.failed {
   color: rgb(201, 24, 24);
 }
 
 @media only screen and (max-width: 665px) {
-  .search input{
+  .search input {
     width: 250px;
   }
 }

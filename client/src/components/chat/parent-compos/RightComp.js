@@ -3,13 +3,14 @@ import EmojiPicker from 'emoji-picker-react';
 
 function RightComp({ openMenu, chatWith }) {
   const [message, setMessage] = useState(''); // For storing typed messages
+  const { name, avatar, image } = chatWith
 
   const emoji_btn = useRef(null);
   const smile_face = useRef(null);
   const emoji_piker = useRef(null);
 
   //For scrolled to message bottom section
-  function scrollBottom(){
+  function scrollBottom() {
     const bottomMsg = document.getElementById('msg-bottom');
     bottomMsg.scrollIntoView({ behavior: "smooth" });
   };
@@ -30,7 +31,7 @@ function RightComp({ openMenu, chatWith }) {
       emoji_piker.current.style.display = "none";
     });
 
-    chatWith && scrollBottom();
+    scrollBottom();
   }, []);
 
   // Emoji piker clicked function
@@ -49,11 +50,11 @@ function RightComp({ openMenu, chatWith }) {
         <button className='menu-btn' onClick={openMenu}>
           <i className="ri-menu-line"></i>
         </button>
-        <span className='user-avatar'>
-          <img src='https://media.istockphoto.com/id/1294339577/photo/young-beautiful-woman.jpg?s=612x612&w=0&k=20&c=v41m_jNzYXQtxrr8lZ9dE8hH3CGWh6HqpieWkdaMAAM=' alt='profile' />
+        <span className='user-avatar' style={{background: avatar}}>
+          {image? <img src={image} alt='profile' /> : name.slice(0, 2)}
         </span>
         <span>
-          <div className='user-name'>Rahul Ghosh</div>
+          <div className='user-name'>{name}</div>
           <div className='user-status'>Online</div>
         </span>
       </div>
@@ -90,7 +91,7 @@ function RightComp({ openMenu, chatWith }) {
         <button type="file" name="avatar" className='attach'>
           <i className="ri-attachment-line"></i>
         </button>
-        <button className='btn-send'>
+        <button className='btn-send' disabled={message.length <= 0}>
           <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt='' />
         </button>
       </div>

@@ -7,13 +7,14 @@ import Chat from './child-components/Chat';
 import Profile from "./child-components/Profile";
 import AvailableChat from './child-components/AvailableChat';
 import Setting from './child-components/Setting';
+import NoChat from './micro-compos/NoChat';
 
 function Home() {
   const [compo, setCompo] = useState(<Chat key={'chat'} />);
   const [pixle, setPixle] = useState(0);
   const [chatWith, setChatWith] = useState(null);
 
-  // Changing components when clicked 
+  // Changing components when clicked and sending propertis to components
   function changeCompo(name) {
     if (name === "chat") {
       setCompo(<Chat key={'chat'} setChatWith={setChatWith} />);
@@ -30,14 +31,14 @@ function Home() {
   };
 
   // toggling menu
-  const twoCompo = useRef(null)
+  const menuCompo = useRef(null)
   function toggleMenu() {
     if (pixle === 0) {
-      twoCompo.current.style.left = pixle + "px";
+      menuCompo.current.style.left = pixle + "px";
       setPixle(-500)
     }
     else {
-      twoCompo.current.style.left = pixle + "px";
+      menuCompo.current.style.left = pixle + "px";
       setPixle(0)
     }
   };
@@ -45,15 +46,14 @@ function Home() {
   return (
     <div className='home-con'>
       <div>
-        <div ref={twoCompo} className='two-compo'>
+        <div ref={menuCompo} className='two-compo'>
           <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} />
           <MiddleComp compo={compo} />
         </div>
-        <RightComp openMenu={toggleMenu} chatWith={chatWith} />
+        {chatWith? <RightComp openMenu={toggleMenu} chatWith={chatWith} /> : <NoChat openMenu={toggleMenu}/>}
       </div>
     </div>
   );
 };
-// position: "absolute", left: "0", zIndex: '100'
 
 export default Home;

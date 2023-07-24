@@ -1,0 +1,38 @@
+.no-chat, .no-chat div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-chat div img{
+    max-width: 240px;
+    height: 240px;
+    margin: 0;
+}
+
+.no-chat div p{
+    font-size: .825rem;
+    color: #8c96a0;
+}
+
+.no-chat div button{
+    display: none;
+    height: 52px;
+    width: 155px;
+    background-color: #72c976;
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+    border: none;
+    border-radius: 25px;
+}
+
+@media only screen and (max-width: 910px){
+    .no-chat div p{
+        display: none;
+    }
+    .no-chat div button{
+        display: inline;
+    }
+};
