@@ -29,7 +29,7 @@ function App() {
   function loginToDispatch() {
     dispatch(fetchUser());
     dispatch(fetchAllUsers());
-  }
+  };
 
   return (
     <>

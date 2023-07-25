@@ -1,9 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
+import { useSelector } from 'react-redux';
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:4000");
 
 function RightComp({ openMenu, chatWith }) {
-  const [message, setMessage] = useState(''); // For storing typed messages
-  const { name, avatar, image } = chatWith
+  const userData = useSelector(state => state.user.userData);
+  const userId = userData.data._id;
+  const [text, setText] = useState(''); // For storing typed messages
+  const [message, setMessage] = useState([
+    {
+      id: chatWith._id,
+      msg: "Hello brother"
+    },
+    {
+      id: userId,
+      msg: "kaise ho vai"
+    }
+  ]);
+  const { name, avatar, image } = chatWith;
 
   const emoji_btn = useRef(null);
   const smile_face = useRef(null);
@@ -36,8 +52,23 @@ function RightComp({ openMenu, chatWith }) {
 
   // Emoji piker clicked function
   function pickEmoji(e) {
-    setMessage(message + e.emoji);
+    setText(text + e.emoji);
   };
+
+  // For sending messages
+  function sendMsg() {
+    socket.emit('send-msg', text);
+    setMessage(message.concat({
+      id: userId,
+      msg: text
+    }));
+    setText('');
+  };
+
+  // For resiving messages
+  socket.on("recive-msg", obj => {
+    console.log(obj);;
+  });
 
   // For delete and edit message options
   function options() {
@@ -50,8 +81,8 @@ function RightComp({ openMenu, chatWith }) {
         <button className='menu-btn' onClick={openMenu}>
           <i className="ri-menu-line"></i>
         </button>
-        <span className='user-avatar' style={{background: avatar}}>
-          {image? <img src={image} alt='profile' /> : name.slice(0, 2)}
+        <span className='user-avatar' style={{ background: avatar }}>
+          {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
         </span>
         <span>
           <div className='user-name'>{name}</div>
@@ -60,26 +91,17 @@ function RightComp({ openMenu, chatWith }) {
       </div>
       <div className='chat-section'>
 
-        <div onClick={options} className='msg-box msg-left'>hey whatsup</div>
-        <div onClick={options} className='msg-box msg-right'>fine! what about you man?</div>
-        <div onClick={options} className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-right'>fine! what about you man?</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-right'>fine! what about you man?</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-right'>fine! what about you man?</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
-        <div className='msg-box msg-left'>hey whatsup</div>
+        {
+          message && message.map((obj, i) => {
+            return <div onClick={options} key={i} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>{obj.msg}</div>
+          })
+        }
 
-        <div className='msg-box msg-left'>
-          hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro hey whatsup bro
-        </div>
         <div id='msg-bottom'></div>
       </div>
 
       <div className='msg-sender'>
-        <textarea type='text' placeholder='Type your message here...' value={message} onChange={e => setMessage(e.target.value)} />
+        <textarea type='text' placeholder='Type your message here...' value={text} onChange={e => setText(e.target.value)} />
 
         <div className='attach' ref={emoji_btn}>
           <i className="fa-regular fa-face-smile-beam" ref={smile_face}></i>
@@ -91,7 +113,7 @@ function RightComp({ openMenu, chatWith }) {
         <button type="file" name="avatar" className='attach'>
           <i className="ri-attachment-line"></i>
         </button>
-        <button className='btn-send' disabled={message.length <= 0}>
+        <button className='btn-send' disabled={text.length <= 0} onClick={sendMsg} >
           <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt='' />
         </button>
       </div>

@@ -14,8 +14,8 @@ function AvailableChat({ setChatWith }) {
   const userData = useSelector(state => state.user.userData);
 
 
+  // changing images on hover
   useEffect(() => {
-    // changing images on hover
     con.current.addEventListener("mouseenter", (e) => {
       img.current.src = limeSearch;
     });
@@ -25,6 +25,7 @@ function AvailableChat({ setChatWith }) {
     });
   }, []);
 
+  // Filtering the user from the all user datas and storing it in data state
   useEffect(() => {
     const splice = removeUser(allUsersData.data, userData.data._id);
     setData(splice);
@@ -34,7 +35,8 @@ function AvailableChat({ setChatWith }) {
     setChatWith(data)
   };
 
-  function searchFun(e) {
+  // search function
+  function onChange(e) {
     const searchName = e.target.value.toLowerCase();
     if (searchName.length <= 0) {
       const splice = removeUser(allUsersData.data, userData.data._id);
@@ -50,7 +52,7 @@ function AvailableChat({ setChatWith }) {
       <div>Available Chat</div>
       <div ref={con} className="search">
         <img ref={img} src={blackSearch} alt='search' />
-        <input type='search' placeholder='Search Chat' onChange={searchFun} />
+        <input type='search' placeholder='Search Chat' onChange={onChange} />
       </div>
       <div className='chat-list'>
         {allUsersData.isLoading && <div>Loading...</div>}
