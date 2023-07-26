@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { useSelector } from 'react-redux';
-import io from "socket.io-client";
-
-const socket = io.connect("http://localhost:4000");
+import { socket } from '../socket/socketIO';
 
 function RightComp({ openMenu, chatWith }) {
   const userData = useSelector(state => state.user.userData);
   const userId = userData.data._id;
   const [text, setText] = useState(''); // For storing typed messages
-  const [message, setMessage] = useState([
+  const [message, setMessage] = useState([  // For storing the sending and reciving messages
     {
       id: chatWith._id,
       msg: "Hello brother"
@@ -57,18 +55,22 @@ function RightComp({ openMenu, chatWith }) {
 
   // For sending messages
   function sendMsg() {
-    socket.emit('send-msg', text);
-    setMessage(message.concat({
-      id: userId,
-      msg: text
-    }));
+    socket.emit('send_msg', text); 
+    let obj = { id: userId, msg: text };
+    let newArray = [...message, obj];
+    console.log(newArray);
+    setMessage(newArray);
     setText('');
   };
 
-  // For resiving messages
-  socket.on("recive-msg", obj => {
-    console.log(obj);;
-  });
+  // For resiving emitied functions on the server
+  useEffect(() => {
+    socket.on("recive-msg", (obj) => {
+      let newArray = [...message, obj]
+      console.log(newArray);
+      setMessage(newArray);
+    });
+  }, [socket]);
 
   // For delete and edit message options
   function options() {

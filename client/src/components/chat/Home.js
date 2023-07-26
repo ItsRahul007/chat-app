@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './home.css';
 import { useSelector } from 'react-redux';
 import LeftComp from "./parent-compos/LeftComp";
@@ -9,21 +9,30 @@ import Profile from "./child-components/Profile";
 import AvailableChat from './child-components/AvailableChat';
 import Setting from './child-components/Setting';
 import NoChat from './micro-compos/NoChat';
-import io from "socket.io-client";
+import { socket } from './socket/socketIO';
 
-const socket = io.connect("http://localhost:4000");
 
 function Home() {
+  const userData = useSelector(state => state.user.userData);
   const [compo, setCompo] = useState(<Chat key={'chat'} />);
   const [pixle, setPixle] = useState(0);
   const [chatWith, setChatWith] = useState(null);
 
-  // online user
-  const userData = useSelector(state => state.user.userData);
+  // when a user loged in or open the app emiting user-online function
   if (userData.data) {
     const userId = userData.data._id;
     socket.emit('user-online', userId);
   };
+
+  useEffect(()=>{
+    socket.on("new-user-online", id =>{
+      console.log(id+" is online");
+    });
+
+    socket.on("user-offline", id =>{
+      console.log(id+" is offline");
+    })
+  }, [socket])
 
   // Changing components when clicked and sending propertis to components
   function changeCompo(name) {
