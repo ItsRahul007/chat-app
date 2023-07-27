@@ -17,16 +17,16 @@ function RightComp({ openMenu, chatWith }) {
       msg: "kaise ho vai"
     }
   ]);
-  const { name, avatar, image } = chatWith;
+  const { name, avatar, image, _id } = chatWith;
 
   const emoji_btn = useRef(null);
   const smile_face = useRef(null);
   const emoji_piker = useRef(null);
+  const bottom_msg = useRef(null);
 
   //For scrolled to message bottom section
   function scrollBottom() {
-    const bottomMsg = document.getElementById('msg-bottom');
-    bottomMsg.scrollIntoView({ behavior: "smooth" });
+    bottom_msg.current && bottom_msg.current.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -53,24 +53,30 @@ function RightComp({ openMenu, chatWith }) {
     setText(text + e.emoji);
   };
 
+  function appendChild(msg, position){
+    let chatCon = document.querySelector(".chat-section");
+    let child = document.createElement('div')
+    child.classList.add(`msg-box`)
+    child.classList.add(`msg-${position}`)
+    child.onClick = options();
+    child.innerText = msg;
+    child.ref = bottom_msg;
+    chatCon.appendChild(child);
+  }
+
   // For sending messages
   function sendMsg() {
-    socket.emit('send_msg', text); 
-    let obj = { id: userId, msg: text };
-    let newArray = [...message, obj];
-    console.log(newArray);
-    setMessage(newArray);
+    socket.emit('send_msg', { text, id: _id });
+    appendChild(text, "right");
     setText('');
   };
 
   // For resiving emitied functions on the server
   useEffect(() => {
     socket.on("recive-msg", (obj) => {
-      let newArray = [...message, obj]
-      console.log(newArray);
-      setMessage(newArray);
+      appendChild(obj.msg, "left");
     });
-  }, [socket]);
+  });
 
   // For delete and edit message options
   function options() {
@@ -99,7 +105,6 @@ function RightComp({ openMenu, chatWith }) {
           })
         }
 
-        <div id='msg-bottom'></div>
       </div>
 
       <div className='msg-sender'>
@@ -115,7 +120,7 @@ function RightComp({ openMenu, chatWith }) {
         <button type="file" name="avatar" className='attach'>
           <i className="ri-attachment-line"></i>
         </button>
-        <button className='btn-send' disabled={text.length <= 0} onClick={sendMsg} >
+        <button className='btn-send' disabled={text.length <= 0 || text === ''} onClick={sendMsg} >
           <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt='' />
         </button>
       </div>

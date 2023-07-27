@@ -11,7 +11,6 @@ import Setting from './child-components/Setting';
 import NoChat from './micro-compos/NoChat';
 import { socket } from './socket/socketIO';
 
-
 function Home() {
   const userData = useSelector(state => state.user.userData);
   const [compo, setCompo] = useState(<Chat key={'chat'} />);
@@ -32,7 +31,7 @@ function Home() {
     socket.on("user-offline", id =>{
       console.log(id+" is offline");
     })
-  }, [socket])
+  })
 
   // Changing components when clicked and sending propertis to components
   function changeCompo(name) {
