@@ -5,7 +5,7 @@ import limeSearch from "../../../png/limeSearch.png";
 import { useSelector } from 'react-redux';
 import removeUser from '../micro-compos/removeUser';
 
-function AvailableChat({ setChatWith }) {
+function AvailableChat({ setChatWith, toggleMenu }) {
   const [data, setData] = useState(null);
   const con = useRef(null);
   const img = useRef(null);
@@ -32,7 +32,8 @@ function AvailableChat({ setChatWith }) {
   }, [allUsersData.data, userData.data]);
 
   function clickedChat(data) {
-    setChatWith(data)
+    toggleMenu();
+    setChatWith(data);
   };
 
   // search function

@@ -17,21 +17,28 @@ function Home() {
   const [pixle, setPixle] = useState(0);
   const [chatWith, setChatWith] = useState(null);
 
+  // adding a alert before reload the page or closing the browser
+  // window.addEventListener('beforeunload', function (e) {
+  //   e.preventDefault();
+  //   e.returnValue = '';
+  //   console.log('hello');
+  // });
+
   // when a user loged in or open the app emiting user-online function
   if (userData.data) {
     const userId = userData.data._id;
     socket.emit('user-online', userId);
   };
 
-  useEffect(()=>{
-    socket.on("new-user-online", id =>{
-      console.log(id+" is online");
+  useEffect(() => {
+    socket.on("new-user-online", id => {
+      console.log(id + " is online");
     });
 
-    socket.on("user-offline", id =>{
-      console.log(id+" is offline");
+    socket.on("user-offline", id => {
+      console.log(id + " is offline");
     })
-  })
+  }, [socket]);
 
   // Changing components when clicked and sending propertis to components
   function changeCompo(name) {
@@ -42,7 +49,7 @@ function Home() {
       setCompo(<Profile key={"profile"} />)
     }
     else if (name === "avalibleChat") {
-      setCompo(<AvailableChat key={'avalibleChat'} setChatWith={setChatWith} />)
+      setCompo(<AvailableChat key={'avalibleChat'} setChatWith={setChatWith} toggleMenu={toggleMenu} />)
     }
     else if (name === "setting") {
       setCompo(<Setting key={'setting'} />)
