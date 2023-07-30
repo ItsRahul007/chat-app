@@ -17,27 +17,31 @@ function Home() {
   const [pixle, setPixle] = useState(0);
   const [chatWith, setChatWith] = useState(null);
 
-  // adding a alert before reload the page or closing the browser
-  // window.addEventListener('beforeunload', function (e) {
-  //   e.preventDefault();
-  //   e.returnValue = '';
-  //   console.log('hello');
-  // });
-
   // when a user loged in or open the app emiting user-online function
   if (userData.data) {
     const userId = userData.data._id;
     socket.emit('user-online', userId);
+    socket.emit("get-unsend-msg", userId);
   };
 
   useEffect(() => {
+    // When user will be online
     socket.on("new-user-online", id => {
       console.log(id + " is online");
     });
 
+    // When user will be offline
     socket.on("user-offline", id => {
       console.log(id + " is offline");
-    })
+    });
+
+    // Reciving the undelivered messages
+    socket.on("recive-unsend-msg", message => {
+      console.log(message);
+      message.map(obj => {
+        socket.emit("recived-msg", obj._id);
+      });
+    });
   }, [socket]);
 
   // Changing components when clicked and sending propertis to components
@@ -76,7 +80,12 @@ function Home() {
           <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} />
           <MiddleComp compo={compo} />
         </div>
-        {chatWith ? <RightComp openMenu={toggleMenu} chatWith={chatWith} /> : <NoChat openMenu={toggleMenu} />}
+        {
+          chatWith ? // If user select a chat then displaying Right component with chat otherwise showing NoChat component
+            <RightComp openMenu={toggleMenu} chatWith={chatWith} userId={userData.data && userData.data._id} /* if user data exist then sending user id */ />
+            :
+            <NoChat openMenu={toggleMenu} />
+        }
       </div>
     </div>
   );

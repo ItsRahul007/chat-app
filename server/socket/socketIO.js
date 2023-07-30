@@ -38,18 +38,17 @@ function socketServer(io) {
           console.error('Error saving message:', error);
         };
       };
+    });
 
-      // Checking if the users already chatted or not. If not then creating an index with their id's and if they already chatted then updating the chat index
-      if (allChat.hasOwnProperty(users[socket.id] + "_" + id)) {
-        allChat[users[socket.id] + "_" + id].push({ id: users[socket.id], msg: text });
-      }
-      else if (allChat.hasOwnProperty(id + "_" + users[socket.id])) {
-        allChat[id + "_" + users[socket.id]].push({ id: users[socket.id], msg: text });
-      }
-      else {
-        allChat[users[socket.id] + "_" + id] = [{ id: users[socket.id], msg: text }];
-      }
-      console.log(allChat);
+    socket.on("get-unsend-msg", async (id) => {
+      const messages = await collectedMSG.find({ reciverId: id });
+      // If user have any messages
+      if (messages) return socket.emit("recive-unsend-msg", messages);
+    });
+
+    // If user recived unsend messages then deleting the messages from DB
+    socket.on("recived-msg", async (msgId) => {
+      await collectedMSG.findByIdAndDelete(msgId);
     });
 
     socket.on("disconnect", () => {

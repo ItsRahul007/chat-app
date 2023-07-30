@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { socket } from '../socket/socketIO';
 
-function RightComp({ openMenu, chatWith }) {
+function RightComp({ openMenu, chatWith, userId }) {
   const { name, avatar, image, _id } = chatWith;
   const [text, setText] = useState(''); // For storing typed messages
-  const [messages, setMessages] = useState('')
+  const [message, setMessage] = useState({});
   const bottom_msg = useRef(null);
 
   //For scrolled to the bottom message
@@ -41,32 +41,52 @@ function RightComp({ openMenu, chatWith }) {
     setText(text + e.emoji);
   };
 
-  function appendChild(msg, position){
-    let chatCon = document.querySelector(".chat-section");
-    let child = document.createElement('div');
-    child.classList.add(`msg-box`);
-    child.classList.add(`msg-${position}`);
-    child.onClick = options();
-    child.innerText = msg;
-    child.ref = bottom_msg;
-    chatCon.appendChild(child);
-  };
-
   // Sending the messages into server and adding the message in frontend
   function sendMsg() {
     socket.emit('send_msg', { text, id: _id });
-    appendChild(text, "right");
-    setText('');
     scrollBottom();
+    setMessage((prevMessages) => {
+      const updatedMessages = { ...prevMessages };
+
+      // If no previous messages with this sender, create a new array
+      if (!updatedMessages[_id]) {
+        updatedMessages[_id] = [{ id: userId, msg: text }];
+      }
+      else {
+        // Append the new message to the existing array
+        updatedMessages[_id] = [
+          ...updatedMessages[_id],
+          { id: userId, msg: text },
+        ];
+      };
+      return updatedMessages;
+    });
+    setText('');
+    console.log(message);
   };
 
   // Receving emitied functions on the server
   useEffect(() => {
     // Receving the sended message and adding the message in the frontend
     socket.on("recive-msg", (obj) => {
-      appendChild(obj.msg, "left");
       console.log(obj);
       scrollBottom();
+      setMessage((prevMessages) => {
+        const updatedMessages = { ...prevMessages };
+  
+        if (!updatedMessages[obj.id]) {
+          // If no previous messages with this sender, create a new array
+          updatedMessages[obj.id] = [{ id: obj.id, msg: obj.msg }];
+        }
+        else {
+          // Append the new message to the existing array
+          updatedMessages[obj.id] = [
+            ...updatedMessages[obj.id],
+            { id: obj.id, msg: obj.msg },
+          ];
+        };
+        return updatedMessages;
+      });
     });
   }, [socket]);
 
@@ -94,15 +114,17 @@ function RightComp({ openMenu, chatWith }) {
       {/* Message section */}
       <div className='chat-section'>
 
-        {/* {
-          message && message.map((obj, i) => {
+        {
+          message[_id]? message[_id].map((obj, i) => {
             return <div onClick={options} key={i} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>{obj.msg}</div>
           })
-        } */}
+          :
+          <h1>No chats</h1>
+        }
 
       </div>
 
-        {/* The right bottom section */}
+      {/* The right bottom section */}
       <div className='msg-sender'>
         <textarea type='text' placeholder='Type your message here...' value={text} onChange={e => setText(e.target.value)} />
 
