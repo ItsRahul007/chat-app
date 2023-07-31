@@ -13,9 +13,9 @@ import { socket } from './socket/socketIO';
 
 function Home() {
   const userData = useSelector(state => state.user.userData);
-  const [compo, setCompo] = useState(<Chat key={'chat'} />);
-  const [pixle, setPixle] = useState(0);
   const [chatWith, setChatWith] = useState(null);
+  const [compo, setCompo] = useState(<Chat setChatWith={setChatWith} toggleMenu={toggleMenu} />);
+  const [pixle, setPixle] = useState(0);
 
   // when a user loged in or open the app emiting user-online function
   if (userData.data) {
@@ -37,7 +37,6 @@ function Home() {
 
     // Reciving the undelivered messages
     socket.on("recive-unsend-msg", message => {
-      console.log(message);
       message.map(obj => {
         socket.emit("recived-msg", obj._id);
       });
@@ -47,16 +46,16 @@ function Home() {
   // Changing components when clicked and sending propertis to components
   function changeCompo(name) {
     if (name === "chat") {
-      setCompo(<Chat key={'chat'} setChatWith={setChatWith} />);
+      setCompo(<Chat setChatWith={setChatWith} toggleMenu={toggleMenu} />);
     }
     else if (name === "profile") {
-      setCompo(<Profile key={"profile"} />)
+      setCompo(<Profile />)
     }
     else if (name === "avalibleChat") {
-      setCompo(<AvailableChat key={'avalibleChat'} setChatWith={setChatWith} toggleMenu={toggleMenu} />)
+      setCompo(<AvailableChat setChatWith={setChatWith} toggleMenu={toggleMenu} />)
     }
     else if (name === "setting") {
-      setCompo(<Setting key={'setting'} />)
+      setCompo(<Setting />)
     }
   };
 

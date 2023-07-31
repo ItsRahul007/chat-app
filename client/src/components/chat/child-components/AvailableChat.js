@@ -31,6 +31,7 @@ function AvailableChat({ setChatWith, toggleMenu }) {
     setData(splice);
   }, [allUsersData.data, userData.data]);
 
+  // Toggling the menu and setting the righ-comp data 
   function clickedChat(data) {
     toggleMenu();
     setChatWith(data);

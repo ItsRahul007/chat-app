@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { socket } from '../socket/socketIO';
+import { chatList } from '../../../store/slices/chatSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function RightComp({ openMenu, chatWith, userId }) {
   const { name, avatar, image, _id } = chatWith;
   const [text, setText] = useState(''); // For storing typed messages
   const [message, setMessage] = useState({});
   const bottom_msg = useRef(null);
+  const dispatch = useDispatch();
+  const chatId = useSelector(state => state.chatId);
 
   //For scrolled to the bottom message
   function scrollBottom() {
@@ -62,7 +66,8 @@ function RightComp({ openMenu, chatWith, userId }) {
       return updatedMessages;
     });
     setText('');
-    console.log(message);
+    // Checking if the id already stored or not
+    if(!chatId.includes(_id)) dispatch(chatList(_id));
   };
 
   // Receving emitied functions on the server
@@ -73,7 +78,7 @@ function RightComp({ openMenu, chatWith, userId }) {
       scrollBottom();
       setMessage((prevMessages) => {
         const updatedMessages = { ...prevMessages };
-  
+
         if (!updatedMessages[obj.id]) {
           // If no previous messages with this sender, create a new array
           updatedMessages[obj.id] = [{ id: obj.id, msg: obj.msg }];
@@ -87,6 +92,9 @@ function RightComp({ openMenu, chatWith, userId }) {
         };
         return updatedMessages;
       });
+
+      // Checking if the id already stored or not
+      if(!chatId.includes(obj.id)) dispatch(chatList(obj.id));
     });
   }, [socket]);
 
@@ -115,11 +123,15 @@ function RightComp({ openMenu, chatWith, userId }) {
       <div className='chat-section'>
 
         {
-          message[_id]? message[_id].map((obj, i) => {
-            return <div onClick={options} key={i} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>{obj.msg}</div>
+          message[_id] ? message[_id].map((obj, i) => {
+            return (
+              <div onClick={options} key={i} ref={bottom_msg} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
+                {obj.msg}
+              </div>
+            )
           })
-          :
-          <h1>No chats</h1>
+            :
+            <h1>No chats</h1>
         }
 
       </div>
