@@ -21,7 +21,6 @@ function Home() {
   if (userData.data) {
     const userId = userData.data._id;
     socket.emit('user-online', userId);
-    socket.emit("get-unsend-msg", userId);
   };
 
   useEffect(() => {
@@ -33,13 +32,6 @@ function Home() {
     // When user will be offline
     socket.on("user-offline", id => {
       console.log(id + " is offline");
-    });
-
-    // Reciving the undelivered messages
-    socket.on("recive-unsend-msg", message => {
-      message.map(obj => {
-        socket.emit("recived-msg", obj._id);
-      });
     });
   }, [socket]);
 

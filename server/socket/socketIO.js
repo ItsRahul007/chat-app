@@ -1,7 +1,6 @@
 const collectedMSG = require("../schema/UnsendMSG");
 
 const users = {}; // For storing users with the key of socket id and the value of their mondoDB id 
-const allChat = {}; // For creating the chats name and storing the users messages with their mongoDb id
 
 // Finding the object key with his value
 function getKeyByValue(object, value) {
@@ -10,14 +9,22 @@ function getKeyByValue(object, value) {
 
 function socketServer(io) {
   io.on("connection", socket => {
+
     // when a new user online throwing a function named "user-join"
-    socket.on("user-online", userId => {
+    socket.on("user-online", async (userId) => {
       users[socket.id] = userId;
       socket.broadcast.emit("new-user-online", userId);
       socket.join(userId); // Join the users on their specified rooms with the name of their id's
+
+      // Checking if user has some pending messages or not
+      const messages = await collectedMSG.find({ reciverId: userId });
+      // If user have any messages
+      if (!messages.length <= 0) {
+        socket.emit("get-unsend-msg", messages);
+      };
     });
 
-    // When send msg emittied emiting recive msg function
+    // When send msg emittied, emiting recive msg function
     socket.on("send_msg", async ({ text, id }) => {
       // Checking if the user online or not
       let objectKey = getKeyByValue(users, id);
@@ -32,7 +39,7 @@ function socketServer(io) {
             message: text
           });
           await newMSG.save();
-          console.log('Message saved for offline user:', newMessage);
+          console.log('Message saved for offline user:', newMSG);
         }
         catch (error) {
           console.error('Error saving message:', error);
@@ -40,14 +47,8 @@ function socketServer(io) {
       };
     });
 
-    socket.on("get-unsend-msg", async (id) => {
-      const messages = await collectedMSG.find({ reciverId: id });
-      // If user have any messages
-      if (messages) return socket.emit("recive-unsend-msg", messages);
-    });
-
     // If user recived unsend messages then deleting the messages from DB
-    socket.on("recived-msg", async (msgId) => {
+    socket.on("recived-unsend-msg", async (msgId) => {
       await collectedMSG.findByIdAndDelete(msgId);
     });
 

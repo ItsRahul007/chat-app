@@ -15,7 +15,26 @@ function RightComp({ openMenu, chatWith, userId }) {
   //For scrolled to the bottom message
   function scrollBottom() {
     bottom_msg.current && bottom_msg.current.scrollIntoView({ behavior: "smooth" });
-    console.log(bottom_msg.current);
+  };
+
+  // Updating the message state
+  function updateMessageState(keyId, id, msg){
+    setMessage((prevMessages) => {
+      const updatedMessages = { ...prevMessages };
+
+      if (!updatedMessages[keyId]) {
+        // If no previous messages with this sender, create a new array
+        updatedMessages[keyId] = [{ id, msg }];
+      }
+      else {
+        // Append the new message to the existing array
+        updatedMessages[keyId] = [
+          ...updatedMessages[keyId],
+          { id, msg },
+        ];
+      };
+      return updatedMessages;
+    });
   };
 
   useEffect(() => {
@@ -48,54 +67,37 @@ function RightComp({ openMenu, chatWith, userId }) {
   // Sending the messages into server and adding the message in frontend
   function sendMsg() {
     socket.emit('send_msg', { text, id: _id });
-    scrollBottom();
-    setMessage((prevMessages) => {
-      const updatedMessages = { ...prevMessages };
-
-      // If no previous messages with this sender, create a new array
-      if (!updatedMessages[_id]) {
-        updatedMessages[_id] = [{ id: userId, msg: text }];
-      }
-      else {
-        // Append the new message to the existing array
-        updatedMessages[_id] = [
-          ...updatedMessages[_id],
-          { id: userId, msg: text },
-        ];
-      };
-      return updatedMessages;
-    });
+    updateMessageState(_id, userId, text);
     setText('');
+    
     // Checking if the id already stored or not
     if(!chatId.includes(_id)) dispatch(chatList(_id));
+    scrollBottom();
   };
 
   // Receving emitied functions on the server
   useEffect(() => {
+
     // Receving the sended message and adding the message in the frontend
     socket.on("recive-msg", (obj) => {
-      console.log(obj);
-      scrollBottom();
-      setMessage((prevMessages) => {
-        const updatedMessages = { ...prevMessages };
-
-        if (!updatedMessages[obj.id]) {
-          // If no previous messages with this sender, create a new array
-          updatedMessages[obj.id] = [{ id: obj.id, msg: obj.msg }];
-        }
-        else {
-          // Append the new message to the existing array
-          updatedMessages[obj.id] = [
-            ...updatedMessages[obj.id],
-            { id: obj.id, msg: obj.msg },
-          ];
-        };
-        return updatedMessages;
-      });
-
+      updateMessageState(obj.id, obj.id, obj.msg);
+      
       // Checking if the id already stored or not
       if(!chatId.includes(obj.id)) dispatch(chatList(obj.id));
     });
+    
+    // Reciving the undelivered messages
+    socket.on("get-unsend-msg", msg => {
+      updateMessageState(msg.senderId, msg.senderId, msg.message);
+      console.log(msg);
+      
+      // Maping through the msg array and emiting "recived-msg" function for deleting recived messages
+      msg.map(obj => {
+        return socket.emit("recived-unsend-msg", obj._id);
+      });
+      scrollBottom();
+    });
+
   }, [socket]);
 
   // For delete and edit message options
