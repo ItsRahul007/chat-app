@@ -4,37 +4,19 @@ import { socket } from '../socket/socketIO';
 import { chatList } from '../../../store/slices/chatSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
-function RightComp({ openMenu, chatWith, userId }) {
+function RightComp({ openMenu, chatWith, userId, updateMessageState }) {
   const { name, avatar, image, _id } = chatWith;
   const [text, setText] = useState(''); // For storing typed messages
-  const [message, setMessage] = useState({});
   const bottom_msg = useRef(null);
   const dispatch = useDispatch();
+
+  // Importing the store states
   const chatId = useSelector(state => state.chatId);
+  const messageStore = useSelector(state => state.messageSlice);
 
   //For scrolled to the bottom message
   function scrollBottom() {
     bottom_msg.current && bottom_msg.current.scrollIntoView({ behavior: "smooth" });
-  };
-
-  // Updating the message state
-  function updateMessageState(keyId, id, msg){
-    setMessage((prevMessages) => {
-      const updatedMessages = { ...prevMessages };
-
-      if (!updatedMessages[keyId]) {
-        // If no previous messages with this sender, create a new array
-        updatedMessages[keyId] = [{ id, msg }];
-      }
-      else {
-        // Append the new message to the existing array
-        updatedMessages[keyId] = [
-          ...updatedMessages[keyId],
-          { id, msg },
-        ];
-      };
-      return updatedMessages;
-    });
   };
 
   useEffect(() => {
@@ -69,36 +51,12 @@ function RightComp({ openMenu, chatWith, userId }) {
     socket.emit('send_msg', { text, id: _id });
     updateMessageState(_id, userId, text);
     setText('');
-    
+
     // Checking if the id already stored or not
-    if(!chatId.includes(_id)) dispatch(chatList(_id));
+    if (!chatId.includes(_id)) dispatch(chatList(_id));
     scrollBottom();
   };
 
-  // Receving emitied functions on the server
-  useEffect(() => {
-
-    // Receving the sended message and adding the message in the frontend
-    socket.on("recive-msg", (obj) => {
-      updateMessageState(obj.id, obj.id, obj.msg);
-      
-      // Checking if the id already stored or not
-      if(!chatId.includes(obj.id)) dispatch(chatList(obj.id));
-    });
-    
-    // Reciving the undelivered messages
-    socket.on("get-unsend-msg", msg => {
-      updateMessageState(msg.senderId, msg.senderId, msg.message);
-      console.log(msg);
-      
-      // Maping through the msg array and emiting "recived-msg" function for deleting recived messages
-      msg.map(obj => {
-        return socket.emit("recived-unsend-msg", obj._id);
-      });
-      scrollBottom();
-    });
-
-  }, [socket]);
 
   // For delete and edit message options
   function options() {
@@ -125,7 +83,7 @@ function RightComp({ openMenu, chatWith, userId }) {
       <div className='chat-section'>
 
         {
-          message[_id] ? message[_id].map((obj, i) => {
+          messageStore[_id] ? messageStore[_id].map((obj, i) => {
             return (
               <div onClick={options} key={i} ref={bottom_msg} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
                 {obj.msg}
