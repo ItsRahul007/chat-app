@@ -32,14 +32,22 @@ function Home() {
 
   // Updating the message state and also storing the messages
   function updateMessageState(keyId, id, msg) {
-    // If no previous messages with this sender, create a new array
-    if (!messageStore[keyId]) {
-      dispatch(setNewMessage({ keyId, id, msg }))
-    }
+    // Setting and storing the messages in redux state
+    dispatch(setNewMessage({ keyId, id, msg }));
 
-    // Append the new message to the existing array
-    else {
-      dispatch(saveMessage({ keyId, id, msg }));
+    // Storing the messages in local storage
+    if (userData.data) {
+      const localItem = localStorage.getItem(userData.data._id);
+      if (localItem) {
+        const parsedItem = JSON.parse(localItem);
+        parsedItem[keyId] = [...(parsedItem[keyId] || []), {id, msg}];
+        localStorage.setItem(userData.data._id, JSON.stringify(parsedItem));
+      }
+      else {
+        const obj = {};
+        obj[keyId] = [{id, msg}];
+        localStorage.setItem(userData.data._id, JSON.stringify(obj));
+      };
     };
   };
 

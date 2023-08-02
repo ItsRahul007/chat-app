@@ -6,20 +6,11 @@ const messageSlice = createSlice({
     reducers: {
         setNewMessage(state, action) {
             const {keyId, id, msg} = action.payload;
-            state[keyId] = [{id, msg}];
-        },
-
-        saveMessage(state, action) {
-            const {keyId, id, msg} = action.payload;
-            const newMsg = [
-                ...state[keyId],
-                { id, msg },
-              ];
-              
-            state[keyId] = newMsg;
+            state[keyId] = [...(state[keyId] || []), {id, msg}];
+            console.log("not ok");
         }
     }
 });
 
-export const { setNewMessage, saveMessage } = messageSlice.actions;
+export const { setNewMessage } = messageSlice.actions;
 export default messageSlice.reducer

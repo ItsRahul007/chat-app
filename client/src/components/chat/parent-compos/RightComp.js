@@ -16,7 +16,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState }) {
 
   //For scrolled to the bottom message
   function scrollBottom() {
-    bottom_msg.current && bottom_msg.current.scrollIntoView({ behavior: "smooth" });
+    // bottom_msg.current && bottom_msg.current.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
