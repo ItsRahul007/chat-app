@@ -12,6 +12,7 @@ import NoChat from './micro-compos/NoChat';
 import { socket } from './socket/socketIO';
 import { setMessage } from '../../store/slices/messageSlice';
 import { chatList } from '../../store/slices/chatSlice';
+import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
 
 function Home() {
   // The store state variables
@@ -24,11 +25,13 @@ function Home() {
   const dispatch = useDispatch();
 
   // when a user loged in or open the app emiting user-online function
-  if (userData.data) {
-    const userId = userData.data._id;
-    socket.emit('user-online', userId);
-    localStorage.setItem("userId", userId);
-  };
+  useEffect(() => {
+    if (userData.data) {
+      const userId = userData.data._id;
+      socket.emit('user-online', userId);
+      localStorage.setItem("userId", userId);
+    };
+  }, [userData.data]);
 
   // Updating the message state
   function updateMessageState(keyId, id, msg) {
@@ -39,7 +42,7 @@ function Home() {
   };
 
   // Storing the messages in local storage and also updating them
-  function updateLocalMessages(keyId, id, msg){
+  function updateLocalMessages(keyId, id, msg) {
     const userId = localStorage.getItem("userId");
     // Storing the messages in local storage
     if (userId) {
@@ -47,12 +50,12 @@ function Home() {
       if (localItem) {
         console.log("got the local item")
         const parsedItem = JSON.parse(localItem);
-        parsedItem[keyId] = [...(parsedItem[keyId] || []), {id, msg}];
+        parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, msg }];
         localStorage.setItem(userId, JSON.stringify(parsedItem));
       }
       else {
         const obj = {};
-        obj[keyId] = [{id, msg}];
+        obj[keyId] = [{ id, msg }];
         localStorage.setItem(userId, JSON.stringify(obj));
       };
     };
@@ -61,12 +64,21 @@ function Home() {
   useEffect(() => {
     // When user will be online
     socket.on("new-user-online", id => {
-      console.log(id + " is online");
+      dispatch(pushOnlineId(id));
+    });
+
+    // Storing the already onlined user's id
+    socket.on("get-online-id", arr => {
+      console.log(arr);
+      for (let i = 0; i < arr.length; i++) {
+        const id = arr[i];
+        dispatch(pushOnlineId(id));        
+      }
     });
 
     // When user will be offline
     socket.on("user-offline", id => {
-      console.log(id + " is offline");
+      dispatch(removeOnlineId(id));
     });
 
     // Receving the sended message and adding the message in the frontend
@@ -89,7 +101,11 @@ function Home() {
       });
     });
 
-  }, [socket]);
+    // Clean up the socket connection when the component unmounts
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   // Changing components when clicked and sending propertis to components
   function changeCompo(name) {
@@ -120,9 +136,9 @@ function Home() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const userId = localStorage.getItem("userId");
-    if(userId){
+    if (userId) {
       const localItem = localStorage.getItem(userId);
       const messageObject = JSON.parse(localItem);
       const keyArray = Object.keys(messageObject);
@@ -132,8 +148,8 @@ function Home() {
 
         // Maping the message object and storing the messages in state
         messageObject[keyId].map(obj => {
-          const {id, msg} = obj;
-          updateMessageState(keyId, id, msg);
+          const { id, msg } = obj;
+          return updateMessageState(keyId, id, msg);
         });
       };
     };

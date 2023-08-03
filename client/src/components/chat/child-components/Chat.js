@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 function Chat({ setChatWith, toggleMenu }) {
     const chatId = useSelector(state => state.chatId);
     const allusers = useSelector(state => state.user.allUsersData);
+    const onlineId = useSelector(state => state.onlineSlice);
 
     useEffect(() => {
         const searchCon = document.getElementById("searchCon");
@@ -44,9 +45,10 @@ function Chat({ setChatWith, toggleMenu }) {
                                     <span className='profile-img' style={{ background: avatar }}>
                                         {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
                                     </span>
+                                    {onlineId.includes(_id) && <div className='online-symbol'></div>}
                                     <span className='name-msg'>
                                         <div className='name'>{name}</div>
-                                        <div className='last-msg'>{about ? about : "Hello there. I'm using chat-app"}</div>
+                                        <div className='last-msg'>{about ? [about.length <= 32? about : about.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}</div>
                                     </span>
                                 </li>
                             );

@@ -10,6 +10,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
   // Importing the store states
   const messageStore = useSelector(state => state.messageSlice);
+  const onlineId = useSelector(state => state.onlineSlice);
 
   //For scrolled to the bottom message
   function scrollBottom() {
@@ -70,7 +71,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         </span>
         <span>
           <div className='user-name'>{name}</div>
-          <div className='user-status'>Online</div>
+          <div className='user-status'>{onlineId.includes(_id)? "Online" : "Offline"}</div>
         </span>
       </div>
 

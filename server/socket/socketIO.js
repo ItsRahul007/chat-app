@@ -24,6 +24,9 @@ function socketServer(io) {
       };
     });
 
+    // Getting the id of already connected user
+    socket.emit("get-online-id", Object.values(users));
+
     // When send msg emittied, emiting recive msg function
     socket.on("send_msg", async ({ text, id }) => {
       // Checking if the user online or not
