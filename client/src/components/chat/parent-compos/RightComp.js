@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { socket } from '../socket/socketIO';
-import { chatList } from '../../../store/slices/chatSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-function RightComp({ openMenu, chatWith, userId, updateMessageState }) {
+function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages }) {
   const { name, avatar, image, _id } = chatWith;
   const [text, setText] = useState(''); // For storing typed messages
   const bottom_msg = useRef(null);
-  const dispatch = useDispatch();
 
   // Importing the store states
-  const chatId = useSelector(state => state.chatId);
   const messageStore = useSelector(state => state.messageSlice);
 
   //For scrolled to the bottom message
@@ -50,10 +47,8 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState }) {
   function sendMsg() {
     socket.emit('send_msg', { text, id: _id });
     updateMessageState(_id, userId, text);
+    updateLocalMessages(_id, userId, text);
     setText('');
-
-    // Checking if the id already stored or not
-    if (!chatId.includes(_id)) dispatch(chatList(_id));
     scrollBottom();
   };
 

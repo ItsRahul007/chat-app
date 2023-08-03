@@ -10,13 +10,12 @@ import AvailableChat from './child-components/AvailableChat';
 import Setting from './child-components/Setting';
 import NoChat from './micro-compos/NoChat';
 import { socket } from './socket/socketIO';
-import { setNewMessage, saveMessage } from '../../store/slices/messageSlice';
+import { setMessage } from '../../store/slices/messageSlice';
 import { chatList } from '../../store/slices/chatSlice';
 
 function Home() {
   // The store state variables
   const userData = useSelector(state => state.user.userData);
-  const messageStore = useSelector(state => state.messageSlice);
   const chatId = useSelector(state => state.chatId);
 
   const [chatWith, setChatWith] = useState(null);
@@ -28,25 +27,33 @@ function Home() {
   if (userData.data) {
     const userId = userData.data._id;
     socket.emit('user-online', userId);
+    localStorage.setItem("userId", userId);
   };
 
-  // Updating the message state and also storing the messages
+  // Updating the message state
   function updateMessageState(keyId, id, msg) {
     // Setting and storing the messages in redux state
-    dispatch(setNewMessage({ keyId, id, msg }));
+    dispatch(setMessage({ keyId, id, msg }));
+    // Checking if the id already stored or not
+    if (!chatId.includes(keyId)) dispatch(chatList(keyId));
+  };
 
+  // Storing the messages in local storage and also updating them
+  function updateLocalMessages(keyId, id, msg){
+    const userId = localStorage.getItem("userId");
     // Storing the messages in local storage
-    if (userData.data) {
-      const localItem = localStorage.getItem(userData.data._id);
+    if (userId) {
+      const localItem = localStorage.getItem(userId);
       if (localItem) {
+        console.log("got the local item")
         const parsedItem = JSON.parse(localItem);
         parsedItem[keyId] = [...(parsedItem[keyId] || []), {id, msg}];
-        localStorage.setItem(userData.data._id, JSON.stringify(parsedItem));
+        localStorage.setItem(userId, JSON.stringify(parsedItem));
       }
       else {
         const obj = {};
         obj[keyId] = [{id, msg}];
-        localStorage.setItem(userData.data._id, JSON.stringify(obj));
+        localStorage.setItem(userId, JSON.stringify(obj));
       };
     };
   };
@@ -65,9 +72,7 @@ function Home() {
     // Receving the sended message and adding the message in the frontend
     socket.on("recive-msg", (obj) => {
       updateMessageState(obj.id, obj.id, obj.msg);
-
-      // Checking if the id already stored or not
-      if (!chatId.includes(obj.id)) dispatch(chatList(obj.id));
+      updateLocalMessages(obj.id, obj.id, obj.msg);
     });
 
     // Reciving the undelivered messages
@@ -76,6 +81,7 @@ function Home() {
       msg.map(obj => {
         // Setting the messages
         updateMessageState(obj.senderId, obj.senderId, obj.message);
+        updateLocalMessages(obj.senderId, obj.senderId, obj.message);
 
         // Checking if the id already stored or not
         if (!chatId.includes(obj.senderId)) dispatch(chatList(obj.senderId));
@@ -114,6 +120,25 @@ function Home() {
     }
   };
 
+  useEffect(()=>{
+    const userId = localStorage.getItem("userId");
+    if(userId){
+      const localItem = localStorage.getItem(userId);
+      const messageObject = JSON.parse(localItem);
+      const keyArray = Object.keys(messageObject);
+      // Looping through the keys and getting the messageObject
+      for (let i = 0; i < keyArray.length; i++) {
+        const keyId = keyArray[i];
+
+        // Maping the message object and storing the messages in state
+        messageObject[keyId].map(obj => {
+          const {id, msg} = obj;
+          updateMessageState(keyId, id, msg);
+        });
+      };
+    };
+  }, []);
+
   return (
     <div className='home-con'>
       <div>
@@ -123,7 +148,7 @@ function Home() {
         </div>
         {
           chatWith ? // If user select a chat then displaying Right component with chat otherwise showing NoChat component
-            <RightComp openMenu={toggleMenu} chatWith={chatWith} userId={userData.data && userData.data._id} /* if user data exist then sending user id */ updateMessageState={updateMessageState} />
+            <RightComp openMenu={toggleMenu} chatWith={chatWith} userId={userData.data && userData.data._id} /* if user data exist then sending user id */ updateMessageState={updateMessageState} updateLocalMessages={updateLocalMessages} />
             :
             <NoChat openMenu={toggleMenu} />
         }
