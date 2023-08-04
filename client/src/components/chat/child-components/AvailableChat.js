@@ -4,6 +4,7 @@ import blackSearch from "../../../png/blackSearch.png";
 import limeSearch from "../../../png/limeSearch.png";
 import { useSelector } from 'react-redux';
 import removeUser from '../micro-compos/removeUser';
+import { socket } from '../socket/socketIO';
 
 function AvailableChat({ setChatWith, toggleMenu }) {
   const [data, setData] = useState(null);
@@ -33,13 +34,12 @@ function AvailableChat({ setChatWith, toggleMenu }) {
     setData(splice);
   }, [allUsersData.data, userData.data]);
 
-  // Toggling the menu and setting the righ-comp data 
-  function clickedChat(data) {
-    toggleMenu();
-    setChatWith(data);
-  };
+  useEffect(() => {
+    const filter = data && data.filter(obj => obj.name.toLocaleLowerCase().includes(searchValue));
+    setFilterValue(filter);
+  }, [searchValue]);
 
-  //
+  // Displaying Filltered persons
   function SearchValues() {
     return (
       <>
@@ -66,10 +66,11 @@ function AvailableChat({ setChatWith, toggleMenu }) {
     );
   };
 
-  useEffect(() => {
-    const filter = data && data.filter(obj => obj.name.toLocaleLowerCase().includes(searchValue));
-    setFilterValue(filter);
-  }, [searchValue]);
+  // Toggling the menu and setting the righ-comp data 
+  function clickedChat(data) {
+    toggleMenu();
+    setChatWith(data);
+  };
 
   return (
     <div className='chat-comp'>

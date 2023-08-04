@@ -12,6 +12,7 @@ import NoChat from './micro-compos/NoChat';
 import { socket } from './socket/socketIO';
 import { setMessage } from '../../store/slices/messageSlice';
 import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
+import { fetchAllUsers } from '../../store/slices/userSlice';
 
 function Home() {
   // The store state variables
@@ -90,6 +91,10 @@ function Home() {
         updateLocalMessages(obj.senderId, obj.senderId, obj.message);
         return socket.emit("recived-unsend-msg", obj._id);
       });
+    });
+
+    socket.on("user-update-server", obj => {
+      dispatch(fetchAllUsers());
     });
 
     // Clean up the socket connection when the component unmounts

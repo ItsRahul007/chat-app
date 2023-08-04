@@ -55,6 +55,11 @@ function socketServer(io) {
       await collectedMSG.findByIdAndDelete(msgId);
     });
 
+    // Getting the updates and sending it to the other users
+    socket.on("user-update-client", obj => {
+      socket.broadcast.emit("user-update-server", obj);
+    });
+
     socket.on("disconnect", () => {
       console.log("user offline " + users[socket.id]);
       socket.broadcast.emit("user-offline", users[socket.id]);

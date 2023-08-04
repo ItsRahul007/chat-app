@@ -84,7 +84,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
               <div onClick={options} key={i} ref={bottom_msg} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
                 {obj.msg}
               </div>
-            )
+            );
           })
             :
             <h1>No chats</h1>

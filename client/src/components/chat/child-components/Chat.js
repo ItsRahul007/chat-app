@@ -50,7 +50,7 @@ function Chat({ setChatWith, toggleMenu }) {
         filterPerson();
     }, [allusers.data]);
 
-    // 
+    // Displaying Filltered persons
     function SearchValues() {
         return (
             <>
@@ -125,7 +125,7 @@ function Chat({ setChatWith, toggleMenu }) {
                         })
                     }
                     {
-                        searchInput.length >= 1 && <SearchValues/>
+                        searchInput.length >= 1 && <SearchValues />
                     }
                 </ul>
             </div>

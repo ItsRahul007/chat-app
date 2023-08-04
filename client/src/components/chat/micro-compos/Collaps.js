@@ -59,7 +59,7 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
                         </span>
                         <div>
                             <input type='file' style={{ display: 'none' }} id='chooseFile' />
-                            <label htmlFor='chooseFile'><i class="ri-edit-2-fill"></i></label>
+                            <label htmlFor='chooseFile'><i className="ri-edit-2-fill"></i></label>
                         </div>
                     </div>
                     <div>

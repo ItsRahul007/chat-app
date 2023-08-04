@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser, fetchAllUsers } from '../../../store/slices/userSlice';
+import { fetchUser } from '../../../store/slices/userSlice';
 import Collaps from '../micro-compos/Collaps';
+import { socket } from '../socket/socketIO';
 
 function Setting() {
   const [user, setUser] = useState({ name: '', about: '', email: '', avatar: '', image: '' });
@@ -22,6 +23,7 @@ function Setting() {
     const genMsg = document.getElementById('gen-msg');
     // If datas then storing it in obj and sending them in responce
     let obj = {};
+    obj.id = user._id;
     if (name !== userData.data.name) obj.name = name;
     if (avatar !== userData.data.avatar) obj.avatar = avatar;
     if (image !== userData.data.image) obj.image = image;
@@ -48,6 +50,9 @@ function Setting() {
       }, 3000);
     };
 
+    dispatch(fetchUser());
+    socket.emit("user-update-client", obj); // Emiting the updates
+    
     // If success then sending message
     genMsg.classList.add('success');
     genMsg.innerText = "Changed success fully";
@@ -55,9 +60,6 @@ function Setting() {
       genMsg.innerText = '';
       genMsg.classList.remove('success');
     }, 3000);
-
-    dispatch(fetchUser());
-    dispatch(fetchAllUsers());
   };
 
   return (
