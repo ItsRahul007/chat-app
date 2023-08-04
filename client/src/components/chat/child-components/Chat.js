@@ -1,14 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./middle.css";
 import blackSearch from "../../../png/blackSearch.png";
 import limeSearch from "../../../png/limeSearch.png";
 import { useSelector } from "react-redux";
 
 function Chat({ setChatWith, toggleMenu }) {
-    const chatId = useSelector(state => state.chatId);
     const allusers = useSelector(state => state.user.allUsersData);
     const onlineId = useSelector(state => state.onlineSlice);
+    const messageStore = useSelector(state => state.messageSlice);
 
+    const [value, setValue] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
+    const [filterValue, setFilterValue] = useState([]);
+
+    const chatId = Object.keys(messageStore); // Getting the keys that I'm chated with
+
+    // Changing images in hover
     useEffect(() => {
         const searchCon = document.getElementById("searchCon");
         const searchImage = document.getElementById("searchImage");
@@ -22,24 +29,85 @@ function Chat({ setChatWith, toggleMenu }) {
         });
     }, []);
 
+    // Filltering the persons that I'm chat with
+    function filterPerson() {
+        setValue([]);
+        if (allusers.data) {
+            allusers.data.map(data => {
+                const { _id } = data;
+                if (chatId.includes(_id)) {
+                    setValue(value => {
+                        const updateData = [...value, data];
+                        return updateData;
+                    });
+                };
+            });
+        };
+    };
+
+    // Runing the filter person when allusers.data id avaliable for displaying persons
+    useEffect(() => {
+        filterPerson();
+    }, [allusers.data]);
+
+    // 
+    function SearchValues() {
+        return (
+            <>
+                {
+                    filterValue && filterValue.map(data => {
+                        const { name, avatar, image, _id } = data;
+                        // Getting the last message
+                        const allMsg = chatId.includes(_id) && messageStore[_id];
+                        const lastMsg = allMsg && allMsg[allMsg.length - 1].msg;
+
+                        return (
+                            <li key={_id} onClick={() => clickedChat(data)}>
+                                <span className='profile-img' style={{ background: avatar }}>
+                                    {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
+                                </span>
+                                {onlineId.includes(_id) && <div className='online-symbol'></div>}
+                                <span className='name-msg'>
+                                    <div className='name'>{name}</div>
+                                    <div className='last-msg'>
+                                        {lastMsg ? [lastMsg.length <= 32 ? lastMsg : lastMsg.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
+                                    </div>
+                                </span>
+                            </li>
+                        );
+                    })
+                }
+            </>
+        );
+    };
+
     // Toggling the menu and setting the righ-comp data 
     function clickedChat(data) {
         toggleMenu();
         setChatWith(data);
     };
 
+    useEffect(() => {
+        const filter = value.filter(obj => obj.name.toLocaleLowerCase().includes(searchInput));
+        setFilterValue(filter);
+    }, [searchInput]);
+
     return (
         <div className='chat-comp'>
             <div>Chats</div>
             <div id='searchCon' className="search">
                 <img id='searchImage' src={blackSearch} alt='search' />
-                <input type='search' placeholder='Search Chat' />
+                <input type='search' placeholder='Search Chat' value={searchInput} onChange={e => setSearchInput(e.target.value.toLocaleLowerCase())} />
             </div>
             <div className='chat-list'>
                 <ul>
                     {
-                        allusers.data && allusers.data.map(data => {
-                            const { name, about, avatar, image, _id } = data;
+                        searchInput.length <= 0 &&
+                        allusers.data && value.map(data => {
+                            const { name, avatar, image, _id } = data;
+                            // Getting the last message
+                            const allMsg = chatId.includes(_id) && messageStore[_id];
+                            const lastMsg = allMsg && allMsg[allMsg.length - 1].msg;
                             return (chatId.includes(_id) &&
                                 <li key={_id} onClick={() => clickedChat(data)}>
                                     <span className='profile-img' style={{ background: avatar }}>
@@ -48,11 +116,16 @@ function Chat({ setChatWith, toggleMenu }) {
                                     {onlineId.includes(_id) && <div className='online-symbol'></div>}
                                     <span className='name-msg'>
                                         <div className='name'>{name}</div>
-                                        <div className='last-msg'>{about ? [about.length <= 32? about : about.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}</div>
+                                        <div className='last-msg'>
+                                            {lastMsg ? [lastMsg.length <= 32 ? lastMsg : lastMsg.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
+                                        </div>
                                     </span>
                                 </li>
                             );
                         })
+                    }
+                    {
+                        searchInput.length >= 1 && <SearchValues/>
                     }
                 </ul>
             </div>

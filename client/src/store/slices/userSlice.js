@@ -51,7 +51,6 @@ const userSlice = createSlice({
         });
         builder.addCase(fetchUser.rejected, (state, action) => {
             state.userData.isFailed = action.payload;
-            console.log(action.payload);
         });
 
         // For fetching all users

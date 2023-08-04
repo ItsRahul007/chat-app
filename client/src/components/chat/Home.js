@@ -11,13 +11,11 @@ import Setting from './child-components/Setting';
 import NoChat from './micro-compos/NoChat';
 import { socket } from './socket/socketIO';
 import { setMessage } from '../../store/slices/messageSlice';
-import { chatList } from '../../store/slices/chatSlice';
 import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
 
 function Home() {
   // The store state variables
   const userData = useSelector(state => state.user.userData);
-  const chatId = useSelector(state => state.chatId);
 
   const [chatWith, setChatWith] = useState(null);
   const [compo, setCompo] = useState(<Chat setChatWith={setChatWith} toggleMenu={toggleMenu} />);
@@ -37,8 +35,6 @@ function Home() {
   function updateMessageState(keyId, id, msg) {
     // Setting and storing the messages in redux state
     dispatch(setMessage({ keyId, id, msg }));
-    // Checking if the id already stored or not
-    if (!chatId.includes(keyId)) dispatch(chatList(keyId));
   };
 
   // Storing the messages in local storage and also updating them
@@ -48,7 +44,6 @@ function Home() {
     if (userId) {
       const localItem = localStorage.getItem(userId);
       if (localItem) {
-        console.log("got the local item")
         const parsedItem = JSON.parse(localItem);
         parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, msg }];
         localStorage.setItem(userId, JSON.stringify(parsedItem));
@@ -69,7 +64,6 @@ function Home() {
 
     // Storing the already onlined user's id
     socket.on("get-online-id", arr => {
-      console.log(arr);
       for (let i = 0; i < arr.length; i++) {
         const id = arr[i];
         dispatch(pushOnlineId(id));        
@@ -94,9 +88,6 @@ function Home() {
         // Setting the messages
         updateMessageState(obj.senderId, obj.senderId, obj.message);
         updateLocalMessages(obj.senderId, obj.senderId, obj.message);
-
-        // Checking if the id already stored or not
-        if (!chatId.includes(obj.senderId)) dispatch(chatList(obj.senderId));
         return socket.emit("recived-unsend-msg", obj._id);
       });
     });
