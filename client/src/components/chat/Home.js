@@ -109,7 +109,7 @@ function Home() {
       setCompo(<Chat setChatWith={setChatWith} toggleMenu={toggleMenu} />);
     }
     else if (name === "profile") {
-      setCompo(<Profile />)
+      setCompo(<Profile chatWith={chatWith} />)
     }
     else if (name === "avalibleChat") {
       setCompo(<AvailableChat setChatWith={setChatWith} toggleMenu={toggleMenu} />)
