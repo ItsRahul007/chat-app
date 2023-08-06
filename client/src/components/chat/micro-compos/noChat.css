@@ -1,38 +1,118 @@
-.no-chat, .no-chat div{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.no-chat,
+.no-chat div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.no-chat div img{
-    max-width: 240px;
-    height: 240px;
-    margin: 0;
+.no-chat div img {
+  max-width: 240px;
+  height: 240px;
+  margin: 0;
 }
 
-.no-chat div p{
-    font-size: .825rem;
-    color: #8c96a0;
+.no-chat div p {
+  font-size: 0.825rem;
+  color: #8c96a0;
 }
 
-.no-chat div button{
+.no-chat div button {
+  display: none;
+  height: 52px;
+  width: 155px;
+  background-color: #72c976;
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  border: none;
+  border-radius: 25px;
+}
+
+@media only screen and (max-width: 910px) {
+  .no-chat div p {
     display: none;
-    height: 52px;
-    width: 155px;
-    background-color: #72c976;
-    color: white;
-    font-size: 22px;
-    font-weight: 700;
-    border: none;
-    border-radius: 25px;
+  }
+  .no-chat div button {
+    display: inline;
+  }
 }
 
-@media only screen and (max-width: 910px){
-    .no-chat div p{
-        display: none;
-    }
-    .no-chat div button{
-        display: inline;
-    }
-};
+@keyframes toastAni {
+  from{
+    top: -90%;
+  }
+  to{
+    top: 0%;
+  }
+}
+
+.toast {
+  position: absolute;
+  height: 90%;
+  background: #00000042;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  animation: toastAni 1s 1;
+}
+
+.toast .toast-con {
+  background-color: rgb(0 0 0 / 60%);
+  color: black;
+  height: 200px;
+  width: 350px;
+  margin-top: 50px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.toast-con input {
+  margin-top: 20px;
+  height: 50px;
+  width: 80%;
+  background-color: #1f242075;
+  color: white;
+  border: 2px solid transparent;
+  border-bottom: 2px solid #72c976;
+  border-radius: 10px;
+  outline: none;
+  transition: ease .5s;
+  padding: 5px;
+  font-size: 15px;
+}
+
+.toast-con input:hover{
+  border: 2px solid #72c976;
+}
+
+.toast-con input:focus{
+  border: 2px solid #72c976;
+}
+
+.toast-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 34px;
+  width: 100%;
+  justify-content: center;
+}
+
+.toast-btns button {
+  height: 35px;
+  border-radius: 20px;
+  min-width: 60px;
+  font-weight: 500;
+  border: none;
+  color: #ffffff;
+  background-color: rgba(50, 177, 50, 0.877);
+  cursor: pointer;
+}
+
+.toast-btns :nth-child(2) {
+  width: 110px;
+}

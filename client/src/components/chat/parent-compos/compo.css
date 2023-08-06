@@ -106,6 +106,7 @@
   width: 1200px;
   background-color: #262e35;
   color: white;
+  position: relative;
 }
 
 .chat-head {

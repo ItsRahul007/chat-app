@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { socket } from '../socket/socketIO';
 import { useSelector } from 'react-redux';
+import Toast from '../micro-compos/Toast';
 
 function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages }) {
   const { name, avatar, image, _id } = chatWith;
@@ -61,6 +62,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
   return (
     <div className='right-comp'>
+      <Toast /> {/* For deleting or editing messages */}
       {/* Right head section */}
       <div className='chat-head'>
         <button className='menu-btn' onClick={openMenu}>
