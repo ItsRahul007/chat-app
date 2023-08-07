@@ -38,15 +38,6 @@
   }
 }
 
-@keyframes toastAni {
-  from{
-    top: -90%;
-  }
-  to{
-    top: 0%;
-  }
-}
-
 .toast {
   position: absolute;
   height: 90%;
@@ -55,7 +46,7 @@
   z-index: 2;
   display: flex;
   justify-content: center;
-  animation: toastAni 1s 1;
+  top: -90%;
 }
 
 .toast .toast-con {
@@ -115,4 +106,9 @@
 
 .toast-btns :nth-child(2) {
   width: 110px;
+}
+
+.toast-btns button:disabled{
+  background-color: rgba(28, 108, 28, 0.877);
+  cursor: not-allowed;
 }

@@ -10,6 +10,9 @@ const UnsendMSG = new Schema({
     },
     message: {
         type: String
+    },
+    msgId: {
+        type: String
     }
 });
 

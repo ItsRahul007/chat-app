@@ -33,28 +33,36 @@ function Home() {
   }, [userData.data]);
 
   // Updating the message state
-  function updateMessageState(keyId, id, msg) {
+  function updateMessageState(keyId, id, msg, msgId) {
     // Setting and storing the messages in redux state
-    dispatch(setMessage({ keyId, id, msg }));
+    dispatch(setMessage({ keyId, id, msg, msgId }));
   };
 
   // Storing the messages in local storage and also updating them
-  function updateLocalMessages(keyId, id, msg) {
+  function updateLocalMessages(keyId, id, msg, msgId) {
     const userId = localStorage.getItem("userId");
     // Storing the messages in local storage
     if (userId) {
       const localItem = localStorage.getItem(userId);
       if (localItem) {
         const parsedItem = JSON.parse(localItem);
-        parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, msg }];
+        parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, msg, msgId }];
         localStorage.setItem(userId, JSON.stringify(parsedItem));
       }
       else {
         const obj = {};
-        obj[keyId] = [{ id, msg }];
+        obj[keyId] = [{ id, msg, msgId }];
         localStorage.setItem(userId, JSON.stringify(obj));
       };
     };
+  };
+
+  //For scrolled to the bottom message
+  function scrollBottom() {
+    const chatContainer = document.getElementById('chat-container'); // This id is from right compo
+    setTimeout(() => {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }, 200);
   };
 
   useEffect(() => {
@@ -78,8 +86,9 @@ function Home() {
 
     // Receving the sended message and adding the message in the frontend
     socket.on("recive-msg", (obj) => {
-      updateMessageState(obj.id, obj.id, obj.msg);
-      updateLocalMessages(obj.id, obj.id, obj.msg);
+      updateMessageState(obj.id, obj.id, obj.msg, obj.msgId);
+      updateLocalMessages(obj.id, obj.id, obj.msg, obj.msgId);
+      scrollBottom();
     });
 
     // Reciving the undelivered messages
@@ -93,7 +102,7 @@ function Home() {
       });
     });
 
-    socket.on("user-update-server", obj => {
+    socket.on("user-update-server", () => {
       dispatch(fetchAllUsers());
     });
 
@@ -137,17 +146,19 @@ function Home() {
     if (userId) {
       const localItem = localStorage.getItem(userId);
       const messageObject = JSON.parse(localItem);
-      const keyArray = Object.keys(messageObject);
       // Looping through the keys and getting the messageObject
-      for (let i = 0; i < keyArray.length; i++) {
-        const keyId = keyArray[i];
-
-        // Maping the message object and storing the messages in state
-        messageObject[keyId].map(obj => {
-          const { id, msg } = obj;
-          return updateMessageState(keyId, id, msg);
-        });
-      };
+      if(messageObject){
+        const keyArray = Object.keys(messageObject);
+        for (let i = 0; i < keyArray.length; i++) {
+          const keyId = keyArray[i];
+  
+          // Maping the message object and storing the messages in state
+          messageObject[keyId].map(obj => {
+            const { id, msg } = obj;
+            return updateMessageState(keyId, id, msg);
+          });
+        };
+      }
     };
   }, []);
 

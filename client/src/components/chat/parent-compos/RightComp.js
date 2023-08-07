@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { socket } from '../socket/socketIO';
 import { useSelector } from 'react-redux';
@@ -7,7 +7,7 @@ import Toast from '../micro-compos/Toast';
 function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages }) {
   const { name, avatar, image, _id } = chatWith;
   const [text, setText] = useState(''); // For storing typed messages
-  const bottom_msg = useRef(null);
+  const [toastStyle, setToastStyle] = useState({ top: "-90%", value: '', disabled: false });
 
   // Importing the store states
   const messageStore = useSelector(state => state.messageSlice);
@@ -15,8 +15,20 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
   //For scrolled to the bottom message
   function scrollBottom() {
-    // bottom_msg.current && bottom_msg.current.scrollIntoView({ behavior: "smooth" });
+    const chatContainer = document.getElementById('chat-container');
+    setTimeout(() => {
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }, 200);
   };
+
+  // Generating a unique id for messages
+  function generateUniqueID() {
+    const timestamp = Date.now().toString(36);
+    const randomString = Math.random().toString(36).substr(2, 9);
+    return `${timestamp}-${randomString}`;
+  };
+
+  useEffect(() => scrollBottom(), [chatWith]);
 
   useEffect(() => {
 
@@ -37,7 +49,6 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
       emojiPicker.style.display = "none";
     });
 
-    scrollBottom();
   }, []);
 
   // Emoji piker clicked function
@@ -47,22 +58,23 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
   // Sending the messages into server and adding the message in frontend
   function sendMsg() {
-    socket.emit('send_msg', { text, id: _id });
+    const msgId = generateUniqueID();
+    socket.emit('send_msg', { text, id: _id, msgId });
     updateMessageState(_id, userId, text);
     updateLocalMessages(_id, userId, text);
     setText('');
     scrollBottom();
   };
 
-
-  // For delete and edit message options
-  function options() {
-    // TODO: AKTA ALERT TYPE KI6U BANA JEI KHANE OPTION GULO ASBE
+  // For delete and edit message options if the message is clicked user's then buttons are not disabled else its disabled
+  function options(obj, i) {
+    if (obj.id !== userId) setToastStyle({ top: "0", value: obj.msg, disabled: true });
+    else setToastStyle({ top: "0", value: obj.msg, disabled: false });
   };
 
   return (
     <div className='right-comp'>
-      <Toast /> {/* For deleting or editing messages */}
+      <Toast toastStyle={toastStyle} setToastStyle={setToastStyle} /> {/* For deleting or editing messages */}
       {/* Right head section */}
       <div className='chat-head'>
         <button className='menu-btn' onClick={openMenu}>
@@ -73,17 +85,17 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         </span>
         <span>
           <div className='user-name'>{name}</div>
-          <div className='user-status'>{onlineId.includes(_id)? "Online" : "Offline"}</div>
+          <div className='user-status'>{onlineId.includes(_id) ? "Online" : "Offline"}</div>
         </span>
       </div>
 
       {/* Message section */}
-      <div className='chat-section'>
+      <div className='chat-section' id='chat-container'>
 
         {
           messageStore[_id] ? messageStore[_id].map((obj, i) => {
             return (
-              <div onClick={options} key={i} ref={bottom_msg} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
+              <div onClick={() => options(obj, i)} key={i} id={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
                 {obj.msg}
               </div>
             );
@@ -105,9 +117,10 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           </div>
         </div>
 
-        <button type="file" name="avatar" className='attach'>
+        <input type='file' accept="image/png, image/gif, image/jpeg" style={{display: "none"}} id='attachFile' />
+        <label htmlFor='attachFile' type="file" name="avatar" className='attach'>
           <i className="ri-attachment-line"></i>
-        </button>
+        </label>
         <button className='btn-send' disabled={text.length <= 0 || text === ''} onClick={sendMsg} >
           <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt='' />
         </button>

@@ -58,7 +58,7 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
                             {image ? <img src={image} alt='' /> : name.length !== 0 && name.slice(0, 2)}
                         </span>
                         <div>
-                            <input type='file' style={{ display: 'none' }} id='chooseFile' />
+                            <input type='file' accept="image/png, image/gif, image/jpeg" style={{ display: 'none' }} id='chooseFile' />
                             <label htmlFor='chooseFile'><i className="ri-edit-2-fill"></i></label>
                         </div>
                     </div>

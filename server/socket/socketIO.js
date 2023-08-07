@@ -28,18 +28,19 @@ function socketServer(io) {
     socket.emit("get-online-id", Object.values(users));
 
     // When send msg emittied, emiting recive msg function
-    socket.on("send_msg", async ({ text, id }) => {
+    socket.on("send_msg", async ({ text, id, msgId }) => {
       // Checking if the user online or not
       let objectKey = getKeyByValue(users, id);
       if (objectKey) {
-        io.to(id).emit("recive-msg", { id: users[socket.id], msg: text });
+        io.to(id).emit("recive-msg", { id: users[socket.id], msg: text, msgId });
       }
       else { // If user is offline the saving the messages on database
         try {
           const newMSG = new collectedMSG({
             senderId: users[socket.id],
             reciverId: id,
-            message: text
+            message: text,
+            msgId
           });
           await newMSG.save();
           console.log('Message saved for offline user:', newMSG);
@@ -56,8 +57,8 @@ function socketServer(io) {
     });
 
     // Getting the updates and sending it to the other users
-    socket.on("user-update-client", obj => {
-      socket.broadcast.emit("user-update-server", obj);
+    socket.on("user-update-client", () => {
+      socket.broadcast.emit("user-update-server");
     });
 
     socket.on("disconnect", () => {
