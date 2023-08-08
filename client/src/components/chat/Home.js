@@ -88,7 +88,7 @@ function Home() {
     socket.on("recive-msg", (obj) => {
       updateMessageState(obj.id, obj.id, obj.msg, obj.msgId);
       updateLocalMessages(obj.id, obj.id, obj.msg, obj.msgId);
-      scrollBottom();
+      chatWith && scrollBottom();
     });
 
     // Reciving the undelivered messages

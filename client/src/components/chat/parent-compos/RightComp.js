@@ -21,14 +21,15 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     }, 200);
   };
 
-  // Generating a unique id for messages
+  // Generating a unique id for specific messages
   function generateUniqueID() {
     const timestamp = Date.now().toString(36);
     const randomString = Math.random().toString(36).substr(2, 9);
+    console.log("runed");
     return `${timestamp}-${randomString}`;
   };
 
-  useEffect(() => scrollBottom(), [chatWith]);
+  useEffect(() => scrollBottom(), [chatWith]); // When ever clicked on any chat scrolling down
 
   useEffect(() => {
 
@@ -60,21 +61,21 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   function sendMsg() {
     const msgId = generateUniqueID();
     socket.emit('send_msg', { text, id: _id, msgId });
-    updateMessageState(_id, userId, text);
-    updateLocalMessages(_id, userId, text);
+    updateMessageState(_id, userId, text, msgId);
+    updateLocalMessages(_id, userId, text, msgId);
     setText('');
     scrollBottom();
   };
 
   // For delete and edit message options if the message is clicked user's then buttons are not disabled else its disabled
   function options(obj, i) {
-    if (obj.id !== userId) setToastStyle({ top: "0", value: obj.msg, disabled: true });
-    else setToastStyle({ top: "0", value: obj.msg, disabled: false });
+    if (obj.id !== userId) setToastStyle({ top: "0", value: obj.msg, msgId: obj.msgId, disabled: true });
+    else setToastStyle({ top: "0", value: obj.msg, msgId: obj.msgId, disabled: false });
   };
 
   return (
     <div className='right-comp'>
-      <Toast toastStyle={toastStyle} setToastStyle={setToastStyle} /> {/* For deleting or editing messages */}
+      <Toast toastStyle={toastStyle} keyId={_id} setToastStyle={setToastStyle} userId={userId} /> {/* For deleting or editing messages */}
       {/* Right head section */}
       <div className='chat-head'>
         <button className='menu-btn' onClick={openMenu}>
@@ -95,7 +96,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         {
           messageStore[_id] ? messageStore[_id].map((obj, i) => {
             return (
-              <div onClick={() => options(obj, i)} key={i} id={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
+              <div onClick={() => options(obj, i)} key={i} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
                 {obj.msg}
               </div>
             );

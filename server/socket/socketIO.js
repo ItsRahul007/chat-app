@@ -43,7 +43,6 @@ function socketServer(io) {
             msgId
           });
           await newMSG.save();
-          console.log('Message saved for offline user:', newMSG);
         }
         catch (error) {
           console.error('Error saving message:', error);
@@ -61,8 +60,8 @@ function socketServer(io) {
       socket.broadcast.emit("user-update-server");
     });
 
+    // When user disconnect 
     socket.on("disconnect", () => {
-      console.log("user offline " + users[socket.id]);
       socket.broadcast.emit("user-offline", users[socket.id]);
       delete users[socket.id];
     });

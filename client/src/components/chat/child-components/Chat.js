@@ -3,6 +3,7 @@ import "./middle.css";
 import blackSearch from "../../../png/blackSearch.png";
 import limeSearch from "../../../png/limeSearch.png";
 import { useSelector } from "react-redux";
+// import { socket } from '../socket/socketIO';
 
 function Chat({ setChatWith, toggleMenu }) {
     const allusers = useSelector(state => state.user.allUsersData);
@@ -13,7 +14,7 @@ function Chat({ setChatWith, toggleMenu }) {
     const [searchInput, setSearchInput] = useState('');
     const [filterValue, setFilterValue] = useState([]);
 
-    const chatId = Object.keys(messageStore); // Getting the keys that I'm chated with
+    let chatId = Object.keys(messageStore); // Getting the keys that I'm chated with
 
     // Changing images in hover
     useEffect(() => {
@@ -50,7 +51,7 @@ function Chat({ setChatWith, toggleMenu }) {
         filterPerson();
     }, [allusers.data]);
 
-    // Displaying Filltered persons
+    // Displaying Searched Filltered persons
     function SearchValues() {
         return (
             <>
@@ -59,7 +60,7 @@ function Chat({ setChatWith, toggleMenu }) {
                         const { name, avatar, image, _id } = data;
                         // Getting the last message
                         const allMsg = chatId.includes(_id) && messageStore[_id];
-                        const lastMsg = allMsg && allMsg[allMsg.length - 1].msg;
+                        const lastMsg = allMsg && allMsg[allMsg.length - 1];
 
                         return (
                             <li key={_id} onClick={() => clickedChat(data)}>
@@ -70,7 +71,7 @@ function Chat({ setChatWith, toggleMenu }) {
                                 <span className='name-msg'>
                                     <div className='name'>{name}</div>
                                     <div className='last-msg'>
-                                        {lastMsg ? [lastMsg.length <= 32 ? lastMsg : lastMsg.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
+                                        {lastMsg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
                                     </div>
                                 </span>
                             </li>
@@ -91,6 +92,19 @@ function Chat({ setChatWith, toggleMenu }) {
         const filter = value.filter(obj => obj.name.toLocaleLowerCase().includes(searchInput));
         setFilterValue(filter);
     }, [searchInput]);
+
+    // useEffect(() => {
+    //     socket.on("recive-msg", obj => {
+    //         let newId = [...chatId];
+    //         chatId = newId;
+    //         console.log(newId);
+    //     });
+
+    //     return () => {
+    //         socket.disconnect();
+    //     }
+    // }, []);
+
 
     return (
         <div className='chat-comp'>
