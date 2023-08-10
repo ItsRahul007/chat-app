@@ -1,7 +1,7 @@
 import React from 'react';
 import "./noChat.css";
 import { socket } from '../socket/socketIO';
-import { dltMessage } from '../../../store/slices/messageSlice';
+import { dltMessage, updateMessage } from '../../../store/slices/messageSlice';
 import { useDispatch } from 'react-redux';
 
 function Toast({ toastStyle, setToastStyle, keyId, userId }) {
@@ -16,31 +16,38 @@ function Toast({ toastStyle, setToastStyle, keyId, userId }) {
     setToastStyle({ top: '-90%' });
   };
 
-  // Deleting the clicked message
-  function deleteMsg() {
+  // Deleting the clicked message for user only
+  function deleteMsgForMe() {
     dispatch(dltMessage({ keyId, msgId: toastStyle.msgId }));
     close();
   };
 
+  // Deleting the clicked message for everyone
   function deleteForEveryOne() {
-    dispatch(dltMessage({ keyId, msgId: toastStyle.msgId }));
-    socket.emit("delete-msg", { userId, msgId: toastStyle.msgId });
+    deleteMsgForMe();
+    socket.emit("delete-msg", { userId, msgId: toastStyle.msgId, reciverId: keyId });
+  };
+
+  function update(){
+    const updateValue = document.getElementById("updateValue");
+    dispatch(updateMessage({ keyId, msgId: toastStyle.msgId, newContent: updateValue.value }));
+    socket.emit("update-msg", { userId, msgId: toastStyle.msgId, reciverId: keyId, newContent: updateValue.value });
     close();
   };
 
   return (
     <div className='toast' style={{ top: toastStyle.top }}>
       <div className='toast-con'>
-        <input type='text' name='value' value={toastStyle.value} onChange={onChange} readOnly={toastStyle.disabled} />
+        <input type='text' name='value' value={toastStyle.value} onChange={onChange} readOnly={toastStyle.disabled} id='updateValue' />
         <div className='toast-btns'>
           <button disabled={toastStyle.disabled} onClick={deleteForEveryOne}>
             Delete
           </button>
-          <button onClick={deleteMsg}>
+          <button onClick={deleteMsgForMe}>
             Delete For Me
           </button>
-          <button disabled={toastStyle.disabled}>
-            Edit
+          <button disabled={toastStyle.disabled} onClick={update}>
+            Update
           </button>
           <button onClick={close}>
             Cancle

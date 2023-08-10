@@ -68,7 +68,8 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   };
 
   // For delete and edit message options if the message is clicked user's then buttons are not disabled else its disabled
-  function options(obj, i) {
+  function options(obj) {
+    console.log(obj)
     if (obj.id !== userId) setToastStyle({ top: "0", value: obj.msg, msgId: obj.msgId, disabled: true });
     else setToastStyle({ top: "0", value: obj.msg, msgId: obj.msgId, disabled: false });
   };
@@ -96,7 +97,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         {
           messageStore[_id] ? messageStore[_id].map((obj, i) => {
             return (
-              <div onClick={() => options(obj, i)} key={i} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
+              <div onClick={() => options(obj)} key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
                 {obj.msg}
               </div>
             );

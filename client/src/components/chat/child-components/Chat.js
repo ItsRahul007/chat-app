@@ -88,23 +88,11 @@ function Chat({ setChatWith, toggleMenu }) {
         setChatWith(data);
     };
 
+    // Re-rendring chats whenever some new word entered in search input
     useEffect(() => {
         const filter = value.filter(obj => obj.name.toLocaleLowerCase().includes(searchInput));
         setFilterValue(filter);
     }, [searchInput]);
-
-    // useEffect(() => {
-    //     socket.on("recive-msg", obj => {
-    //         let newId = [...chatId];
-    //         chatId = newId;
-    //         console.log(newId);
-    //     });
-
-    //     return () => {
-    //         socket.disconnect();
-    //     }
-    // }, []);
-
 
     return (
         <div className='chat-comp'>
@@ -121,8 +109,9 @@ function Chat({ setChatWith, toggleMenu }) {
                             const { name, avatar, image, _id } = data;
                             // Getting the last message
                             const allMsg = chatId.includes(_id) && messageStore[_id];
-                            const lastMsg = allMsg && allMsg[allMsg.length - 1].msg;
-                            return (chatId.includes(_id) &&
+                            const lastMsg = allMsg && allMsg[allMsg.length - 1];
+                            
+                            return (chatId.includes(_id) && allMsg.length >= 0 &&
                                 <li key={_id} onClick={() => clickedChat(data)}>
                                     <span className='profile-img' style={{ background: avatar }}>
                                         {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
@@ -131,7 +120,7 @@ function Chat({ setChatWith, toggleMenu }) {
                                     <span className='name-msg'>
                                         <div className='name'>{name}</div>
                                         <div className='last-msg'>
-                                            {lastMsg ? [lastMsg.length <= 32 ? lastMsg : lastMsg.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
+                                            {lastMsg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
                                         </div>
                                     </span>
                                 </li>

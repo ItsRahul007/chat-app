@@ -3,9 +3,9 @@ const collectedMSG = require("../schema/UnsendMSG");
 const users = {}; // For storing users with the key of socket id and the value of their mondoDB id 
 
 // Finding the object key with his value
-function getKeyByValue(object, value) {
-  return Object.keys(object).find(key => object[key] === value);
-}
+function getKeyByValue(value) {
+  return Object.keys(users).find(key => users[key] === value);
+};
 
 function socketServer(io) {
   io.on("connection", socket => {
@@ -30,7 +30,7 @@ function socketServer(io) {
     // When send msg emittied, emiting recive msg function
     socket.on("send_msg", async ({ text, id, msgId }) => {
       // Checking if the user online or not
-      let objectKey = getKeyByValue(users, id);
+      let objectKey = getKeyByValue(id);
       if (objectKey) {
         io.to(id).emit("recive-msg", { id: users[socket.id], msg: text, msgId });
       }
@@ -58,6 +58,16 @@ function socketServer(io) {
     // Getting the updates and sending it to the other users
     socket.on("user-update-client", () => {
       socket.broadcast.emit("user-update-server");
+    });
+
+    // When someone update message
+    socket.on("update-msg", obj => {
+
+    });
+
+    // When someone delete message
+    socket.on("delete-msg", obj => {
+
     });
 
     // When user disconnect 

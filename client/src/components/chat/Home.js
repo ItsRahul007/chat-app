@@ -154,8 +154,8 @@ function Home() {
   
           // Maping the message object and storing the messages in state
           messageObject[keyId].map(obj => {
-            const { id, msg } = obj;
-            return updateMessageState(keyId, id, msg);
+            const { id, msg, msgId } = obj;
+            return updateMessageState(keyId, id, msg, msgId);
           });
         };
       }
