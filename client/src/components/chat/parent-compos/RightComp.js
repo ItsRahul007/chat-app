@@ -25,7 +25,6 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   function generateUniqueID() {
     const timestamp = Date.now().toString(36);
     const randomString = Math.random().toString(36).substr(2, 9);
-    console.log("runed");
     return `${timestamp}-${randomString}`;
   };
 
@@ -67,9 +66,18 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     scrollBottom();
   };
 
+  // Listening the Enter button event
+  function handleKeyDown(e) {
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      if (text.trim() !== '') {
+        sendMsg();
+      };
+    };
+  };
+
   // For delete and edit message options if the message is clicked user's then buttons are not disabled else its disabled
   function options(obj) {
-    console.log(obj)
     if (obj.id !== userId) setToastStyle({ top: "0", value: obj.msg, msgId: obj.msgId, disabled: true });
     else setToastStyle({ top: "0", value: obj.msg, msgId: obj.msgId, disabled: false });
   };
@@ -110,7 +118,8 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
       {/* The right bottom section */}
       <div className='msg-sender'>
-        <textarea type='text' placeholder='Type your message here...' value={text} onChange={e => setText(e.target.value)} />
+        <textarea type='text' placeholder='Type your message here...' value={text} onChange={e => setText(e.target.value)} onKeyDown={handleKeyDown}
+        />
 
         <div className='attach' id='emojiBtn'>
           <i className="fa-regular fa-face-smile-beam" id='smilefaceEmoji'></i>
@@ -119,11 +128,11 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           </div>
         </div>
 
-        <input type='file' accept="image/png, image/gif, image/jpeg" style={{display: "none"}} id='attachFile' />
+        <input type='file' accept="image/png, image/gif, image/jpeg" style={{ display: "none" }} id='attachFile' />
         <label htmlFor='attachFile' type="file" name="avatar" className='attach'>
           <i className="ri-attachment-line"></i>
         </label>
-        <button className='btn-send' disabled={text.length <= 0 || text === ''} onClick={sendMsg} >
+        <button className='btn-send' disabled={text.length <= 0 || !text.trim().length} onClick={sendMsg} >
           <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt='' />
         </button>
       </div>
