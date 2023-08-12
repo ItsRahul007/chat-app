@@ -30,6 +30,17 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
   useEffect(() => scrollBottom(), [chatWith]); // When ever clicked on any chat scrolling down
 
+  // Scrolling down when ever get any messages and also chatWith is not null
+  useEffect(() => {
+    socket.on("recive-msg", () => {
+      scrollBottom();
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
 
     const smilefaceEmoji = document.getElementById("smilefaceEmoji");
@@ -68,7 +79,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
   // Listening the Enter button event
   function handleKeyDown(e) {
-    if(e.key === 'Enter'){
+    if (e.key === 'Enter') {
       e.preventDefault();
       if (text.trim() !== '') {
         sendMsg();

@@ -1,4 +1,6 @@
+const DeleteMSG = require("../schema/DeleteMSG");
 const collectedMSG = require("../schema/UnsendMSG");
+const UpdateMSG = require("../schema/UpdateMSG");
 
 const users = {}; // For storing users with the key of socket id and the value of their mondoDB id 
 
@@ -16,12 +18,20 @@ function socketServer(io) {
       socket.broadcast.emit("new-user-online", userId);
       socket.join(userId); // Join the users on their specified rooms with the name of their id's
 
-      // Checking if user has some pending messages or not
+      // Checking if user has some pending messages and pending deleted or updated messages or not
       const messages = await collectedMSG.find({ reciverId: userId });
+      const deleteMessages = await DeleteMSG.find({ reciverId: userId });
+      const updateMessages = await UpdateMSG.find({ reciverId: userId });
+
       // If user have any messages
       if (!messages.length <= 0) {
         socket.emit("get-unsend-msg", messages);
       };
+
+      // If user have some message to be deleted
+      if(deleteMessages) socket.emit("delete-msg-db", deleteMessages);
+      // If user have some message to be updated
+      if(updateMessages) socket.emit("update-msg-db", updateMessages);
     });
 
     // Getting the id of already connected user
@@ -55,19 +65,58 @@ function socketServer(io) {
       await collectedMSG.findByIdAndDelete(msgId);
     });
 
-    // Getting the updates and sending it to the other users
+    // If user recived updated messages then deleting the messages from DB
+    socket.on("recived-update-msg", async (msgId) => {
+      await UpdateMSG.findByIdAndDelete(msgId);
+    });
+
+    // If user recived deleted messages then deleting the messages from DB
+    socket.on("recived-deleted-msg", async (msgId) => {
+      await DeleteMSG.findByIdAndDelete(msgId);
+    });
+
+    // Getting the updates and broadcast it to the other users
     socket.on("user-update-client", () => {
       socket.broadcast.emit("user-update-server");
     });
 
     // When someone update message
-    socket.on("update-msg", obj => {
+    socket.on("update-msg", async (obj) => {
+      // Checking if the user online or not
+      let objectKey = getKeyByValue(obj.reciverId);
+      if(objectKey){
+        io.to(obj.reciverId).emit("update-msg-server", obj);
+      }
+      else{
+        const {senderId, reciverId, msgId, newContent} = obj;
+        const newUpdate = new UpdateMSG({
+          senderId, 
+          reciverId, 
+          msgId, 
+          newContent
+        });
 
+        await newUpdate.save();
+      };
     });
 
     // When someone delete message
-    socket.on("delete-msg", obj => {
+    socket.on("delete-msg", async (obj) => {
+      // Checking if the user online or not
+      let objectKey = getKeyByValue(obj.reciverId);
+      if(objectKey){
+        io.to(obj.reciverId).emit("delete-msg-server", obj);
+      }
+      else{
+        const {senderId, reciverId, msgId} = obj;
+        const newDelete = new DeleteMSG({
+          senderId,
+          reciverId,
+          msgId
+        });
 
+        await newDelete.save();
+      };
     });
 
     // When user disconnect 

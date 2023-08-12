@@ -10,7 +10,7 @@ import AvailableChat from './child-components/AvailableChat';
 import Setting from './child-components/Setting';
 import NoChat from './micro-compos/NoChat';
 import { socket } from './socket/socketIO';
-import { setMessage } from '../../store/slices/messageSlice';
+import { dltMessage, setMessage, updateMessage } from '../../store/slices/messageSlice';
 import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
 import { fetchAllUsers } from '../../store/slices/userSlice';
 
@@ -57,14 +57,6 @@ function Home() {
     };
   };
 
-  //For scrolled to the bottom message
-  function scrollBottom() {
-    const chatContainer = document.getElementById('chat-container'); // This id is from right compo
-    setTimeout(() => {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }, 200);
-  };
-
   useEffect(() => {
     // When user will be online
     socket.on("new-user-online", id => {
@@ -75,7 +67,7 @@ function Home() {
     socket.on("get-online-id", arr => {
       for (let i = 0; i < arr.length; i++) {
         const id = arr[i];
-        dispatch(pushOnlineId(id));        
+        dispatch(pushOnlineId(id));
       }
     });
 
@@ -85,10 +77,9 @@ function Home() {
     });
 
     // Receving the sended message and adding the message in the frontend
-    socket.on("recive-msg", (obj) => {
+    socket.on("recive-msg", obj => {
       updateMessageState(obj.id, obj.id, obj.msg, obj.msgId);
       updateLocalMessages(obj.id, obj.id, obj.msg, obj.msgId);
-      chatWith && scrollBottom();
     });
 
     // Reciving the undelivered messages
@@ -102,8 +93,39 @@ function Home() {
       });
     });
 
+    // When someone update smething on his profile then re-fetching all users
     socket.on("user-update-server", () => {
       dispatch(fetchAllUsers());
+    });
+
+    // If user have some message to be deleted then getting them and also emiting a function to delete those messages from db
+    socket.on("delete-msg-db", arr => {
+      arr.map(obj => {
+        const { senderId, msgId } = obj;
+        dispatch(dltMessage({ keyId: senderId, msgId }));
+        return socket.emit("recived-deleted-msg", obj._id);
+      });
+    });
+
+    // If user have some message to be updated then getting them and also emiting a function to delete those messages from db
+    socket.on("update-msg-db", arr => {
+      arr.map(obj => {
+        const { senderId, msgId, newContent } = obj;
+        dispatch(updateMessage({ keyId: senderId, msgId, newContent }));
+        return socket.emit("recived-update-msg", obj._id);
+      });
+    });
+
+    // If user online and someone update some message
+    socket.on("update-msg-server", obj => {
+      const { senderId, msgId, newContent } = obj;
+      dispatch(updateMessage({ keyId: senderId, msgId, newContent }));
+    });
+
+    // If user online and someone delete some message
+    socket.on("delete-msg-server", obj => {
+      const { senderId, msgId } = obj;
+      dispatch(dltMessage({ keyId: senderId, msgId }));
     });
 
     // Clean up the socket connection when the component unmounts
@@ -147,11 +169,11 @@ function Home() {
       const localItem = localStorage.getItem(userId);
       const messageObject = JSON.parse(localItem);
       // Looping through the keys and getting the messageObject
-      if(messageObject){
+      if (messageObject) {
         const keyArray = Object.keys(messageObject);
         for (let i = 0; i < keyArray.length; i++) {
           const keyId = keyArray[i];
-  
+
           // Maping the message object and storing the messages in state
           messageObject[keyId].map(obj => {
             const { id, msg, msgId } = obj;

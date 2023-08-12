@@ -1,16 +1,12 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const UnsendMSG = new Schema({
-    senderId: {
-        type: String,
-        require: true
-    },
+const pendingDelete = new Schema({
     reciverId: {
         type: String,
         require: true
     },
-    message: {
+    senderId: {
         type: String,
         require: true
     },
@@ -20,5 +16,5 @@ const UnsendMSG = new Schema({
     }
 });
 
-const collectedMSG = mongoose.model("UnsendMessages", UnsendMSG);
-module.exports = collectedMSG;
+const DeleteMSG = mongoose.model("MessageDelete", pendingDelete);
+module.exports = DeleteMSG;

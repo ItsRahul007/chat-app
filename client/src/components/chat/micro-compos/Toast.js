@@ -25,13 +25,13 @@ function Toast({ toastStyle, setToastStyle, keyId, userId }) {
   // Deleting the clicked message for everyone
   function deleteForEveryOne() {
     deleteMsgForMe();
-    socket.emit("delete-msg", { userId, msgId: toastStyle.msgId, reciverId: keyId });
+    socket.emit("delete-msg", { senderId: userId, msgId: toastStyle.msgId, reciverId: keyId });
   };
 
   function update(){
     const updateValue = document.getElementById("updateValue");
     dispatch(updateMessage({ keyId, msgId: toastStyle.msgId, newContent: updateValue.value }));
-    socket.emit("update-msg", { userId, msgId: toastStyle.msgId, reciverId: keyId, newContent: updateValue.value });
+    socket.emit("update-msg", { senderId: userId, msgId: toastStyle.msgId, reciverId: keyId, newContent: updateValue.value });
     close();
   };
 

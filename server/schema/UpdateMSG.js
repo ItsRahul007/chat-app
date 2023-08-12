@@ -1,24 +1,24 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const UnsendMSG = new Schema({
-    senderId: {
-        type: String,
-        require: true
-    },
+const pendingUpdate = new Schema({
     reciverId: {
         type: String,
         require: true
     },
-    message: {
+    senderId: {
         type: String,
         require: true
     },
     msgId: {
         type: String,
         require: true
+    },
+    newContent: {
+        type: String,
+        require: true
     }
 });
 
-const collectedMSG = mongoose.model("UnsendMessages", UnsendMSG);
-module.exports = collectedMSG;
+const UpdateMSG = mongoose.model("MessageUpdate", pendingUpdate);
+module.exports = UpdateMSG;
