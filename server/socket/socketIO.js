@@ -119,6 +119,11 @@ function socketServer(io) {
       };
     });
 
+    socket.on("send-image", obj => {
+      const bufferImage = Buffer.from(obj.data.split(',')[1], 'base64');
+      console.log(bufferImage);
+    })
+
     // When user disconnect 
     socket.on("disconnect", () => {
       socket.broadcast.emit("user-offline", users[socket.id]);

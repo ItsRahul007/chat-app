@@ -107,6 +107,7 @@
   background-color: #262e35;
   color: white;
   position: relative;
+  scroll-behavior: smooth;
 }
 
 .chat-head {

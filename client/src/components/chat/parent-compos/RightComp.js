@@ -8,6 +8,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   const { name, avatar, image, _id } = chatWith;
   const [text, setText] = useState(''); // For storing typed messages
   const [toastStyle, setToastStyle] = useState({ top: "-90%", value: '', disabled: false });
+  const [localImage, setLocalImage] = useState(null);
 
   // Importing the store states
   const messageStore = useSelector(state => state.messageSlice);
@@ -93,6 +94,25 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     else setToastStyle({ top: "0", value: obj.msg, msgId: obj.msgId, disabled: false });
   };
 
+  // For sending pictures
+  function sendFile(e) {
+    const file = e.target.files[0];
+
+    const imageContainer = document.getElementById("chat-container");
+
+    const reader = new FileReader();
+    reader.onload = (fileEvent) => {
+      const imageData = fileEvent.target.result;
+      const imageElement = document.createElement('img');
+      imageElement.src = imageData;
+      imageElement.classList = 'msg-box msg-right';
+      imageContainer.appendChild(imageElement);
+      console.log(imageData);
+      socket.emit("send-image", {data: imageData, imageName: file.name});
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
     <div className='right-comp'>
       <Toast toastStyle={toastStyle} keyId={_id} setToastStyle={setToastStyle} userId={userId} /> {/* For deleting or editing messages */}
@@ -124,6 +144,9 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
             :
             <h1>No chats</h1>
         }
+        {
+          // localImage && <img src={localImage} className='msg-box msg-right'/>
+        }
 
       </div>
 
@@ -139,7 +162,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           </div>
         </div>
 
-        <input type='file' accept="image/png, image/gif, image/jpeg" style={{ display: "none" }} id='attachFile' />
+        <input type='file' accept="image/png, image/gif, image/jpeg" style={{ display: "none" }} id='attachFile' onChange={sendFile} />
         <label htmlFor='attachFile' type="file" name="avatar" className='attach'>
           <i className="ri-attachment-line"></i>
         </label>
