@@ -71,7 +71,7 @@ function Chat({ setChatWith, toggleMenu }) {
                                 <span className='name-msg'>
                                     <div className='name'>{name}</div>
                                     <div className='last-msg'>
-                                        {lastMsg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
+                                        {lastMsg ? [lastMsg.msg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "image"] : "Hello there. I'm using chat-app"}
                                     </div>
                                 </span>
                             </li>
@@ -120,7 +120,7 @@ function Chat({ setChatWith, toggleMenu }) {
                                     <span className='name-msg'>
                                         <div className='name'>{name}</div>
                                         <div className='last-msg'>
-                                            {lastMsg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
+                                        {lastMsg ? [lastMsg.msg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "image"] : "Hello there. I'm using chat-app"}
                                         </div>
                                     </span>
                                 </li>

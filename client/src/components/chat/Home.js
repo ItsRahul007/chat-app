@@ -10,7 +10,7 @@ import AvailableChat from './child-components/AvailableChat';
 import Setting from './child-components/Setting';
 import NoChat from './micro-compos/NoChat';
 import { socket } from './socket/socketIO';
-import { dltMessage, setMessage, updateMessage } from '../../store/slices/messageSlice';
+import { dltMessage, setImage, setMessage, updateMessage } from '../../store/slices/messageSlice';
 import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
 import { fetchAllUsers } from '../../store/slices/userSlice';
 
@@ -38,6 +38,11 @@ function Home() {
     dispatch(setMessage({ keyId, id, msg, msgId }));
   };
 
+  // Updating the message state but with images
+  function storeImage(keyId, id, img, msgId){
+    dispatch(setImage({ keyId, id, img, msgId }));
+  };
+
   // Storing the messages in local storage and also updating them
   function updateLocalMessages(keyId, id, msg, msgId) {
     const userId = localStorage.getItem("userId");
@@ -52,6 +57,25 @@ function Home() {
       else {
         const obj = {};
         obj[keyId] = [{ id, msg, msgId }];
+        localStorage.setItem(userId, JSON.stringify(obj));
+      };
+    };
+  };
+
+  // Storing the images in local storage with messages
+  function updateLocalImages(keyId, id, img, msgId) {
+    const userId = localStorage.getItem("userId");
+    // Storing the messages in local storage
+    if (userId) {
+      const localItem = localStorage.getItem(userId);
+      if (localItem) {
+        const parsedItem = JSON.parse(localItem);
+        parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, img, msgId }];
+        localStorage.setItem(userId, JSON.stringify(parsedItem));
+      }
+      else {
+        const obj = {};
+        obj[keyId] = [{ id, img, msgId }];
         localStorage.setItem(userId, JSON.stringify(obj));
       };
     };
@@ -86,9 +110,17 @@ function Home() {
     socket.on("get-unsend-msg", msg => {
       // Maping through the msg array and emiting "recived-msg" function for deleting recived messages
       msg.map(obj => {
-        // Setting the messages
-        updateMessageState(obj.senderId, obj.senderId, obj.message);
-        updateLocalMessages(obj.senderId, obj.senderId, obj.message);
+        if(obj.message){
+          // Setting the messages
+          updateMessageState(obj.senderId, obj.senderId, obj.message, obj.msgId);
+          updateLocalMessages(obj.senderId, obj.senderId, obj.message, obj.msgId);
+        }
+        else if(obj.image){
+          // Setting the images
+          storeImage(obj.senderId, obj.senderId, obj.image, obj.msgId);
+          updateLocalImages(obj.senderId, obj.senderId, obj.image, obj.msgId);
+        }
+
         return socket.emit("recived-unsend-msg", obj._id);
       });
     });
@@ -126,6 +158,12 @@ function Home() {
     socket.on("delete-msg-server", obj => {
       const { senderId, msgId } = obj;
       dispatch(dltMessage({ keyId: senderId, msgId }));
+    });
+
+    socket.on("recive-image", obj => {
+      const {id, img, msgId} = obj;
+      storeImage(id, id, img, msgId);
+      updateLocalImages(id, id, img, msgId);
     });
 
     // Clean up the socket connection when the component unmounts
@@ -176,8 +214,14 @@ function Home() {
 
           // Maping the message object and storing the messages in state
           messageObject[keyId].map(obj => {
-            const { id, msg, msgId } = obj;
-            return updateMessageState(keyId, id, msg, msgId);
+            if(obj.msg){
+              const { id, msg, msgId } = obj;
+              return updateMessageState(keyId, id, msg, msgId);
+            }
+            else if(obj.img){
+              const { id, img, msgId } = obj;
+              return storeImage(keyId, id, img, msgId);
+            }
           });
         };
       }
@@ -193,7 +237,7 @@ function Home() {
         </div>
         {
           chatWith ? // If user select a chat then displaying Right component with chat otherwise showing NoChat component
-            <RightComp openMenu={toggleMenu} chatWith={chatWith} userId={userData.data && userData.data._id} /* if user data exist then sending user id */ updateMessageState={updateMessageState} updateLocalMessages={updateLocalMessages} />
+            <RightComp openMenu={toggleMenu} chatWith={chatWith} userId={userData.data && userData.data._id} /* if user data exist then sending user id */ updateMessageState={updateMessageState} updateLocalMessages={updateLocalMessages} storeImage={storeImage} updateLocalImages={updateLocalImages} />
             :
             <NoChat openMenu={toggleMenu} />
         }

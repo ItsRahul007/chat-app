@@ -43,6 +43,11 @@ const messageSlice = createSlice({
             state[keyId] = [...(state[keyId] || []), { id, msg, msgId }];
         },
 
+        setImage(state, action){
+            const { keyId, id, img, msgId } = action.payload;
+            state[keyId] = [...(state[keyId] || []), { id, img, msgId }];
+        },
+
         // Filtering through the message id and remove it
         dltMessage(state, action) {
             const { keyId, msgId } = action.payload;
@@ -78,5 +83,5 @@ const messageSlice = createSlice({
     }
 });
 
-export const { setMessage, dltMessage, updateMessage, deleteWholeChat } = messageSlice.actions;
+export const { setMessage, dltMessage, updateMessage, deleteWholeChat, setImage } = messageSlice.actions;
 export default messageSlice.reducer

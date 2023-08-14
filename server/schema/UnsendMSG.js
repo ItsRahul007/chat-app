@@ -12,7 +12,9 @@ const UnsendMSG = new Schema({
     },
     message: {
         type: String,
-        require: true
+    },
+    image: {
+        type: String,
     },
     msgId: {
         type: String,

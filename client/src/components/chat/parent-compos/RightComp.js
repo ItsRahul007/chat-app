@@ -4,11 +4,10 @@ import { socket } from '../socket/socketIO';
 import { useSelector } from 'react-redux';
 import Toast from '../micro-compos/Toast';
 
-function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages }) {
+function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
   const { name, avatar, image, _id } = chatWith;
   const [text, setText] = useState(''); // For storing typed messages
   const [toastStyle, setToastStyle] = useState({ top: "-90%", value: '', disabled: false });
-  const [localImage, setLocalImage] = useState(null);
 
   // Importing the store states
   const messageStore = useSelector(state => state.messageSlice);
@@ -31,9 +30,13 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
   useEffect(() => scrollBottom(), [chatWith]); // When ever clicked on any chat scrolling down
 
-  // Scrolling down when ever get any messages and also chatWith is not null
+  // If chatWith is not null scrolling down the page whenever get any messages or images
   useEffect(() => {
     socket.on("recive-msg", () => {
+      scrollBottom();
+    });
+
+    socket.on("recive-image", () => {
       scrollBottom();
     });
 
@@ -97,20 +100,18 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   // For sending pictures
   function sendFile(e) {
     const file = e.target.files[0];
-
-    const imageContainer = document.getElementById("chat-container");
+    const msgId = generateUniqueID();
 
     const reader = new FileReader();
     reader.onload = (fileEvent) => {
       const imageData = fileEvent.target.result;
-      const imageElement = document.createElement('img');
-      imageElement.src = imageData;
-      imageElement.classList = 'msg-box msg-right';
-      imageContainer.appendChild(imageElement);
-      console.log(imageData);
-      socket.emit("send-image", {data: imageData, imageName: file.name});
+
+      storeImage(_id, userId, imageData, msgId);
+      updateLocalImages(_id, userId, imageData, msgId);
+      socket.emit("send-image", { id: _id, img: imageData, msgId });
     };
     reader.readAsDataURL(file);
+    scrollBottom();
   };
 
   return (
@@ -136,16 +137,19 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         {
           messageStore[_id] ? messageStore[_id].map((obj, i) => {
             return (
-              <div onClick={() => options(obj)} key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
-                {obj.msg}
-              </div>
+              <>
+                {obj.msg ?
+                  <div onClick={() => options(obj)} key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
+                    {obj.msg}
+                  </div>
+                  :
+                  <img src={obj.img} alt='' key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} />
+                }
+              </>
             );
           })
             :
             <h1>No chats</h1>
-        }
-        {
-          // localImage && <img src={localImage} className='msg-box msg-right'/>
         }
 
       </div>

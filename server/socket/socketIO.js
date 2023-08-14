@@ -29,9 +29,9 @@ function socketServer(io) {
       };
 
       // If user have some message to be deleted
-      if(deleteMessages) socket.emit("delete-msg-db", deleteMessages);
+      if (deleteMessages) socket.emit("delete-msg-db", deleteMessages);
       // If user have some message to be updated
-      if(updateMessages) socket.emit("update-msg-db", updateMessages);
+      if (updateMessages) socket.emit("update-msg-db", updateMessages);
     });
 
     // Getting the id of already connected user
@@ -84,15 +84,15 @@ function socketServer(io) {
     socket.on("update-msg", async (obj) => {
       // Checking if the user online or not
       let objectKey = getKeyByValue(obj.reciverId);
-      if(objectKey){
+      if (objectKey) {
         io.to(obj.reciverId).emit("update-msg-server", obj);
       }
-      else{
-        const {senderId, reciverId, msgId, newContent} = obj;
+      else {
+        const { senderId, reciverId, msgId, newContent } = obj;
         const newUpdate = new UpdateMSG({
-          senderId, 
-          reciverId, 
-          msgId, 
+          senderId,
+          reciverId,
+          msgId,
           newContent
         });
 
@@ -104,11 +104,11 @@ function socketServer(io) {
     socket.on("delete-msg", async (obj) => {
       // Checking if the user online or not
       let objectKey = getKeyByValue(obj.reciverId);
-      if(objectKey){
+      if (objectKey) {
         io.to(obj.reciverId).emit("delete-msg-server", obj);
       }
-      else{
-        const {senderId, reciverId, msgId} = obj;
+      else {
+        const { senderId, reciverId, msgId } = obj;
         const newDelete = new DeleteMSG({
           senderId,
           reciverId,
@@ -119,10 +119,27 @@ function socketServer(io) {
       };
     });
 
-    socket.on("send-image", obj => {
-      const bufferImage = Buffer.from(obj.data.split(',')[1], 'base64');
-      console.log(bufferImage);
-    })
+    socket.on("send-image", async (obj) => {
+      // Checking if the user online or not
+      let objectKey = getKeyByValue(obj.id);
+      if (objectKey) {
+        io.to(obj.id).emit("recive-image", { id: users[socket.id], img: obj.img, msgId: obj.msgId });
+      }
+      else { // If user is offline the saving the messages on database
+        try {
+          const newMSG = new collectedMSG({
+            senderId: users[socket.id],
+            reciverId: id,
+            image: obj.img,
+            msgId
+          });
+          await newMSG.save();
+        }
+        catch (error) {
+          console.error('Error saving message:', error);
+        };
+      };
+    });
 
     // When user disconnect 
     socket.on("disconnect", () => {
