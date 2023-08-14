@@ -13,6 +13,7 @@ import { socket } from './socket/socketIO';
 import { dltMessage, setImage, setMessage, updateMessage } from '../../store/slices/messageSlice';
 import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
 import { fetchAllUsers } from '../../store/slices/userSlice';
+import { storeImagesToSlice } from '../../store/slices/mediaSlice';
 
 function Home() {
   // The store state variables
@@ -39,8 +40,9 @@ function Home() {
   };
 
   // Updating the message state but with images
-  function storeImage(keyId, id, img, msgId){
+  function storeImage(keyId, id, img, msgId) {
     dispatch(setImage({ keyId, id, img, msgId }));
+    dispatch(storeImagesToSlice({ img }));
   };
 
   // Storing the messages in local storage and also updating them
@@ -110,12 +112,12 @@ function Home() {
     socket.on("get-unsend-msg", msg => {
       // Maping through the msg array and emiting "recived-msg" function for deleting recived messages
       msg.map(obj => {
-        if(obj.message){
+        if (obj.message) {
           // Setting the messages
           updateMessageState(obj.senderId, obj.senderId, obj.message, obj.msgId);
           updateLocalMessages(obj.senderId, obj.senderId, obj.message, obj.msgId);
         }
-        else if(obj.image){
+        else if (obj.image) {
           // Setting the images
           storeImage(obj.senderId, obj.senderId, obj.image, obj.msgId);
           updateLocalImages(obj.senderId, obj.senderId, obj.image, obj.msgId);
@@ -161,7 +163,7 @@ function Home() {
     });
 
     socket.on("recive-image", obj => {
-      const {id, img, msgId} = obj;
+      const { id, img, msgId } = obj;
       storeImage(id, id, img, msgId);
       updateLocalImages(id, id, img, msgId);
     });
@@ -214,11 +216,11 @@ function Home() {
 
           // Maping the message object and storing the messages in state
           messageObject[keyId].map(obj => {
-            if(obj.msg){
+            if (obj.msg) {
               const { id, msg, msgId } = obj;
               return updateMessageState(keyId, id, msg, msgId);
             }
-            else if(obj.img){
+            else if (obj.img) {
               const { id, img, msgId } = obj;
               return storeImage(keyId, id, img, msgId);
             }

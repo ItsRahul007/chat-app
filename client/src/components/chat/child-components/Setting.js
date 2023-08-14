@@ -51,7 +51,7 @@ function Setting() {
     };
 
     dispatch(fetchUser());
-    socket.emit("user-update-client"); // Emiting the updates
+    socket.emit("user-update-client", obj); // Emiting the updates
     
     // If success then sending message
     genMsg.classList.add('success');

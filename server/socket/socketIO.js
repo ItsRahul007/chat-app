@@ -24,9 +24,7 @@ function socketServer(io) {
       const updateMessages = await UpdateMSG.find({ reciverId: userId });
 
       // If user have any messages
-      if (!messages.length <= 0) {
-        socket.emit("get-unsend-msg", messages);
-      };
+      if (messages) socket.emit("get-unsend-msg", messages);
 
       // If user have some message to be deleted
       if (deleteMessages) socket.emit("delete-msg-db", deleteMessages);
@@ -76,8 +74,8 @@ function socketServer(io) {
     });
 
     // Getting the updates and broadcast it to the other users
-    socket.on("user-update-client", () => {
-      socket.broadcast.emit("user-update-server");
+    socket.on("user-update-client", obj => {
+      socket.broadcast.emit("user-update-server", obj);
     });
 
     // When someone update message
@@ -125,13 +123,14 @@ function socketServer(io) {
       if (objectKey) {
         io.to(obj.id).emit("recive-image", { id: users[socket.id], img: obj.img, msgId: obj.msgId });
       }
-      else { // If user is offline the saving the messages on database
+      else {
+        // If user is offline the saving the messages on database
         try {
           const newMSG = new collectedMSG({
             senderId: users[socket.id],
-            reciverId: id,
+            reciverId: obj.id,
             image: obj.img,
-            msgId
+            msgId: obj.msgId
           });
           await newMSG.save();
         }

@@ -82,12 +82,13 @@
 
 .online-symbol {
   position: absolute;
-  height: 15px;
-  width: 15px;
+  height: 14.5px;
+  width: 14.5px;
   border-radius: 50%;
   background-color: lime;
-  bottom: 10px;
-  left: 39px;
+  bottom: 8px;
+  left: 38px;
+  border: 4px solid #303841;
 }
 
 .profile-img {
