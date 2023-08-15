@@ -3,6 +3,8 @@ import EmojiPicker from 'emoji-picker-react';
 import { socket } from '../socket/socketIO';
 import { useSelector } from 'react-redux';
 import Toast from '../micro-compos/Toast';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 
 function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
   let { _id } = chatWith;
@@ -146,15 +148,17 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         {
           messageStore[_id] ? messageStore[_id].map((obj) => {
             return (
-              <>
+              <PhotoProvider>
                 {obj.msg ?
                   <div onClick={() => options(obj)} key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
                     {obj.msg}
                   </div>
                   :
-                  <img src={obj.img} alt='' key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} />
+                  <PhotoView src={obj.img}>
+                    <img src={obj.img} alt='' key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} />
+                  </PhotoView>
                 }
-              </>
+              </PhotoProvider>
             );
           })
             :

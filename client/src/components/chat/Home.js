@@ -214,7 +214,7 @@ function Home() {
         for (let i = 0; i < keyArray.length; i++) {
           const keyId = keyArray[i];
 
-          // Maping the message object and storing the messages in state
+          // Maping the message object and storing the messages and images in state
           messageObject[keyId].map(obj => {
             if (obj.msg) {
               const { id, msg, msgId } = obj;

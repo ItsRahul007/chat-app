@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 
 function Profile({ chatWith }) {
   const [data, setData] = useState({ name: '', avatar: '', image: '', about: '' });
@@ -56,8 +58,8 @@ function Profile({ chatWith }) {
           </div>
         }
       </>
-    )
-  }
+    );
+  };
 
   function MyProfile() {
     return (
@@ -77,19 +79,22 @@ function Profile({ chatWith }) {
         <div className='user-media'>
           <span>MEDIA</span>
           <div>
-            {
-              mediaPictures ? mediaPictures.map((url, i) => {
-                return <img src={url.img} alt='' key={i} />
-              })
-                :
-                <h4 style={{ color: "white", marginLeft: "130px", width: "100%" }}>No Images</h4>
-            }
+            <PhotoProvider>
+              {
+                mediaPictures ? mediaPictures.map((url, i) => (
+                  <PhotoView src={url.img} key={i} >
+                    <img src={url.img} alt='' style={{ objectFit: 'cover' }} />
+                  </PhotoView>
+                ))
+                  :
+                  <h4 style={{ color: "white", marginLeft: "130px", width: "100%" }}>No Images</h4>
+              }
+            </PhotoProvider>
           </div>
         </div>
       </>
     );
-  }
-
+  };
 
   return (
     <div className='profile-con'>
