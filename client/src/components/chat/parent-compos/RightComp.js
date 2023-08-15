@@ -179,7 +179,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           </div>
         </div>
 
-        <input type='file' accept="image/png, image/gif, image/jpeg" style={{ display: "none" }} id='attachFile' onChange={sendFile} />
+        <input type='file' accept="image/*" style={{ display: "none" }} id='attachFile' onChange={sendFile} />
         <label htmlFor='attachFile' type="file" name="avatar" className='attach'>
           <i className="ri-attachment-line"></i>
         </label>

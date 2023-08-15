@@ -7,6 +7,7 @@ import Login from "./components/authentication/Login";
 import Signup from "./components/authentication/Signup";
 import Alert from "./components/alert/Alert";
 import { fetchUser, fetchAllUsers } from './store/slices/userSlice';
+import CropImage from "./components/chat/micro-compos/CropImage";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function App() {
     if (localStorage.getItem("authToken")) {
       dispatch(fetchUser());
       dispatch(fetchAllUsers());
-      navigate('/');
+      // navigate('/');
     }
     else navigate('/login');
   }, []);
@@ -36,6 +37,7 @@ function App() {
       <Alert errors={data[0]} />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/crop" element={<CropImage />} />
         <Route path="/login" element={<Login callApi={loginToDispatch} />} />
         <Route path="/signup" element={<Signup callApi={loginToDispatch} />} />
       </Routes>
