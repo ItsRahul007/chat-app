@@ -5,15 +5,22 @@ import { useSelector } from 'react-redux';
 import Toast from '../micro-compos/Toast';
 
 function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
-  let { name, avatar, image, _id } = chatWith;
+  let { _id } = chatWith;
   const [text, setText] = useState(''); // For storing typed messages
   const [toastStyle, setToastStyle] = useState({ top: "-90%", value: '', disabled: false });
-  const [info, setInfo] = useState(null);
+  const [info, setInfo] = useState({ name: '', avatar: '', image: '' });
+  const { name, avatar, image } = info;
 
   // Importing the store states
   const messageStore = useSelector(state => state.messageSlice);
   const onlineId = useSelector(state => state.onlineSlice);
-  const allPersons = useSelector(state => state.user.allUsersData); // ei khan theke chat with ke filter kor diye or information gulo usestate e store kore display kor
+  const allPersons = useSelector(state => state.user.allUsersData);
+
+  useEffect(() => {
+    const allUsers = allPersons.data;
+    const user = allUsers.filter(obj => obj._id === _id);
+    setInfo(user[0]);
+  }, [chatWith, allPersons]);
 
   //For scrolled to the bottom message
   function scrollBottom() {
@@ -41,19 +48,6 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     socket.on("recive-image", () => {
       scrollBottom();
     });
-
-    // Updating the chat with when user update something -----------not working---------------
-    // socket.on("user-update-server", obj => {
-    //   if(obj.id === _id){
-    //     const updateKeys = Object.keys(obj).filter(e => e !== "id");
-    //     updateKeys.map(key => {
-    //       if(key === "image") image = obj[key];
-    //       if(key === "name") name = obj[key];
-    //       if(key === "avatar") avatar = obj[key];
-    //       console.log(chatWith);
-    //     });        
-    //   };
-    // });
 
     return () => {
       socket.disconnect();
@@ -138,7 +132,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           <i className="ri-menu-line"></i>
         </button>
         <span className='user-avatar' style={{ background: avatar }}>
-          {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
+          {image ? <img src={image} alt='profile' /> : [name && name.slice(0, 2)]}
         </span>
         <span>
           <div className='user-name'>{name}</div>
