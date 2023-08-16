@@ -1,5 +1,5 @@
 import React from 'react';
-import "./noChat.css";
+import "./microCompo.css";
 
 function NoChat({openMenu}) {
   return (

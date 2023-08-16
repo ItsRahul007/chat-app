@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { showAlert } from '../../../store/slices/alertSlice';
 
-function Collaps({ name, about, email, avatar, image, onUserChange, setUser, user, dispatch }) {
+function Collaps({ name, about, email, avatar, image, onUserChange, setUser, user, dispatch, setDisplay }) {
 
     const [pass, setPass] = useState({ oldPassword: '', password: '', conPassword: '' });
     const { oldPassword, password, conPassword } = pass;
@@ -57,9 +57,8 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
                         <span className='profile-img collap-img' style={{ background: avatar }}>
                             {image ? <img src={image} alt='' /> : name.length !== 0 && name.slice(0, 2)}
                         </span>
-                        <div>
-                            <input type='file' accept="image/png, image/gif, image/jpeg" style={{ display: 'none' }} id='chooseFile' />
-                            <label htmlFor='chooseFile'><i className="ri-edit-2-fill"></i></label>
+                        <div onClick={() => setDisplay("flex")}>
+                            <i className="ri-edit-2-fill"></i>
                         </div>
                     </div>
                     <div>

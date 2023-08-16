@@ -72,16 +72,16 @@
   border-bottom: 2px solid #72c976;
   border-radius: 10px;
   outline: none;
-  transition: ease .5s;
+  transition: ease 0.5s;
   padding: 5px;
   font-size: 15px;
 }
 
-.toast-con input:hover{
+.toast-con input:hover {
   border: 2px solid #72c976;
 }
 
-.toast-con input:focus{
+.toast-con input:focus {
   border: 2px solid #72c976;
 }
 
@@ -108,7 +108,41 @@
   width: 110px;
 }
 
-.toast-btns button:disabled{
+.toast-btns button:disabled {
   background-color: rgba(28, 108, 28, 0.877);
   cursor: not-allowed;
+}
+
+.crop-image {
+  height: 600px;
+  width: 250px;
+  background-color: #293134;
+  border-radius: 20px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  position: absolute;
+  left: -50px;
+}
+
+.crop-image > button {
+  height: 30px;
+  width: 50px;
+  margin: 15px;
+  border-radius: 20px;
+  border: none;
+  align-self: flex-end;
+  background-color: #72c976;
+  color: white;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.crop-image .preview {
+  height: 150px;
+  width: 150px;
+  margin: 60px;
+  margin-bottom: 0;
+  margin-top: 20px;
 }

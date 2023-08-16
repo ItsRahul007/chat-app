@@ -1,5 +1,5 @@
 import React from 'react';
-import "./noChat.css";
+import "./microCompo.css";
 import { socket } from '../socket/socketIO';
 import { dltMessage, updateMessage } from '../../../store/slices/messageSlice';
 import { useDispatch } from 'react-redux';

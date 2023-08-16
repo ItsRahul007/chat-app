@@ -1,21 +1,32 @@
 import { useState } from 'react';
 import Avatar from "react-avatar-edit";
+import "./microCompo.css"
 
 
-function CropImage() {
+function CropImage({ display, setDisplay, setUser, user }) {
     const [cropedImage, setCropedImage] = useState(null);
 
-    function onCrop(e){
+    function onCrop(e) {
         setCropedImage(e);
-        console.log(e);
     }
 
-    function onClose(){
+    function onClose() {
         setCropedImage(null);
     };
 
+    function close() {
+        onClose();
+        setDisplay("none");
+    };
+
+    function saveImage(){
+        setUser({ ...user, image: cropedImage });
+        setDisplay("none");
+    }
+
     return (
-        <>
+        <div className='crop-image' style={{ display }}>
+            <button onClick={close}>Close</button>
             <Avatar
                 height={300}
                 width={300}
@@ -23,9 +34,12 @@ function CropImage() {
                 onClose={onClose}
             />
             {
-                cropedImage && <img src={cropedImage} style={{height: "100px"}} />
+                cropedImage && <>
+                    <img src={cropedImage} className='preview' />
+                    <button className='save-img' onClick={saveImage}>Save</button>
+                </>
             }
-        </>
+        </div>
     )
 };
 

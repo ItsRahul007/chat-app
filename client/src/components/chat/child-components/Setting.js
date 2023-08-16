@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../../../store/slices/userSlice';
 import Collaps from '../micro-compos/Collaps';
 import { socket } from '../socket/socketIO';
+import CropImage from '../micro-compos/CropImage';
 
 function Setting() {
   const [user, setUser] = useState({ name: '', about: '', email: '', avatar: '', image: '' });
   const { name, about, email, avatar, image } = user;
+  const [display, setDisplay] = useState("none");
+
   const dispatch = useDispatch();
   const userData = useSelector(state => state.user.userData);
 
@@ -65,9 +68,10 @@ function Setting() {
   return (
     <div className='setting-comp'>
       <div>Settings</div>
+      <CropImage display={display} setDisplay={setDisplay} user={user} setUser={setUser} />
       <span className='collap-compo'>
         <ul className='collaps'>
-          <Collaps name={name} about={about} email={email} avatar={avatar} image={image} onUserChange={onUserChange} setUser={setUser} user={user} dispatch={dispatch} />
+          <Collaps name={name} about={about} email={email} avatar={avatar} image={image} onUserChange={onUserChange} setUser={setUser} user={user} dispatch={dispatch} setDisplay={setDisplay} />
         </ul>
       </span>
       <button className='setting-btn' onClick={updateUser}>Save Changes</button>
