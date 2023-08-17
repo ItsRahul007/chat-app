@@ -68,7 +68,7 @@ function Setting() {
   return (
     <div className='setting-comp'>
       <div>Settings</div>
-      <CropImage display={display} setDisplay={setDisplay} user={user} setUser={setUser} />
+      <CropImage display={display} setDisplay={setDisplay} />
       <span className='collap-compo'>
         <ul className='collaps'>
           <Collaps name={name} about={about} email={email} avatar={avatar} image={image} onUserChange={onUserChange} setUser={setUser} user={user} dispatch={dispatch} setDisplay={setDisplay} />

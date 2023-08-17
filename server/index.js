@@ -24,6 +24,7 @@ app.use(cors());
 
 //Avalible routes
 app.use("/auth", require("./routes/users"));
+app.use("/upload", require("./routes/uploadImage"));
 app.use("/socket", require("./socket/socketIO"));
 
 server.listen(port, () => {
