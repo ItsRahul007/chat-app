@@ -54,10 +54,9 @@ function CropImage({ display, setDisplay }) {
         const file = convertBase64ToImageFile(cropedImage);
         const fd = new FormData();
         fd.append("file", file);
-        console.log(fd.getAll("file"));
         const res = await axios.post("http://localhost:4000/upload/uploadImage", fd, {
             headers: {
-                "Content-Type": 'application/json',
+                "Content-Type": 'multipart/form-data',
                 "auth-token": localStorage.getItem('authToken')
             }
         });
