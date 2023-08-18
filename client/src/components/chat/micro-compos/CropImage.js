@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Avatar from "react-avatar-edit";
-import "./microCompo.css"
+import "./microCompo.css";
+import axios from 'axios';
 
 function CropImage({ display, setDisplay }) {
     const [cropedImage, setCropedImage] = useState(null);
@@ -8,32 +9,32 @@ function CropImage({ display, setDisplay }) {
     // Converting base64 image to a normal image
     function convertBase64ToImageFile(base64String) {
         const matches = base64String.match(/^data:(.+);base64,(.+)$/);
-      
+
         if (!matches || matches.length !== 3) {
-          throw new Error('Invalid Base64 string format');
+            throw new Error('Invalid Base64 string format');
         }
-      
+
         const mimeType = matches[1];
         const base64Data = matches[2];
-      
+
         const byteCharacters = atob(base64Data);
         const byteArrays = [];
-      
+
         for (let i = 0; i < byteCharacters.length; i++) {
-          byteArrays.push(byteCharacters.charCodeAt(i));
+            byteArrays.push(byteCharacters.charCodeAt(i));
         }
-      
+
         const blob = new Blob([new Uint8Array(byteArrays)], { type: mimeType });
-      
+
         // Generate a unique filename (optional)
         const timestamp = new Date().getTime();
         const filename = `image_${timestamp}.${mimeType.split('/')[1]}`;
-      
+
         // If you need a File object (optional)
         const file = new File([blob], filename, { type: mimeType });
-      
+
         return file;
-      }
+    }
 
     function onCrop(e) {
         setCropedImage(e);
@@ -48,10 +49,21 @@ function CropImage({ display, setDisplay }) {
         setDisplay("none");
     };
 
-    function saveImage(){
+    async function saveImage() {
         setDisplay("none");
         const file = convertBase64ToImageFile(cropedImage);
-        console.log(file);
+        const fd = new FormData();
+        fd.append("file", file);
+        console.log(fd.getAll("file"));
+        const res = await axios.post("http://localhost:4000/upload/uploadImage", fd, {
+            headers: {
+                "Content-Type": 'application/json',
+                "auth-token": localStorage.getItem('authToken')
+            }
+        });
+        // const ah = await res.json();
+        console.log(res);
+        // console.log(ah);
     };
 
     return (
@@ -66,7 +78,7 @@ function CropImage({ display, setDisplay }) {
             />
             {
                 cropedImage && <>
-                    <img src={cropedImage} className='preview' />
+                    <img src={cropedImage} className='preview' alt='' />
                     <button className='save-img' onClick={saveImage}>Save</button>
                 </>
             }
