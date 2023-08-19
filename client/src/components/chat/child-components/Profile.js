@@ -45,32 +45,42 @@ function Profile({ chatWith }) {
 
   function ChatProfile() {
     return (
-      <>
+      <PhotoProvider>
         {
           userData.data &&
           <div className='user-profile'>
-            <span className='profile-img' style={{ background: chatWithProfile.avatar }}>
-              {chatWithProfile.image ? <img src={`http://localhost:4000/images/` + chatWithProfile.image} alt='' /> : chatWithProfile.name.slice(0, 2)}
+            <span className='profile-img chat-avatar' style={{ background: chatWithProfile.avatar }}>
+              {chatWithProfile.image ?
+                <PhotoView src={`http://localhost:4000/images/` + chatWithProfile.image} >
+                  <img src={`http://localhost:4000/images/` + chatWithProfile.image} alt='' />
+                </PhotoView>
+                : chatWithProfile.name.slice(0, 2)}
             </span>
             <div className='user-status'>{onlineId.includes(chatWith._id) ? "Online" : "Offline"}</div>
             <div className='user-name'>{chatWithProfile.name}</div>
             <div className='user-about'>{chatWithProfile.about}</div>
           </div>
         }
-      </>
+      </PhotoProvider>
     );
   };
 
   function MyProfile() {
     return (
-      <>
+      <PhotoProvider>
         {userData.isLoading && <div>Loading...</div>}
         {userData.isFailed && <div>some internal server error occurred</div>}
         {
           userData.data &&
           <div className='user-profile'>
-            <span className='profile-img' style={{ background: avatar }}>
-              {image ? <img src={`http://localhost:4000/images/` + image} alt='' /> : name.slice(0, 2)}
+            <span className='profile-img chat-avatar' style={{ background: avatar }}>
+              {
+                image ?
+                  <PhotoView src={`http://localhost:4000/images/` + image}>
+                    <img src={`http://localhost:4000/images/` + image} alt='' />
+                  </PhotoView>
+                  : name.slice(0, 2)
+              }
             </span>
             <div className='user-name'>{name}</div>
             <div className='user-about'>{about}</div>
@@ -79,20 +89,18 @@ function Profile({ chatWith }) {
         <div className='user-media'>
           <span>MEDIA</span>
           <div>
-            <PhotoProvider>
-              {
-                mediaPictures ? mediaPictures.map((url, i) => (
-                  <PhotoView src={url.img} key={i} >
-                    <img src={url.img} alt='' style={{ objectFit: 'cover' }} />
-                  </PhotoView>
-                ))
-                  :
-                  <h4 style={{ color: "white", marginLeft: "130px", width: "100%" }}>No Images</h4>
-              }
-            </PhotoProvider>
+            {
+              mediaPictures ? mediaPictures.map((url, i) => (
+                <PhotoView src={url.img} key={i} >
+                  <img src={url.img} alt='' style={{ objectFit: 'cover' }} />
+                </PhotoView>
+              ))
+                :
+                <h4 style={{ color: "white", marginLeft: "130px", width: "100%" }}>No Images</h4>
+            }
           </div>
         </div>
-      </>
+      </PhotoProvider>
     );
   };
 

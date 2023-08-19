@@ -108,8 +108,7 @@
 }
 
 .profile-img img {
-  height: 43px;
-  transform: scale(2);
+  height: 47px;
 }
 
 .name-msg .name {
@@ -172,14 +171,13 @@
 }
 
 .user-profile .profile-img {
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
   font-weight: 600;
 }
 
 .user-profile .profile-img img {
-  height: 180px;
-  transform: scale(1);
+  height: 153px;
 }
 
 .user-profile .user-name {
@@ -405,6 +403,10 @@
   font-size: 22px;
   font-weight: 500;
   position: relative;
+}
+
+.collap-img img{
+  height: 70px;
 }
 
 .avatar-colors {

@@ -2,9 +2,13 @@ import { useState } from 'react';
 import Avatar from "react-avatar-edit";
 import "./microCompo.css";
 import axios from 'axios';
+import { socket } from '../socket/socketIO';
+import { useDispatch } from 'react-redux';
+import { fetchUser } from '../../../store/slices/userSlice';
 
 function CropImage({ display, setDisplay }) {
     const [cropedImage, setCropedImage] = useState(null);
+    const dispatch = useDispatch();
 
     // Converting base64 image to a normal image
     function convertBase64ToImageFile(base64String) {
@@ -36,6 +40,7 @@ function CropImage({ display, setDisplay }) {
         return file;
     }
 
+    // Geting the base64 image
     function onCrop(e) {
         setCropedImage(e);
     }
@@ -54,14 +59,15 @@ function CropImage({ display, setDisplay }) {
         const file = convertBase64ToImageFile(cropedImage);
         const fd = new FormData();
         fd.append("file", file);
-        await axios.post("http://localhost:4000/upload/uploadImage", fd, {
+        const res = await axios.post("http://localhost:4000/upload/uploadImage", fd, {
             headers: {
                 "Content-Type": 'multipart/form-data',
                 "auth-token": localStorage.getItem('authToken')
             }
         });
-        // const parsedRes = await res.json();
-        // console.log(parsedRes);
+        console.log(res);
+        dispatch(fetchUser());
+        socket.emit("profile-picture-update");
     };
 
     return (

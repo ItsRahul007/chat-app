@@ -155,7 +155,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
                   </div>
                   :
                   <PhotoView src={obj.img}>
-                    <img src={obj.img} alt='' key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} />
+                    <img src={obj.img} alt='' key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} style={{maxHeight: '300px', borderRadius: "25px"}} />
                   </PhotoView>
                 }
               </PhotoProvider>

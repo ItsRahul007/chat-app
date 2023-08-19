@@ -3,9 +3,21 @@ const router = express.Router();
 const fetchUser = require("../middleware/fetchUser");
 const upload = require("../middleware/uploadMulter");
 const UserSchema = require("../schema/UserSchema");
+const fs = require('fs');
 
 // Simulate storing previous image names
 const imageNames = new Map();
+
+// Define the deleteImage function
+function deleteImage(imageName) {
+    fs.unlink(`public/images/${imageName}`, (error) => {
+      if (error) {
+        console.error('Error deleting image:', error);
+      } else {
+        console.log(`Image ${imageName} deleted successfully`);
+      }
+    });
+  }
 
 router.post('/uploadImage', fetchUser, upload.single("file"), async (req, res) => {
     const image = {}

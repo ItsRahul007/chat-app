@@ -140,6 +140,11 @@ function socketServer(io) {
       };
     });
 
+    // When a user updates his profile-picture
+    socket.on("profile-picture-update", ()=>{
+      socket.broadcast.emit("fetch-profile-picture");
+    });
+
     // When user disconnect 
     socket.on("disconnect", () => {
       socket.broadcast.emit("user-offline", users[socket.id]);
