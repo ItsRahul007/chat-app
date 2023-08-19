@@ -21,6 +21,7 @@ socketServer(io)
 connectMongo();
 app.use(express.json());
 app.use(cors());
+app.use(express.static('public'));
 
 //Avalible routes
 app.use("/auth", require("./routes/users"));

@@ -49,8 +49,8 @@ function AvailableChat({ setChatWith, toggleMenu }) {
 
             return (
               <li key={_id} onClick={() => clickedChat(data)}>
-                <span className='profile-img' style={{ background: avatar }}>
-                  {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
+                <span className='profile-img' style={{ background: image ? "black" : avatar }}>
+                  {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                 </span>
                 <span className='name-msg'>
                   <div className='name'>{name}</div>
@@ -92,8 +92,8 @@ function AvailableChat({ setChatWith, toggleMenu }) {
               const { name, about, avatar, image, _id } = data;
               return (
                 <li key={_id} onClick={() => clickedChat(data)}>
-                  <span className='profile-img' style={{ background: avatar }}>
-                    {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
+                  <span className='profile-img' style={{ background: image ? "black" : avatar }}>
+                    {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                   </span>
                   <span className='name-msg'>
                     <div className='name'>{name}</div>

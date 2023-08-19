@@ -64,8 +64,8 @@ function Chat({ setChatWith, toggleMenu }) {
 
                         return (
                             <li key={_id} onClick={() => clickedChat(data)}>
-                                <span className='profile-img' style={{ background: avatar }}>
-                                    {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
+                                <span className='profile-img' style={{ background: image ? "black" : avatar }}>
+                                    {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                                 </span>
                                 {onlineId.includes(_id) && <div className='online-symbol'></div>}
                                 <span className='name-msg'>
@@ -110,17 +110,17 @@ function Chat({ setChatWith, toggleMenu }) {
                             // Getting the last message
                             const allMsg = chatId.includes(_id) && messageStore[_id];
                             const lastMsg = allMsg && allMsg[allMsg.length - 1];
-                            
+
                             return (chatId.includes(_id) && allMsg.length >= 0 &&
                                 <li key={_id} onClick={() => clickedChat(data)}>
-                                    <span className='profile-img' style={{ background: avatar }}>
-                                        {image ? <img src={image} alt='profile' /> : name.slice(0, 2)}
+                                    <span className='profile-img' style={{ background: image ? "black" : avatar }}>
+                                        {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                                     </span>
                                     {onlineId.includes(_id) && <div className='online-symbol'></div>}
                                     <span className='name-msg'>
                                         <div className='name'>{name}</div>
                                         <div className='last-msg'>
-                                        {lastMsg ? [lastMsg.msg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "image"] : "Hello there. I'm using chat-app"}
+                                            {lastMsg ? [lastMsg.msg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "image"] : "Hello there. I'm using chat-app"}
                                         </div>
                                     </span>
                                 </li>

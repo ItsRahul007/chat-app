@@ -26,7 +26,7 @@ function CropImage({ display, setDisplay }) {
 
         const blob = new Blob([new Uint8Array(byteArrays)], { type: mimeType });
 
-        // Generate a unique filename (optional)
+        // Generate a unique filename
         const timestamp = new Date().getTime();
         const filename = `image_${timestamp}.${mimeType.split('/')[1]}`;
 
@@ -60,9 +60,8 @@ function CropImage({ display, setDisplay }) {
                 "auth-token": localStorage.getItem('authToken')
             }
         });
-        // const ah = await res.json();
-        console.log(res);
-        // console.log(ah);
+        const parsedRes = await res.json();
+        console.log(parsedRes);
     };
 
     return (

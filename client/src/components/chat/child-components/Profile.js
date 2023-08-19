@@ -50,7 +50,7 @@ function Profile({ chatWith }) {
           userData.data &&
           <div className='user-profile'>
             <span className='profile-img' style={{ background: chatWithProfile.avatar }}>
-              {chatWithProfile.image ? <img src={chatWithProfile.image} alt='' /> : chatWithProfile.name.slice(0, 2)}
+              {chatWithProfile.image ? <img src={`http://localhost:4000/images/` + chatWithProfile.image} alt='' /> : chatWithProfile.name.slice(0, 2)}
             </span>
             <div className='user-status'>{onlineId.includes(chatWith._id) ? "Online" : "Offline"}</div>
             <div className='user-name'>{chatWithProfile.name}</div>
@@ -70,7 +70,7 @@ function Profile({ chatWith }) {
           userData.data &&
           <div className='user-profile'>
             <span className='profile-img' style={{ background: avatar }}>
-              {image ? <img src={image} alt='' /> : name.slice(0, 2)}
+              {image ? <img src={`http://localhost:4000/images/` + image} alt='' /> : name.slice(0, 2)}
             </span>
             <div className='user-name'>{name}</div>
             <div className='user-about'>{about}</div>

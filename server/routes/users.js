@@ -141,22 +141,22 @@ router.put("/updateuser", fetchUser, async (req, res) => {
     if (name) updates.name = name;
     if (avatar) updates.avatar = avatar;
     if (about) updates.about = about;
-    
+
     // If user dosn't exites
     const isUser = await UserSchema.findById(userId);
-    if (!isUser) return res.status(404).json({errors: "User Not Found"});
-    
+    if (!isUser) return res.status(404).json({ errors: "User Not Found" });
+
     // First checking password the set the password
     if (password && oldPassword) {
-        if(oldPassword !== isUser.password) return res.status(400).json({ errors: "Current password is wrong" });
+        if (oldPassword !== isUser.password) return res.status(400).json({ errors: "Current password is wrong" });
         const salt = await bcrypt.genSalt(10);
         // hashing password and adding salt with it
         const secPas = await bcrypt.hash(req.body.password, salt);
         updates.password = secPas;
     };
 
-    const user = await UserSchema.findByIdAndUpdate(userId, { $set: updates }, { new: true });
-    res.send(user);
+    await UserSchema.findByIdAndUpdate(userId, { $set: updates }, { new: true });
+    res.json({ success: "Updated successfully" });
 });
 
 

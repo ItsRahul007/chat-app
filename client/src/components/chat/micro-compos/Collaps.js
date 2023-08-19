@@ -54,8 +54,8 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
                 <label htmlFor='avatar-img'>Profile Picture</label>
                 <div className='content'>
                     <div className='collap-profile'>
-                        <span className='profile-img collap-img' style={{ background: avatar }}>
-                            {image ? <img src={image} alt='' /> : name.length !== 0 && name.slice(0, 2)}
+                        <span className='profile-img collap-img' style={{ background: image? "black" : avatar }}>
+                            {image ? <img src={`http://localhost:4000/images/` + image} alt='' /> : name.length !== 0 && name.slice(0, 2)}
                         </span>
                         <div onClick={() => setDisplay("flex")}>
                             <i className="ri-edit-2-fill"></i>
