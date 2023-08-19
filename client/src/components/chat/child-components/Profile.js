@@ -15,7 +15,7 @@ function Profile({ chatWith }) {
 
   useEffect(() => {
     if (userData.data) setData(userData.data);
-  }, []);
+  }, [userData.data]);
 
   useEffect(() => {
     if (chatWith) {

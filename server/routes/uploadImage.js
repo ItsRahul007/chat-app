@@ -4,6 +4,8 @@ const fetchUser = require("../middleware/fetchUser");
 const upload = require("../middleware/uploadMulter");
 const UserSchema = require("../schema/UserSchema");
 
+// Simulate storing previous image names
+const imageNames = new Map();
 
 router.post('/uploadImage', fetchUser, upload.single("file"), async (req, res) => {
     const image = {}
@@ -11,6 +13,17 @@ router.post('/uploadImage', fetchUser, upload.single("file"), async (req, res) =
     image.image = req.file.filename;
 
     const userId = req.user.id;
+
+    const previousImageName = imageNames.get(userId);
+
+    // Delete the previous image (if applicable)
+    if (previousImageName) {
+        deleteImage(previousImageName);
+    }
+
+    // Store the new image name in the map
+    imageNames.set(userId, req.file.filename);
+    console.log(imageNames);
 
     // If user dosn't exites
     const isUser = await UserSchema.findById(userId);

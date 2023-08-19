@@ -22,7 +22,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     const allUsers = allPersons.data;
     const user = allUsers.filter(obj => obj._id === _id);
     setInfo(user[0]);
-  }, [chatWith, allPersons]);
+  }, [_id, allPersons]);
 
   //For scrolled to the bottom message
   function scrollBottom() {
@@ -133,8 +133,8 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         <button className='menu-btn' onClick={openMenu}>
           <i className="ri-menu-line"></i>
         </button>
-        <span className='user-avatar' style={{ background: avatar }}>
-          {image ? <img src={image} alt='profile' /> : [name && name.slice(0, 2)]}
+        <span className='user-avatar' style={{ background: image ? "black" : avatar }}>
+          {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : [name && name.slice(0, 2)]}
         </span>
         <span>
           <div className='user-name'>{name}</div>

@@ -4,7 +4,6 @@ import blackSearch from "../../../png/blackSearch.png";
 import limeSearch from "../../../png/limeSearch.png";
 import { useSelector } from 'react-redux';
 import removeUser from '../micro-compos/removeUser';
-import { socket } from '../socket/socketIO';
 
 function AvailableChat({ setChatWith, toggleMenu }) {
   const [data, setData] = useState(null);
@@ -37,7 +36,7 @@ function AvailableChat({ setChatWith, toggleMenu }) {
   useEffect(() => {
     const filter = data && data.filter(obj => obj.name.toLocaleLowerCase().includes(searchValue));
     setFilterValue(filter);
-  }, [searchValue]);
+  }, [searchValue, data]);
 
   // Displaying Filltered persons
   function SearchValues() {

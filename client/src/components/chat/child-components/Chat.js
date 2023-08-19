@@ -36,12 +36,11 @@ function Chat({ setChatWith, toggleMenu }) {
         if (allusers.data) {
             allusers.data.map(data => {
                 const { _id } = data;
-                if (chatId.includes(_id)) {
+                return chatId.includes(_id) &&
                     setValue(value => {
                         const updateData = [...value, data];
                         return updateData;
                     });
-                };
             });
         };
     };
@@ -49,7 +48,7 @@ function Chat({ setChatWith, toggleMenu }) {
     // Runing the filter person when allusers.data id avaliable for displaying persons
     useEffect(() => {
         filterPerson();
-    }, [allusers.data]);
+    }, [allusers.data], filterPerson);
 
     // Displaying Searched Filltered persons
     function SearchValues() {
@@ -92,7 +91,7 @@ function Chat({ setChatWith, toggleMenu }) {
     useEffect(() => {
         const filter = value.filter(obj => obj.name.toLocaleLowerCase().includes(searchInput));
         setFilterValue(filter);
-    }, [searchInput]);
+    }, [searchInput, value]);
 
     return (
         <div className='chat-comp'>
