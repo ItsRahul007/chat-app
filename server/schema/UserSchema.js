@@ -24,6 +24,14 @@ const UserSchema = new Schema({
     about:{
         type: String,
         require: true
+    },
+    block: {
+        blockedChat:{
+            type: Array
+        },
+        blockedBy:{
+            type: Array
+        }
     }
 });
 

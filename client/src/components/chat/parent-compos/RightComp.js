@@ -133,12 +133,13 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   };
 
   function block(){
-
-  }
+    socket.emit("blocked", _id);
+  };
 
   return (
     <div className='right-comp'>
-      <Toast toastStyle={toastStyle} keyId={_id} setToastStyle={setToastStyle} userId={userId} /> {/* For deleting or editing messages */}
+      {/* For deleting or editing messages */}
+      <Toast toastStyle={toastStyle} keyId={_id} setToastStyle={setToastStyle} userId={userId} /> 
       {/* Right head section */}
       <div className='chat-head'>
         <div>
@@ -157,9 +158,15 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           <i className="ri-menu-line" style={{opacity: open? "0" : "100"}}></i>
           {open && (
             <div className="dropdown">
-              <div className="dropdown-option" onClick={()=> dispatch(deleteWholeChat(_id))}>Delete chat</div>
-              <div className="dropdown-option" onClick={block} >Block</div>
-              <div className="dropdown-option">Close</div>
+              <div className="dropdown-option" onClick={()=> dispatch(deleteWholeChat(_id))}>
+                Delete chat
+              </div>
+              <div className="dropdown-option" onClick={block} >
+                Block
+              </div>
+              <div className="dropdown-option">
+                Close
+              </div>
             </div>
           )}
         </div>
@@ -169,7 +176,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
       <div className='chat-section' id='chat-container'>
 
         {
-          messageStore[_id] ? messageStore[_id].map((obj) => {
+          messageStore[_id] && messageStore[_id].length > 0 ? messageStore[_id].map((obj) => {
             return (
               <PhotoProvider>
                 {obj.msg ?

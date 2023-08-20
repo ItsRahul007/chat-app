@@ -1,6 +1,7 @@
 const DeleteMSG = require("../schema/DeleteMSG");
 const collectedMSG = require("../schema/UnsendMSG");
 const UpdateMSG = require("../schema/UpdateMSG");
+const UserSchema = require("../schema/UserSchema");
 
 const users = {}; // For storing users with the key of socket id and the value of their mondoDB id 
 
@@ -141,9 +142,40 @@ function socketServer(io) {
     });
 
     // When a user updates his profile-picture
-    socket.on("profile-picture-update", ()=>{
-      socket.broadcast.emit("fetch-profile-picture");
+    socket.on("profile-picture-update", () => {
+      socket.broadcast.emit("user-update-server");
     });
+
+    // When user blocked a user updating their blocks
+    socket.on("blocked", async (id) => {
+      const userId = users[socket.id];
+      const emiterUser = await UserSchema.findById(userId).select("block");
+      const reciverUser = await UserSchema.findById(id).select("block");
+
+      const emiterBlock = {
+        block: {
+          blockedChat: [...emiterUser.block.blockedChat, id],
+          blockedBy: [...emiterUser.block.blockedBy]
+        }
+      };
+
+      const reciverBlock = {
+        block: {
+          blockedChat: [...reciverUser.block.blockedChat],
+          blockedBy: [...reciverUser.block.blockedBy, id]
+        }
+      };
+      
+      try {
+        await UserSchema.findByIdAndUpdate(userId, { $set: emiterBlock }, { new: true });
+        await UserSchema.findByIdAndUpdate(id, { $set: reciverBlock }, { new: true });
+        socket.emit("you-are-blocked", userId);
+      }
+      catch (error) {
+        console.log(error);
+      };
+
+    })
 
     // When user disconnect 
     socket.on("disconnect", () => {

@@ -35,7 +35,7 @@ function App() {
   return (
     <>
       <Alert errors={data[0]} />
-      <Routes>
+      <Routes style>
         <Route path="/" element={<Home />} />
         <Route path="/crop" element={<CropImage />} />
         <Route path="/login" element={<Login callApi={loginToDispatch} />} />
