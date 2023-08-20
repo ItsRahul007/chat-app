@@ -33,6 +33,17 @@ function updateLocalMessages(keyId, msgId, newContent) {
     };
 };
 
+// Deleting a chat from local storage
+function deleteChat(keyId){
+    const userId = localStorage.getItem("userId");
+    const localMessage = localStorage.getItem(userId);
+    if(localMessage){
+        const parsedMsg = JSON.parse(localMessage);
+        delete parsedMsg[keyId];        
+        localStorage.setItem(userId, JSON.stringify(parsedMsg));
+    };
+};
+
 const messageSlice = createSlice({
     name: 'message-slice',
     initialState: {},
@@ -77,8 +88,11 @@ const messageSlice = createSlice({
 
         // Removing the whole chat
         deleteWholeChat(state, action) {
-            const { keyId, msgId } = action.payload;
-            return state[keyId].filter(e => e.msgId !== msgId);
+            const keyId = action.payload;
+            const newChat = {...state};
+            delete newChat[keyId];
+            deleteChat(keyId);
+            return newChat;
         }
     }
 });

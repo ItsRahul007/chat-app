@@ -43,7 +43,10 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
 
     function changeColor(choosedColor) {
         const avatarCon = document.querySelector(".collap-img");
+        const avatarImage = document.getElementById("avatar-image");
+        if(avatarImage) avatarImage.style.display = "none";
         avatarCon.style.background = choosedColor;
+        avatarCon.innerText = name.slice(0, 2);
         setUser({ ...user, avatar: choosedColor });
     };
 
@@ -55,7 +58,7 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
                 <div className='content'>
                     <div className='collap-profile'>
                         <span className='profile-img collap-img' style={{ background: image? "black" : avatar }}>
-                            {image ? <img src={`http://localhost:4000/images/` + image} alt='' /> : name.length !== 0 && name.slice(0, 2)}
+                            {image ? <img src={`http://localhost:4000/images/` + image} alt='' id='avatar-image' /> : name.length !== 0 && name.slice(0, 2)}
                         </span>
                         <div onClick={() => setDisplay("flex")}>
                             <i className="ri-edit-2-fill"></i>

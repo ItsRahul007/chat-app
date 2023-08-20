@@ -139,7 +139,10 @@ router.put("/updateuser", fetchUser, async (req, res) => {
 
     // Setting the update values inside updates object
     if (name) updates.name = name;
-    if (avatar) updates.avatar = avatar;
+    if (avatar) {
+        updates.avatar = avatar
+        updates.image = null;
+    };
     if (about) updates.about = about;
 
     // If user dosn't exites

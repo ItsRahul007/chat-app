@@ -16,7 +16,7 @@
   position: relative;
 }
 
-.left-comp .menu-btn{
+.left-comp .menu-btn {
   position: absolute;
   top: 20px;
   right: 25px;
@@ -113,11 +113,65 @@
 .chat-head {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.089);
+  position: relative;
+}
+
+.chat-head > div {
+  display: flex;
+  align-items: center;
   justify-content: flex-start;
   height: 80px;
   gap: 20px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.089);
+}
+
+.menu-icon {
+  padding-right: 50px;
+  font-size: 22px;
+  font-weight: 550;
+  cursor: pointer;
   position: relative;
+  transition: ease .6s;
+}
+
+@keyframes dropdown {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 100;
+  }
+}
+
+.dropdown {
+  font-size: 16px;
+  position: absolute;
+  right: 16px;
+  font-weight: 400;
+  width: 95px;
+  top: 44px;
+  z-index: 20;
+  transition: ease .6s;
+  animation: dropdown 1s 1 ease;
+  background-color: #181c1f;
+  padding: 5px;
+  padding-top: 12px;
+  border-radius: 10px;
+}
+
+.dropdown-option{
+  height: 25px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+  transition: ease .5s;
+}
+
+.dropdown-option:hover{
+  background-color: #4b5561;
+  color: #72c976;
 }
 
 .menu-btn {
@@ -239,11 +293,11 @@
 
 @media only screen and (max-width: 910px) {
   /* --------------------left compo------------------ */
-  .logo{
+  .logo {
     top: 80px;
   }
 
-  .buttons{
+  .buttons {
     top: 150px;
   }
 
@@ -257,25 +311,36 @@
   }
 }
 
-
 @media only screen and (max-width: 665px) {
-  .mid-comp{
+  .mid-comp {
     min-width: 300px;
   }
 }
 
 @media only screen and (max-width: 530px) {
-  .msg-box{
+  .msg-box {
     min-width: 150px;
     max-width: 300px;
     font-size: 15px;
   }
+
+  .menu-icon {
+    padding-right: 20px;
+  }
+
+  .dropdown{
+    right: 0;
+  }
 }
 
 @media only screen and (max-width: 390px) {
-  .msg-box{
+  .msg-box {
     min-width: 100px;
     max-width: 250px;
     font-size: 13px;
+  }
+
+  .user-name {
+    font-size: 16px;
   }
 }

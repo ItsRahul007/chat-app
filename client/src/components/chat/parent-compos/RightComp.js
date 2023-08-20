@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { socket } from '../socket/socketIO';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Toast from '../micro-compos/Toast';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
+import { deleteWholeChat } from '../../../store/slices/messageSlice';
 
 function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
   let { _id } = chatWith;
@@ -12,6 +13,8 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   const [toastStyle, setToastStyle] = useState({ top: "-90%", value: '', disabled: false });
   const [info, setInfo] = useState({ name: '', avatar: '', image: '' });
   const { name, avatar, image } = info;
+  const [open, setOpen] = useState(false); // For opening or closing the options
+  const dispatch = useDispatch();
 
   // Importing the store states
   const messageStore = useSelector(state => state.messageSlice);
@@ -23,6 +26,10 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     const user = allUsers.filter(obj => obj._id === _id);
     setInfo(user[0]);
   }, [_id, allPersons]);
+
+  function toggleDropDown() {
+    setOpen(!open);
+  }
 
   //For scrolled to the bottom message
   function scrollBottom() {
@@ -125,21 +132,37 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     scrollBottom();
   };
 
+  function block(){
+
+  }
+
   return (
     <div className='right-comp'>
       <Toast toastStyle={toastStyle} keyId={_id} setToastStyle={setToastStyle} userId={userId} /> {/* For deleting or editing messages */}
       {/* Right head section */}
       <div className='chat-head'>
-        <button className='menu-btn' onClick={openMenu}>
-          <i className="ri-menu-line"></i>
-        </button>
-        <span className='user-avatar' style={{ background: image ? "black" : avatar }}>
-          {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : [name && name.slice(0, 2)]}
-        </span>
-        <span>
-          <div className='user-name'>{name}</div>
-          <div className='user-status'>{onlineId.includes(_id) ? "Online" : "Offline"}</div>
-        </span>
+        <div>
+          <button className='menu-btn' onClick={openMenu}>
+            <i className="ri-menu-line"></i>
+          </button>
+          <span className='user-avatar' style={{ background: image ? "black" : avatar }}>
+            {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : [name && name.slice(0, 2)]}
+          </span>
+          <span>
+            <div className='user-name'>{name}</div>
+            <div className='user-status'>{onlineId.includes(_id) ? "Online" : "Offline"}</div>
+          </span>
+        </div>
+        <div className='menu-icon' onClick={toggleDropDown}>
+          <i className="ri-menu-line" style={{opacity: open? "0" : "100"}}></i>
+          {open && (
+            <div className="dropdown">
+              <div className="dropdown-option" onClick={()=> dispatch(deleteWholeChat(_id))}>Delete chat</div>
+              <div className="dropdown-option" onClick={block} >Block</div>
+              <div className="dropdown-option">Close</div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Message section */}
@@ -155,7 +178,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
                   </div>
                   :
                   <PhotoView src={obj.img}>
-                    <img src={obj.img} alt='' key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} style={{maxHeight: '300px', borderRadius: "25px"}} />
+                    <img src={obj.img} alt='' key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} style={{ maxHeight: '300px', borderRadius: "25px" }} />
                   </PhotoView>
                 }
               </PhotoProvider>
