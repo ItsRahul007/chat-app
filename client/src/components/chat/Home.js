@@ -14,6 +14,7 @@ import { dltMessage, setImage, setMessage, updateMessage } from '../../store/sli
 import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
 import { fetchAllUsers } from '../../store/slices/userSlice';
 import { storeImagesToSlice } from '../../store/slices/mediaSlice';
+import { blockEdBy, blockUser, unBlockEdBy } from '../../store/slices/blockSlice';
 
 function Home() {
   // The store state variables
@@ -24,12 +25,22 @@ function Home() {
   const [pixle, setPixle] = useState(0);
   const dispatch = useDispatch();
 
-  // when a user loged in or open the app emiting user-online function
+  // When a user loged in or open the app emiting user-online function
   useEffect(() => {
     if (userData.data) {
       const userId = userData.data._id;
       socket.emit('user-online', userId);
       localStorage.setItem("userId", userId);
+    };
+
+    if(userData.data){
+      userData.data.block.blockedChat.map(id => {
+        return dispatch(blockUser(id));
+      });
+
+      userData.data.block.blockedBy.map(id => {
+        return dispatch(blockEdBy(id));
+      });
     };
   }, [userData.data]);
 
@@ -163,10 +174,23 @@ function Home() {
       dispatch(dltMessage({ keyId: senderId, msgId }));
     });
 
+    // Reciving image
     socket.on("recive-image", obj => {
       const { id, img, msgId } = obj;
       storeImage(id, id, img, msgId);
       updateLocalImages(id, id, img, msgId);
+    });
+
+    // Listning if any one blocked
+    socket.on("you-are-blocked", id => {
+      dispatch(blockEdBy(id));
+      console.log("blocked by " + id);
+    });
+
+    // Listning if any one unblocked
+    socket.on("you-are-unblocked", id => {
+      dispatch(unBlockEdBy(id));
+      console.log("unblocked by " + id);
     });
 
     // Clean up the socket connection when the component unmounts
@@ -240,7 +264,7 @@ function Home() {
         </div>
         {
           chatWith ? // If user select a chat then displaying Right component with chat otherwise showing NoChat component
-            <RightComp openMenu={toggleMenu} chatWith={chatWith} userData={userData.data && userData.data} /* if user data exist then sending user id */ updateMessageState={updateMessageState} updateLocalMessages={updateLocalMessages} storeImage={storeImage} updateLocalImages={updateLocalImages} />
+            <RightComp openMenu={toggleMenu} chatWith={chatWith} userId={userData.data && userData.data._id} /* if user data exist then sending user id */ updateMessageState={updateMessageState} updateLocalMessages={updateLocalMessages} storeImage={storeImage} updateLocalImages={updateLocalImages} />
             :
             <NoChat openMenu={toggleMenu} />
         }

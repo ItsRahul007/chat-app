@@ -166,10 +166,11 @@ function socketServer(io) {
         }
       };
       
+      io.to(id).emit("you-are-blocked", userId);
+      
       try {
         await UserSchema.findByIdAndUpdate(userId, { $set: emiterBlock }, { new: true });
         await UserSchema.findByIdAndUpdate(id, { $set: reciverBlock }, { new: true });
-        socket.emit("you-are-blocked", userId);
       }
       catch (error) {
         console.log(error);
@@ -199,11 +200,12 @@ function socketServer(io) {
           blockedBy: [newReciverBlockedChat]
         }
       };
+
+      io.to(id).emit("you-are-unblocked", userId);
       
       try {
         await UserSchema.findByIdAndUpdate(userId, { $set: emiterBlock }, { new: true });
         await UserSchema.findByIdAndUpdate(id, { $set: reciverBlock }, { new: true });
-        socket.emit("you-are-unblocked", userId);
       }
       catch (error) {
         console.log(error);

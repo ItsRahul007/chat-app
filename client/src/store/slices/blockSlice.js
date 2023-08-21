@@ -11,19 +11,23 @@ const blockSlice = createSlice({
             state.blockedChat.push(action.payload);
         },
 
+        unBlockUser(state, action) {
+            const newArr = state.blockedChat;            
+            state.blockedChat = newArr.filter(id => id !== action.payload);
+            return state;
+        },
+
         blockEdBy(state, action) {
             state.blockedBy.push(action.payload);
         },
 
         unBlockEdBy(state, action) {
-            state.blockedBy.map(id => id !== action.payload);
-        },
-
-        unblockUser(state, action) {
-            state.blockedChat.map(id => id !== action.payload);
-        },
+            const newArr = state.blockedBy;
+            state.blockedBy = newArr.filter(id => id !== action.payload);
+            return state;
+        }
     }
 });
 
-export const { blockUser, blockEdBy, unBlockEdBy, unblockUser } = blockSlice.actions;
+export const { blockUser, blockEdBy, unBlockEdBy, unBlockUser } = blockSlice.actions;
 export default blockSlice.reducer;

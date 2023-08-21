@@ -6,9 +6,9 @@ import Toast from '../micro-compos/Toast';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import { deleteWholeChat } from '../../../store/slices/messageSlice';
-import {blockUser} from "../../../store/slices/blockSlice";
+import {blockUser, unBlockUser} from "../../../store/slices/blockSlice";
 
-function RightComp({ openMenu, chatWith, userData, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
+function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
 
   const [text, setText] = useState(''); // For storing typed messages
   const [toastStyle, setToastStyle] = useState({ top: "-90%", value: '', disabled: false });
@@ -16,14 +16,17 @@ function RightComp({ openMenu, chatWith, userData, updateMessageState, updateLoc
   const { name, avatar, image } = info;
   const [open, setOpen] = useState(false); // For opening or closing the options
   const { _id } = chatWith; // The id of the person that I'm chatting with
-  const userId = userData._id; // My id
-  const { blockedChat, blockedBy } = userData.block;
   const dispatch = useDispatch();
 
   // Importing the store states
   const messageStore = useSelector(state => state.messageSlice);
   const onlineId = useSelector(state => state.onlineSlice);
   const allPersons = useSelector(state => state.user.allUsersData);
+  const blockSlice = useSelector(state => state.blockSlice);
+  const { blockedChat, blockedBy } = blockSlice;
+
+  const isBlocked = blockedChat.includes(_id);
+  const isBlockedByUser = blockedBy.includes(_id);
 
   useEffect(() => {
     const allUsers = allPersons.data;
@@ -87,7 +90,6 @@ function RightComp({ openMenu, chatWith, userData, updateMessageState, updateLoc
         emojiPicker.style.display = "none";
       });
     };
-    console.log(!blockedBy.includes(_id))
 
   }, []);
 
@@ -146,6 +148,7 @@ function RightComp({ openMenu, chatWith, userData, updateMessageState, updateLoc
 
   function unblock() {
     socket.emit("unblock", _id);
+    dispatch(unBlockUser(_id));
   };
 
   return (
@@ -174,15 +177,9 @@ function RightComp({ openMenu, chatWith, userData, updateMessageState, updateLoc
                 Delete chat
               </div>
               {
-                !blockedBy.includes(_id) || blockedChat.includes(_id) &&
-                <div className="dropdown-option" onClick={block} >
-                  Block
-                </div>
-              }
-              {
-                blockedChat.includes(_id) &&
-                <div className="dropdown-option" onClick={unblock} >
-                  Unblock
+                !isBlockedByUser && 
+                <div className="dropdown-option" onClick={isBlocked ? unblock : block} >
+                  {isBlocked ? 'Unblock' : 'Block'}
                 </div>
               }
               <div className="dropdown-option">
@@ -220,7 +217,7 @@ function RightComp({ openMenu, chatWith, userData, updateMessageState, updateLoc
 
       {/* The right bottom section */}
       <div className='msg-sender'>
-        {blockedChat.includes(_id) || blockedBy.includes(_id) ?
+        {(blockedChat.includes(_id) || blockedBy.includes(_id)) ?
           <div>{blockedChat.includes(_id) ? "You blocked this chat" : "You are blocked"}</div>
           :
           <>
