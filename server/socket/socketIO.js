@@ -162,7 +162,7 @@ function socketServer(io) {
       const reciverBlock = {
         block: {
           blockedChat: [...reciverUser.block.blockedChat],
-          blockedBy: [...reciverUser.block.blockedBy, id]
+          blockedBy: [...reciverUser.block.blockedBy, userId]
         }
       };
       
@@ -174,8 +174,41 @@ function socketServer(io) {
       catch (error) {
         console.log(error);
       };
+    });
 
-    })
+    // When user unblock a user updating their blocks
+    socket.on("unblock", async (id) => {
+      const userId = users[socket.id];
+      const emiterUser = await UserSchema.findById(userId).select("block");
+      const reciverUser = await UserSchema.findById(id).select("block");
+
+      // Removing the ids from the arrray
+      const newEmiterBlockedChat = emiterUser.block.blockedChat.map(storedId => storedId !== id);
+      const newReciverBlockedChat = reciverUser.block.blockedChat.map(storedId => storedId !== userId);
+
+      const emiterBlock = {
+        block: {
+          blockedChat: [newEmiterBlockedChat],
+          blockedBy: [...emiterUser.block.blockedBy]
+        }
+      };
+
+      const reciverBlock = {
+        block: {
+          blockedChat: [...reciverUser.block.blockedChat],
+          blockedBy: [newReciverBlockedChat]
+        }
+      };
+      
+      try {
+        await UserSchema.findByIdAndUpdate(userId, { $set: emiterBlock }, { new: true });
+        await UserSchema.findByIdAndUpdate(id, { $set: reciverBlock }, { new: true });
+        socket.emit("you-are-unblocked", userId);
+      }
+      catch (error) {
+        console.log(error);
+      };
+    });
 
     // When user disconnect 
     socket.on("disconnect", () => {

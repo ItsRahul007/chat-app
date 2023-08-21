@@ -123,6 +123,7 @@ function Home() {
           updateLocalImages(obj.senderId, obj.senderId, obj.image, obj.msgId);
         }
 
+        // Fro deleting stored messages
         return socket.emit("recived-unsend-msg", obj._id);
       });
     });
@@ -239,7 +240,7 @@ function Home() {
         </div>
         {
           chatWith ? // If user select a chat then displaying Right component with chat otherwise showing NoChat component
-            <RightComp openMenu={toggleMenu} chatWith={chatWith} userId={userData.data && userData.data._id} /* if user data exist then sending user id */ updateMessageState={updateMessageState} updateLocalMessages={updateLocalMessages} storeImage={storeImage} updateLocalImages={updateLocalImages} />
+            <RightComp openMenu={toggleMenu} chatWith={chatWith} userData={userData.data && userData.data} /* if user data exist then sending user id */ updateMessageState={updateMessageState} updateLocalMessages={updateLocalMessages} storeImage={storeImage} updateLocalImages={updateLocalImages} />
             :
             <NoChat openMenu={toggleMenu} />
         }

@@ -6,14 +6,18 @@ import Toast from '../micro-compos/Toast';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import { deleteWholeChat } from '../../../store/slices/messageSlice';
+import {blockUser} from "../../../store/slices/blockSlice";
 
-function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
-  let { _id } = chatWith;
+function RightComp({ openMenu, chatWith, userData, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
+
   const [text, setText] = useState(''); // For storing typed messages
   const [toastStyle, setToastStyle] = useState({ top: "-90%", value: '', disabled: false });
   const [info, setInfo] = useState({ name: '', avatar: '', image: '' });
   const { name, avatar, image } = info;
   const [open, setOpen] = useState(false); // For opening or closing the options
+  const { _id } = chatWith; // The id of the person that I'm chatting with
+  const userId = userData._id; // My id
+  const { blockedChat, blockedBy } = userData.block;
   const dispatch = useDispatch();
 
   // Importing the store states
@@ -69,18 +73,21 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     const emojiBtn = document.getElementById("emojiBtn");
     const emojiPicker = document.getElementById("emojiPicker");
 
-    // When hover on emoji emoji piker will visible
-    emojiPicker.style.display = "none";
-    emojiBtn.addEventListener("mouseenter", () => {
-      smilefaceEmoji.style.display = "none";
-      emojiPicker.style.display = "block";
-    });
-
-    // When mouse leave emoji piker would vanised
-    emojiBtn.addEventListener("mouseleave", () => {
-      smilefaceEmoji.style.display = "block";
+    if (emojiBtn && emojiPicker) {
+      // When hover on emoji emoji piker will visible
       emojiPicker.style.display = "none";
-    });
+      emojiBtn.addEventListener("mouseenter", () => {
+        smilefaceEmoji.style.display = "none";
+        emojiPicker.style.display = "block";
+      });
+
+      // When mouse leave emoji piker would vanised
+      emojiBtn.addEventListener("mouseleave", () => {
+        smilefaceEmoji.style.display = "block";
+        emojiPicker.style.display = "none";
+      });
+    };
+    console.log(!blockedBy.includes(_id))
 
   }, []);
 
@@ -132,14 +139,19 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     scrollBottom();
   };
 
-  function block(){
+  function block() {
     socket.emit("blocked", _id);
+    dispatch(blockUser(_id));
+  };
+
+  function unblock() {
+    socket.emit("unblock", _id);
   };
 
   return (
     <div className='right-comp'>
       {/* For deleting or editing messages */}
-      <Toast toastStyle={toastStyle} keyId={_id} setToastStyle={setToastStyle} userId={userId} /> 
+      <Toast toastStyle={toastStyle} keyId={_id} setToastStyle={setToastStyle} userId={userId} />
       {/* Right head section */}
       <div className='chat-head'>
         <div>
@@ -155,15 +167,24 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           </span>
         </div>
         <div className='menu-icon' onClick={toggleDropDown}>
-          <i className="ri-menu-line" style={{opacity: open? "0" : "100"}}></i>
+          <i className="ri-menu-line" style={{ opacity: open ? "0" : "100" }}></i>
           {open && (
             <div className="dropdown">
-              <div className="dropdown-option" onClick={()=> dispatch(deleteWholeChat(_id))}>
+              <div className="dropdown-option" onClick={() => dispatch(deleteWholeChat(_id))}>
                 Delete chat
               </div>
-              <div className="dropdown-option" onClick={block} >
-                Block
-              </div>
+              {
+                !blockedBy.includes(_id) || blockedChat.includes(_id) &&
+                <div className="dropdown-option" onClick={block} >
+                  Block
+                </div>
+              }
+              {
+                blockedChat.includes(_id) &&
+                <div className="dropdown-option" onClick={unblock} >
+                  Unblock
+                </div>
+              }
               <div className="dropdown-option">
                 Close
               </div>
@@ -199,23 +220,29 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
       {/* The right bottom section */}
       <div className='msg-sender'>
-        <textarea type='text' placeholder='Type your message here...' value={text} onChange={e => setText(e.target.value)} onKeyDown={handleKeyDown}
-        />
+        {blockedChat.includes(_id) || blockedBy.includes(_id) ?
+          <div>{blockedChat.includes(_id) ? "You blocked this chat" : "You are blocked"}</div>
+          :
+          <>
+            <textarea type='text' placeholder='Type your message here...' value={text} onChange={e => setText(e.target.value)} onKeyDown={handleKeyDown}
+            />
 
-        <div className='attach' id='emojiBtn'>
-          <i className="fa-regular fa-face-smile-beam" id='smilefaceEmoji'></i>
-          <div id='emojiPicker' style={{ display: "none" }}>
-            <EmojiPicker theme='dark' height={600} onEmojiClick={pickEmoji} />
-          </div>
-        </div>
+            <div className='attach' id='emojiBtn'>
+              <i className="fa-regular fa-face-smile-beam" id='smilefaceEmoji'></i>
+              <div id='emojiPicker' style={{ display: "none" }}>
+                <EmojiPicker theme='dark' height={600} onEmojiClick={pickEmoji} />
+              </div>
+            </div>
 
-        <input type='file' accept="image/*" style={{ display: "none" }} id='attachFile' onChange={sendFile} />
-        <label htmlFor='attachFile' type="file" name="avatar" className='attach'>
-          <i className="ri-attachment-line"></i>
-        </label>
-        <button className='btn-send' disabled={text.length <= 0 || !text.trim().length} onClick={sendMsg} >
-          <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt='' />
-        </button>
+            <input type='file' accept="image/*" style={{ display: "none" }} id='attachFile' onChange={sendFile} />
+            <label htmlFor='attachFile' type="file" name="avatar" className='attach'>
+              <i className="ri-attachment-line"></i>
+            </label>
+            <button className='btn-send' disabled={text.length <= 0 || !text.trim().length} onClick={sendMsg} >
+              <img src='https://www.kodingwife.com/demos/ichat/dark-version/img/send1.svg' alt='' />
+            </button>
+          </>
+        }
       </div>
     </div>
   );
