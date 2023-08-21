@@ -23,10 +23,9 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   const onlineId = useSelector(state => state.onlineSlice);
   const allPersons = useSelector(state => state.user.allUsersData);
   const blockSlice = useSelector(state => state.blockSlice);
-  const { blockedChat, blockedBy } = blockSlice;
 
-  const isBlocked = blockedChat.includes(_id);
-  const isBlockedByUser = blockedBy.includes(_id);
+  const isBlocked = blockSlice.blockedChat.includes(_id);
+  const isBlockedByUser = blockSlice.blockedBy.includes(_id);
 
   useEffect(() => {
     const allUsers = allPersons.data;
@@ -166,7 +165,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           </span>
           <span>
             <div className='user-name'>{name}</div>
-            <div className='user-status'>{onlineId.includes(_id) ? "Online" : "Offline"}</div>
+            <div className='user-status'>{!(isBlocked || isBlockedByUser) && [onlineId.includes(_id) ? "Online" : "Offline"]}</div>
           </span>
         </div>
         <div className='menu-icon' onClick={toggleDropDown}>
@@ -217,8 +216,8 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
       {/* The right bottom section */}
       <div className='msg-sender'>
-        {(blockedChat.includes(_id) || blockedBy.includes(_id)) ?
-          <div>{blockedChat.includes(_id) ? "You blocked this chat" : "You are blocked"}</div>
+        {(isBlocked || isBlockedByUser) ?
+          <div>{isBlocked ? "You blocked this chat" : "You are blocked"}</div>
           :
           <>
             <textarea type='text' placeholder='Type your message here...' value={text} onChange={e => setText(e.target.value)} onKeyDown={handleKeyDown}

@@ -3,12 +3,12 @@ import "./middle.css";
 import blackSearch from "../../../png/blackSearch.png";
 import limeSearch from "../../../png/limeSearch.png";
 import { useSelector } from "react-redux";
-// import { socket } from '../socket/socketIO';
 
 function Chat({ setChatWith, toggleMenu }) {
     const allusers = useSelector(state => state.user.allUsersData);
     const onlineId = useSelector(state => state.onlineSlice);
     const messageStore = useSelector(state => state.messageSlice);
+    const blockSlice = useSelector(state => state.blockSlice);
 
     const [value, setValue] = useState([]);
     const [searchInput, setSearchInput] = useState('');
@@ -61,12 +61,15 @@ function Chat({ setChatWith, toggleMenu }) {
                         const allMsg = chatId.includes(_id) && messageStore[_id];
                         const lastMsg = allMsg && allMsg[allMsg.length - 1];
 
+                        const isBlocked = blockSlice.blockedChat.includes(_id);
+                        const isBlockedByUser = blockSlice.blockedBy.includes(_id);
+
                         return (
                             <li key={_id} onClick={() => clickedChat(data)}>
                                 <span className='profile-img' style={{ background: image ? "black" : avatar }}>
                                     {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                                 </span>
-                                {onlineId.includes(_id) && <div className='online-symbol'></div>}
+                                {!(isBlocked || isBlockedByUser) && [onlineId.includes(_id) && <div className='online-symbol'></div>]}
                                 <span className='name-msg'>
                                     <div className='name'>{name}</div>
                                     <div className='last-msg'>
@@ -110,12 +113,15 @@ function Chat({ setChatWith, toggleMenu }) {
                             const allMsg = chatId.includes(_id) && messageStore[_id];
                             const lastMsg = allMsg && allMsg[allMsg.length - 1];
 
+                            const isBlocked = blockSlice.blockedChat.includes(_id);
+                            const isBlockedByUser = blockSlice.blockedBy.includes(_id);
+
                             return (chatId.includes(_id) && allMsg.length >= 0 &&
                                 <li key={_id} onClick={() => clickedChat(data)}>
                                     <span className='profile-img' style={{ background: image ? "black" : avatar }}>
                                         {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                                     </span>
-                                    {onlineId.includes(_id) && <div className='online-symbol'></div>}
+                                    {!(isBlocked || isBlockedByUser) && [onlineId.includes(_id) && <div className='online-symbol'></div>]}
                                     <span className='name-msg'>
                                         <div className='name'>{name}</div>
                                         <div className='last-msg'>
