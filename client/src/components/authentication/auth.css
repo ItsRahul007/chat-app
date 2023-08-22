@@ -87,6 +87,10 @@ input::placeholder{
     transition: color .5s;
 }
 
+.login-other .ri-github-fill {
+    font-size: 34px;
+}
+
 .login-other i:hover{    
     color: #832029;
 }
@@ -156,11 +160,12 @@ input::placeholder{
     display: flex;
     flex-direction: column;
     text-align: start;
+    gap: 25px;
+    margin: 30px;
 }
 
 .other-option div a{
     font-size: 26px;
-    margin: 15px 0;
     color: #fff;
     text-decoration: none;
 }
@@ -169,6 +174,10 @@ input::placeholder{
     margin: 0 3px;
     transition: color .6s;
     color: #fff;
+}
+
+.other-option div .ri-github-fill{
+    font-size: 32px;
 }
 
 .other-option div a:hover i{

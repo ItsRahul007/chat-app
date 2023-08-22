@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./auth.css";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -79,6 +79,17 @@ function Login({callApi}) {
     onError: ()=> alert("Some server error occerd")
   });
 
+  useEffect(()=>{
+    const querryString = window.location.search;
+    const urlParams = new URLSearchParams(querryString);
+    const codeParam = urlParams.get("code");
+    console.log(codeParam);
+  }, []); // catch: jehetu ami app.js e login page navigate kor6e tai signup page e signup korle abar login page e navigate kore di6e to ei khan thekei toke sob korte hobe  
+  
+  function loginWithGithub(){
+    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`);
+  };
+
   return (
     <div className='log'>
       <h1>Login</h1>
@@ -94,7 +105,7 @@ function Login({callApi}) {
 
         <span>or login with</span>
         <button target='_blank'><i className="fa-brands fa-facebook"></i></button>
-        <button target='_blank'><i className="fa-brands fa-instagram"></i></button>
+        <button target='_blank' onClick={loginWithGithub}><i className="ri-github-fill"></i></button>
         <button id='singGoogle' target='_blank' onClick={loginWithGoogle}><i className="fa-brands fa-google"></i></button>
         
       </div>

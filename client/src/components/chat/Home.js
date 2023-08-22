@@ -259,11 +259,11 @@ function Home() {
 
     setTimeout(() => {
       const loader = document.getElementById("loader");
-      loader.style.display = "none";      
+      if(loader) loader.style.display = "none";
     }, 1500);
-        
+
   }, []);
-  
+
   return (
     <div className='home-con'>
       <div id='loader'>

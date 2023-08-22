@@ -22,7 +22,7 @@ function App() {
     if (localStorage.getItem("authToken")) {
       dispatch(fetchUser());
       dispatch(fetchAllUsers());
-      // navigate('/');
+      navigate('/');
     }
     else navigate('/login');
   }, []);
@@ -31,7 +31,6 @@ function App() {
     dispatch(fetchUser());
     dispatch(fetchAllUsers());
   };
-
   return (
     <>
       <Alert errors={data[0]} />

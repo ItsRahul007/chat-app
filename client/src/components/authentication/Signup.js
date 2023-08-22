@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../../store/slices/alertSlice';
@@ -81,6 +81,10 @@ function Singup({ callApi }) {
       });
   };
 
+  function loginWithGithub(){
+    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`);
+  };
+
   return (
     <div className='log sign'>
       <h1>Signup</h1>
@@ -103,7 +107,7 @@ function Singup({ callApi }) {
           <h2>Signup with</h2>
           <div>
             <a href="/" target='_blank'><i className="fa-brands fa-facebook"></i>acebook</a>
-            <a href="/" target='_blank'><i className="fa-brands fa-instagram"></i>Instagram</a>
+            <a href="/" target='_blank' onClick={loginWithGithub}><i className="ri-github-fill"></i>Github</a>
             <a href="/" target='_blank' onClick={singupGoogle}><i className="fa-brands fa-google"></i>oogle</a>
           </div>
         </div>
