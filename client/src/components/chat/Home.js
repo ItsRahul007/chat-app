@@ -33,7 +33,7 @@ function Home() {
       localStorage.setItem("userId", userId);
     };
 
-    if(userData.data){
+    if (userData.data) {
       userData.data.block.blockedChat.map(id => {
         return dispatch(blockUser(id));
       });
@@ -95,6 +95,11 @@ function Home() {
   };
 
   useEffect(() => {
+    // When a new user signup dispatching fetchAllUsers
+    socket.on("new-user-signup", () => {
+      dispatch(fetchAllUsers());
+    });
+
     // When user will be online
     socket.on("new-user-online", id => {
       dispatch(pushOnlineId(id));
@@ -184,13 +189,11 @@ function Home() {
     // Listning if any one blocked
     socket.on("you-are-blocked", id => {
       dispatch(blockEdBy(id));
-      console.log("blocked by " + id);
     });
 
     // Listning if any one unblocked
     socket.on("you-are-unblocked", id => {
       dispatch(unBlockEdBy(id));
-      console.log("unblocked by " + id);
     });
 
     // Clean up the socket connection when the component unmounts
@@ -253,10 +256,19 @@ function Home() {
         };
       }
     };
-  }, []);
 
+    setTimeout(() => {
+      const loader = document.getElementById("loader");
+      loader.style.display = "none";      
+    }, 1500);
+        
+  }, []);
+  
   return (
     <div className='home-con'>
+      <div id='loader'>
+        <div><div></div></div>
+      </div>
       <div>
         <div ref={menuCompo} className='two-compo'>
           <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} />

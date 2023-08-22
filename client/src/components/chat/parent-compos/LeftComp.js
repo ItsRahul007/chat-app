@@ -23,8 +23,10 @@ function LeftComp({ changeCompo, closeMenu }) {
     buttons[i].classList.add("clicked-button");
   };
 
+  // When someone loguot removing the auth token and his id from local storage
   function logoutFun(){
     localStorage.removeItem("authToken");
+    localStorage.removeItem("userId");
     navigate('/login');
     dispatch(clearData());
   };

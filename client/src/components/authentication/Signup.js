@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../../store/slices/alertSlice';
+import { useGoogleLogin } from '@react-oauth/google';
+import { socket } from "../chat/socket/socketIO";
+import axios from "axios";
 
-function Singup({callApi}) {
+function Singup({ callApi }) {
   const [inputValue, setInputValue] = useState({ name: "", email: '', password: '' });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,14 +21,8 @@ function Singup({callApi}) {
     dispatch(showAlert(msg));
   };
 
-  // Fetching api and sending given credentials
-  async function signupUser(e) {
-    e.preventDefault();
-    const { name, email, password } = inputValue;
-
-    const confirmPassword = document.querySelectorAll(".inputs");
-    if (confirmPassword[2].value !== confirmPassword[3].value) return alert("password didn't matched");
-
+  // Signup user with infos
+  async function storeGoogleUserInfo({name, email, password}){
     const responce = await fetch("http://localhost:4000/auth/signup", {
       method: 'POST',
       headers: {
@@ -39,10 +36,49 @@ function Singup({callApi}) {
       localStorage.setItem("authToken", parsedData.authToken);
       callApi();
       navigate('/');
+      socket.emit("user-signup");
     }
     else {
       alert(parsedData.errors);
     };
+  };
+
+  // Fetching api and sending given credentials
+  function signupUser(e) {
+    e.preventDefault();
+
+    const confirmPassword = document.querySelectorAll(".inputs");
+    if (confirmPassword[2].value !== confirmPassword[3].value) return alert("password didn't matched");
+
+    storeGoogleUserInfo(inputValue);
+  };
+
+  const singupGoogle = useGoogleLogin({
+    onSuccess: tokenResponse => {
+      console.log(tokenResponse);
+      fetchGoogleUser(tokenResponse);
+    },
+    onError: ()=> alert("Some server error occerd")
+  });
+
+  function fetchGoogleUser(token) {
+    axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: {
+        'Authorization': `Bearer ${token.access_token}`
+      }
+    })
+      .then(response => {
+        const info = {};
+        const userData = response.data;
+        info.name = userData.name;
+        info.email = userData.email;
+        info.password = userData.email;
+        storeGoogleUserInfo(info);
+      })
+      .catch(error => {
+        alert("Some server error occerd");
+        console.error('Error fetching user data:', error);
+      });
   };
 
   return (
@@ -68,7 +104,7 @@ function Singup({callApi}) {
           <div>
             <a href="/" target='_blank'><i className="fa-brands fa-facebook"></i>acebook</a>
             <a href="/" target='_blank'><i className="fa-brands fa-instagram"></i>Instagram</a>
-            <a href="/" target='_blank'><i className="fa-brands fa-google"></i>oogle</a>
+            <a href="/" target='_blank' onClick={singupGoogle}><i className="fa-brands fa-google"></i>oogle</a>
           </div>
         </div>
       </div>

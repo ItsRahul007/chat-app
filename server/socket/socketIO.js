@@ -13,19 +13,26 @@ function getKeyByValue(value) {
 function socketServer(io) {
   io.on("connection", socket => {
 
+    // When a user newly join this app
+    socket.on("user-signup", () => {
+      socket.broadcast.emit("new-user-signup");
+    });
+
     // when a new user online throwing a function named "user-join"
     socket.on("user-online", async (userId) => {
       users[socket.id] = userId;
       socket.broadcast.emit("new-user-online", userId);
       socket.join(userId); // Join the users on their specified rooms with the name of their id's
 
-      // Checking if user has some pending messages and pending deleted or updated messages or not
+      // Checking if user has some pending messages and pending deleted message or updated messages or not
       const messages = await collectedMSG.find({ reciverId: userId });
       const deleteMessages = await DeleteMSG.find({ reciverId: userId });
       const updateMessages = await UpdateMSG.find({ reciverId: userId });
 
       // If user have any messages
-      if (messages) socket.emit("get-unsend-msg", messages);
+      if (messages) {
+        socket.emit("get-unsend-msg", messages);
+      };
 
       // If user have some message to be deleted
       if (deleteMessages) socket.emit("delete-msg-db", deleteMessages);
@@ -165,9 +172,9 @@ function socketServer(io) {
           blockedBy: [...reciverUser.block.blockedBy, userId]
         }
       };
-      
+
       io.to(id).emit("you-are-blocked", userId);
-      
+
       try {
         await UserSchema.findByIdAndUpdate(userId, { $set: emiterBlock }, { new: true });
         await UserSchema.findByIdAndUpdate(id, { $set: reciverBlock }, { new: true });
@@ -202,7 +209,7 @@ function socketServer(io) {
       };
 
       io.to(id).emit("you-are-unblocked", userId);
-      
+
       try {
         await UserSchema.findByIdAndUpdate(userId, { $set: emiterBlock }, { new: true });
         await UserSchema.findByIdAndUpdate(id, { $set: reciverBlock }, { new: true });
