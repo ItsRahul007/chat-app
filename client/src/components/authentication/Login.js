@@ -7,14 +7,14 @@ import { showAlert, removeAlert } from '../../store/slices/alertSlice';
 import axios from "axios";
 import { useGoogleLogin } from '@react-oauth/google';
 
-function Login({callApi}) {
-  const [inputValue, setInputValue] = useState({name: '', password: ''});
+function Login({ callApi }) {
+  const [inputValue, setInputValue] = useState({ name: '', password: '' });
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // Setting the given input values
-  function onChange(e){
-    setInputValue({...inputValue, [e.target.name]: e.target.value});
+  function onChange(e) {
+    setInputValue({ ...inputValue, [e.target.name]: e.target.value });
   };
 
   // For allert
@@ -26,7 +26,7 @@ function Login({callApi}) {
   };
 
   // The login function
-  async function loginUser({email, password}){
+  async function loginUser({ email, password }) {
     const responce = await fetch("http://localhost:4000/auth/login", {
       method: 'POST',
       headers: {
@@ -54,6 +54,7 @@ function Login({callApi}) {
     loginUser({ email, password });
   };
 
+  // Fetching google user
   function fetchGoogleUser(token) {
     axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
@@ -63,7 +64,7 @@ function Login({callApi}) {
       .then(response => {
         const userData = response.data;
         console.log((userData))
-        loginUser({email: userData.email, password: userData.email});
+        loginUser({ email: userData.email, password: userData.email });
       })
       .catch(error => {
         alert("Some server error occerd");
@@ -76,18 +77,41 @@ function Login({callApi}) {
       console.log(tokenResponse);
       fetchGoogleUser(tokenResponse);
     },
-    onError: ()=> alert("Some server error occerd")
+    onError: () => alert("Some server error occerd")
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     const querryString = window.location.search;
     const urlParams = new URLSearchParams(querryString);
     const codeParam = urlParams.get("code");
     console.log(codeParam);
-  }, []); // catch: jehetu ami app.js e login page navigate kor6e tai signup page e signup korle abar login page e navigate kore di6e to ei khan thekei toke sob korte hobe  
+    if(codeParam){
+      getAccessToken(codeParam)
+    }
+  }, []);
+
+  function loginWithGithub() {
+    const clientId = "07c40468d891316c80d6";
+    const redirectUri = "http://localhost:3000/login";
+    const scope = 'user'; // The scope of access you're requesting
   
-  function loginWithGithub(){
-    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`);
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=chat-app`;
+    window.location.href = authUrl;
+  };
+
+  async function getAccessToken(codeParam){
+    const res = await fetch("http://localhost:4000/github/getAccessToken?code=" + codeParam);
+    const parsedData = await res.json();
+    if(parsedData.access_token){
+      const data = await fetch("http://localhost:4000/github/getUserData", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + parsedData.access_token
+        }
+      });
+      const userData = await data.json();
+      console.log(userData);
+    };
   };
 
   return (
@@ -104,10 +128,10 @@ function Login({callApi}) {
       <div className='login-other'>
 
         <span>or login with</span>
-        <button target='_blank'><i className="fa-brands fa-facebook"></i></button>
-        <button target='_blank' onClick={loginWithGithub}><i className="ri-github-fill"></i></button>
-        <button id='singGoogle' target='_blank' onClick={loginWithGoogle}><i className="fa-brands fa-google"></i></button>
-        
+        <button><i className="fa-brands fa-facebook"></i></button>
+        <button onClick={loginWithGithub}><i className="ri-github-fill"></i></button>
+        <button id='singGoogle' onClick={loginWithGoogle}><i className="fa-brands fa-google"></i></button>
+
       </div>
       <div className='noAccount'>
         Don't have an account <Link to="/signup">Signup</Link>

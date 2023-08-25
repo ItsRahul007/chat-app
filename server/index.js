@@ -3,7 +3,7 @@ const connectMongo = require("./connectDB");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const socketServer = require("./socket/socketIO")
+const socketServer = require("./socket/socketIO");
 const port = 4000;
 const app = express();
 
@@ -27,6 +27,7 @@ app.use(express.static('public'));
 app.use("/auth", require("./routes/users"));
 app.use("/upload", require("./routes/uploadImage"));
 app.use("/socket", require("./socket/socketIO"));
+app.use("/github", require("./github/githubAuth"));
 
 server.listen(port, () => {
     console.log(`app listen on http://localhost:${port}`);

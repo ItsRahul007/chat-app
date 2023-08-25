@@ -106,9 +106,9 @@ function Singup({ callApi }) {
         <div className='other-option'>
           <h2>Signup with</h2>
           <div>
-            <a href="/" target='_blank'><i className="fa-brands fa-facebook"></i>acebook</a>
-            <a href="/" target='_blank' onClick={loginWithGithub}><i className="ri-github-fill"></i>Github</a>
-            <a href="/" target='_blank' onClick={singupGoogle}><i className="fa-brands fa-google"></i>oogle</a>
+            <a href="/"><i className="fa-brands fa-facebook"></i>acebook</a>
+            <a href="/" onClick={loginWithGithub}><i className="ri-github-fill"></i>Github</a>
+            <a href="/" onClick={singupGoogle}><i className="fa-brands fa-google"></i>oogle</a>
           </div>
         </div>
       </div>
