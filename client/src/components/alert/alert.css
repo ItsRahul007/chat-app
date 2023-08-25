@@ -1,7 +1,8 @@
 
 .alert-compo{
-    height: 50px;
+    min-height: 50px;
     width: 300px;
+    padding: 10px;
     margin-right: 70px;
     background-color: black;
     color: white;

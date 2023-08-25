@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showAlert, removeAlert } from '../../store/slices/alertSlice';
 import axios from "axios";
+import { socket } from "../chat/socket/socketIO";
 import { useGoogleLogin } from '@react-oauth/google';
 
 function Login({ callApi }) {
@@ -44,7 +45,6 @@ function Login({ callApi }) {
     else {
       alert(parsedData.errors);
     };
-
   }
 
   // Fetching api and sending given credentials
@@ -80,6 +80,7 @@ function Login({ callApi }) {
     onError: () => alert("Some server error occerd")
   });
 
+  // Getting the github code from parameaters
   useEffect(() => {
     const querryString = window.location.search;
     const urlParams = new URLSearchParams(querryString);
@@ -89,28 +90,54 @@ function Login({ callApi }) {
       getAccessToken(codeParam)
     }
   }, []);
+  
+  // Creating a new user with infos
+  async function signupUser({name, email, password}){
+    const responce = await fetch("http://localhost:4000/auth/signup", {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, email, password })
+    });
 
+    const parsedData = await responce.json();
+    if (parsedData.authToken) {
+      localStorage.setItem("authToken", parsedData.authToken);
+      callApi();
+      navigate('/');
+      socket.emit("user-signup");
+    }
+    else {
+      alert(parsedData.errors);
+    };
+  };
+
+  // Re-dericet user to github authentication page
   function loginWithGithub() {
     const clientId = "07c40468d891316c80d6";
     const redirectUri = "http://localhost:3000/login";
-    const scope = 'user'; // The scope of access you're requesting
+    const scope = 'user user:email'; // The scope of access you're requesting
   
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=chat-app`;
     window.location.href = authUrl;
   };
 
+  // When user logeding fetching access token and after that fetching his details 
   async function getAccessToken(codeParam){
     const res = await fetch("http://localhost:4000/github/getAccessToken?code=" + codeParam);
     const parsedData = await res.json();
     if(parsedData.access_token){
-      const data = await fetch("http://localhost:4000/github/getUserData", {
+      const res = await fetch("http://localhost:4000/github/getUserData", {
         method: "POST",
         headers: {
           "Authorization": "Bearer " + parsedData.access_token
         }
       });
-      const userData = await data.json();
-      console.log(userData);
+      const data = await res.json();      
+      if(data.errors) alert(data.errors) // If we can't get user's email sending alert
+      else if(data.email) loginUser({email: data.email, password: data.email}) // If email already exist then runing loging user function
+      else signupUser({name: data.name, email: data.email, password: data.email}); // If its a new user then signup him
     };
   };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../../store/slices/alertSlice';
@@ -22,7 +22,7 @@ function Singup({ callApi }) {
   };
 
   // Signup user with infos
-  async function storeGoogleUserInfo({name, email, password}){
+  async function signupUser({name, email, password}){
     const responce = await fetch("http://localhost:4000/auth/signup", {
       method: 'POST',
       headers: {
@@ -44,13 +44,13 @@ function Singup({ callApi }) {
   };
 
   // Fetching api and sending given credentials
-  function signupUser(e) {
+  function signupUserWithGivenInfo(e) {
     e.preventDefault();
 
     const confirmPassword = document.querySelectorAll(".inputs");
     if (confirmPassword[2].value !== confirmPassword[3].value) return alert("password didn't matched");
 
-    storeGoogleUserInfo(inputValue);
+    signupUser(inputValue);
   };
 
   const singupGoogle = useGoogleLogin({
@@ -73,7 +73,7 @@ function Singup({ callApi }) {
         info.name = userData.name;
         info.email = userData.email;
         info.password = userData.email;
-        storeGoogleUserInfo(info);
+        signupUser(info);
       })
       .catch(error => {
         alert("Some server error occerd");
@@ -82,14 +82,19 @@ function Singup({ callApi }) {
   };
 
   function loginWithGithub(){
-    window.location.assign(`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`);
+  const clientId = "07c40468d891316c80d6";
+  const redirectUri = "http://localhost:3000/login";
+  const scope = 'user user:email'; // The scope of access you're requesting
+
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=chat-app`;
+  window.location.href = authUrl;
   };
 
   return (
     <div className='log sign'>
       <h1>Signup</h1>
       <div className='signup'>
-        <form autoComplete='off' className='signup-form' onSubmit={signupUser}>
+        <form autoComplete='off' className='signup-form' onSubmit={signupUserWithGivenInfo}>
 
           <input autoComplete='off' className='inputs' type='text' placeholder='Enter your name' minLength={3} required name='name' value={inputValue.name} onChange={onChange} />
           <input autoComplete='off' className='inputs' type='email' placeholder='Enter your email' name='email' required value={inputValue.email} onChange={onChange} />
