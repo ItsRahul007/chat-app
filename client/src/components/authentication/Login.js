@@ -119,13 +119,13 @@ function Login({ callApi }) {
   function loginWithGithub() {
     const clientId = "07c40468d891316c80d6";
     const redirectUri = "http://localhost:3000/login";
-    const scope = 'user user:email'; // The scope of access you're requesting
+    const scope = 'user'; // The scope of access you're requesting
 
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
     window.location.href = authUrl;
   };
 
-  // When user logeding fetching access token and after that fetching his details 
+  // When user logedin fetching access token and after that fetching his details 
   async function getAccessToken(codeParam) {
     const res = await fetch("http://localhost:4000/github/getAccessToken?code=" + codeParam);
     const parsedData = await res.json();
@@ -138,8 +138,8 @@ function Login({ callApi }) {
       });
       const data = await res.json();
       if (data.errors) alert(data.errors) // If we can't get user's email sending alert
-      else if (data.email) loginUser({ email: data.email, password: data.email }) // If email already exist then runing loging user function
-      else signupUser({ name: data.name, email: data.email, password: data.email }); // If its a new user then signup him
+      else if (data.loginUser) loginUser({ email: data.loginUser, password: data.loginUser }) // If email already exist then runing loging user function
+      else alert("No user exists with this email"); // If its a new user then alerting him
     };
   };
 
@@ -173,9 +173,9 @@ function Login({ callApi }) {
       <div className='login-other'>
 
         <span>or login with</span>
-        <button onClick={handleFacebookLogin}><i className="fa-brands fa-facebook"></i></button>
-        <button onClick={loginWithGithub}><i className="ri-github-fill"></i></button>
-        <button id='singGoogle' onClick={loginWithGoogle}><i className="fa-brands fa-google"></i></button>
+        <button target='_blank' onClick={handleFacebookLogin}><i className="fa-brands fa-facebook"></i></button>
+        <button target='_blank' onClick={loginWithGithub}><i className="ri-github-fill"></i></button>
+        <button target='_blank' id='singGoogle' onClick={loginWithGoogle}><i className="fa-brands fa-google"></i></button>
 
       </div>
       <div className='noAccount'>

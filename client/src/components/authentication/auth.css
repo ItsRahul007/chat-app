@@ -156,7 +156,7 @@ input::placeholder{
     margin-bottom: 10px;
 }
 
-.other-option div{
+.other-option > div{
     display: flex;
     flex-direction: column;
     text-align: start;
@@ -164,22 +164,22 @@ input::placeholder{
     margin: 30px;
 }
 
-.other-option div a{
+.other-option > div a{
     font-size: 26px;
     color: #fff;
     text-decoration: none;
 }
 
-.other-option div i{
+.other-option > div i{
     margin: 0 3px;
     transition: color .6s;
     color: #fff;
 }
 
-.other-option div .ri-github-fill{
+.other-option > div .ri-github-fill{
     font-size: 32px;
 }
 
-.other-option div a:hover i{
+.other-option > div a:hover i{
     color: #832029;
 }

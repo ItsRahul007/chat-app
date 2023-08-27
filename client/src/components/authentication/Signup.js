@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../../store/slices/alertSlice';
 import { useGoogleLogin } from '@react-oauth/google';
 import { socket } from "../chat/socket/socketIO";
 import axios from "axios";
+import { LoginSocialFacebook } from "reactjs-social-login";
 
 function Singup({ callApi }) {
   const [inputValue, setInputValue] = useState({ name: "", email: '', password: '' });
@@ -22,7 +23,7 @@ function Singup({ callApi }) {
   };
 
   // Signup user with infos
-  async function signupUser({name, email, password}){
+  async function signupUser({ name, email, password }) {
     const responce = await fetch("http://localhost:4000/auth/signup", {
       method: 'POST',
       headers: {
@@ -43,7 +44,7 @@ function Singup({ callApi }) {
     };
   };
 
-  // Fetching api and sending given credentials
+  // Fetching api and sending given input credentials
   function signupUserWithGivenInfo(e) {
     e.preventDefault();
 
@@ -58,7 +59,7 @@ function Singup({ callApi }) {
       console.log(tokenResponse);
       fetchGoogleUser(tokenResponse);
     },
-    onError: ()=> alert("Some server error occerd")
+    onError: () => alert("Some server error occerd")
   });
 
   function fetchGoogleUser(token) {
@@ -82,13 +83,43 @@ function Singup({ callApi }) {
   };
 
   // Github login function
-  function loginWithGithub(){
-  const clientId = "07c40468d891316c80d6";
-  const redirectUri = "http://localhost:3000/login";
-  const scope = 'user user:email';
+  function loginWithGithub() {
+    const clientId = "07c40468d891316c80d6";
+    const redirectUri = window.location.href;
+    const scope = 'user';
 
-  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
-  window.location.href = authUrl;
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+    window.location.href = authUrl;
+  };
+
+  useEffect(() => {
+    // Getting the github code from parameaters
+    const querryString = window.location.search;
+    const urlParams = new URLSearchParams(querryString);
+    const codeParam = urlParams.get("code");
+    console.log(codeParam);
+    if (codeParam) {
+      getAccessToken(codeParam)
+    };
+
+  }, []);  
+
+  // When user logedin fetching access token and after that fetching his details 
+  async function getAccessToken(codeParam) {
+    const res = await fetch("http://localhost:4000/github/getAccessToken?code=" + codeParam);
+    const parsedData = await res.json();
+    if (parsedData.access_token) {
+      const res = await fetch("http://localhost:4000/github/getUserData", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + parsedData.access_token
+        }
+      });
+      const data = await res.json();
+      if (data.errors) alert(data.errors) // If we can't get user's email sending alert
+      else if (data.loginUser) alert("A user with this email already exists") // If email already exist then alerting him
+      else signupUser({ name: data.name, email: data.email, password: data.email }); // If its a new user then signup him
+    };
   };
 
   return (
@@ -112,9 +143,22 @@ function Singup({ callApi }) {
         <div className='other-option'>
           <h2>Signup with</h2>
           <div>
-            <a href="/"><i className="fa-brands fa-facebook"></i>acebook</a>
-            <a href="/" onClick={loginWithGithub}><i className="ri-github-fill"></i>Github</a>
-            <a href="/" onClick={singupGoogle}><i className="fa-brands fa-google"></i>oogle</a>
+            <LoginSocialFacebook
+              isOnlyGetToken
+              appId='1094803578156515'
+              onResolve={({ provider, data }) => {
+                console.log(provider)
+                console.log(data)
+              }}
+              onReject={(err) => {
+                console.log(err)
+              }}
+            >
+              <a href="/" target='_blank'><i className="fa-brands fa-facebook"></i>acebook</a>
+            </LoginSocialFacebook>
+
+            <a href="/" target='_blank' onClick={loginWithGithub}><i className="ri-github-fill"></i>Github</a>
+            <a href="/" target='_blank' onClick={singupGoogle}><i className="fa-brands fa-google"></i>oogle</a>
           </div>
         </div>
       </div>

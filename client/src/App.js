@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ import CropImage from "./components/chat/micro-compos/CropImage";
 
 function App() {
   const dispatch = useDispatch();
+  const location = useLocation().pathname;
 
   const data = useSelector(state => {
     return state.alert;
@@ -24,6 +25,7 @@ function App() {
       dispatch(fetchAllUsers());
       navigate('/');
     }
+    else if(!localStorage.getItem("authToken") && location === "/signup") {}
     else navigate('/login');
   }, []);
 
@@ -34,7 +36,7 @@ function App() {
   return (
     <>
       <Alert errors={data[0]} />
-      <Routes style>
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/crop" element={<CropImage />} />
         <Route path="/login" element={<Login callApi={loginToDispatch} />} />
