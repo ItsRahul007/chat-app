@@ -81,12 +81,13 @@ function Singup({ callApi }) {
       });
   };
 
+  // Github login function
   function loginWithGithub(){
   const clientId = "07c40468d891316c80d6";
   const redirectUri = "http://localhost:3000/login";
-  const scope = 'user user:email'; // The scope of access you're requesting
+  const scope = 'user user:email';
 
-  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=chat-app`;
+  const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
   window.location.href = authUrl;
   };
 

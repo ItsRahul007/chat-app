@@ -7,6 +7,7 @@ import { showAlert, removeAlert } from '../../store/slices/alertSlice';
 import axios from "axios";
 import { socket } from "../chat/socket/socketIO";
 import { useGoogleLogin } from '@react-oauth/google';
+import Facebook from "facebook-js-sdk";
 
 function Login({ callApi }) {
   const [inputValue, setInputValue] = useState({ name: '', password: '' });
@@ -80,19 +81,20 @@ function Login({ callApi }) {
     onError: () => alert("Some server error occerd")
   });
 
-  // Getting the github code from parameaters
   useEffect(() => {
+    // Getting the github code from parameaters
     const querryString = window.location.search;
     const urlParams = new URLSearchParams(querryString);
     const codeParam = urlParams.get("code");
     console.log(codeParam);
-    if(codeParam){
+    if (codeParam) {
       getAccessToken(codeParam)
-    }
+    };
+
   }, []);
-  
+
   // Creating a new user with infos
-  async function signupUser({name, email, password}){
+  async function signupUser({ name, email, password }) {
     const responce = await fetch("http://localhost:4000/auth/signup", {
       method: 'POST',
       headers: {
@@ -118,26 +120,42 @@ function Login({ callApi }) {
     const clientId = "07c40468d891316c80d6";
     const redirectUri = "http://localhost:3000/login";
     const scope = 'user user:email'; // The scope of access you're requesting
-  
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=chat-app`;
+
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
     window.location.href = authUrl;
   };
 
   // When user logeding fetching access token and after that fetching his details 
-  async function getAccessToken(codeParam){
+  async function getAccessToken(codeParam) {
     const res = await fetch("http://localhost:4000/github/getAccessToken?code=" + codeParam);
     const parsedData = await res.json();
-    if(parsedData.access_token){
+    if (parsedData.access_token) {
       const res = await fetch("http://localhost:4000/github/getUserData", {
         method: "POST",
         headers: {
           "Authorization": "Bearer " + parsedData.access_token
         }
       });
-      const data = await res.json();      
-      if(data.errors) alert(data.errors) // If we can't get user's email sending alert
-      else if(data.email) loginUser({email: data.email, password: data.email}) // If email already exist then runing loging user function
-      else signupUser({name: data.name, email: data.email, password: data.email}); // If its a new user then signup him
+      const data = await res.json();
+      if (data.errors) alert(data.errors) // If we can't get user's email sending alert
+      else if (data.email) loginUser({ email: data.email, password: data.email }) // If email already exist then runing loging user function
+      else signupUser({ name: data.name, email: data.email, password: data.email }); // If its a new user then signup him
+    };
+  };
+
+  // For facebook authentication
+  function handleFacebookLogin() {
+    const facebook = new Facebook({
+      appId: "1094803578156515",
+      appSecret: "73935974eeee75726485042c578048d8",
+      redirectUrl: "http://localhost:3000",
+      graphVersion: "v17.0",
+    });
+
+    const url = facebook.getLoginUrl(["email"]);
+    console.log(url);
+    if(url){
+      window.location.href = url;
     };
   };
 
@@ -155,7 +173,7 @@ function Login({ callApi }) {
       <div className='login-other'>
 
         <span>or login with</span>
-        <button><i className="fa-brands fa-facebook"></i></button>
+        <button onClick={handleFacebookLogin}><i className="fa-brands fa-facebook"></i></button>
         <button onClick={loginWithGithub}><i className="ri-github-fill"></i></button>
         <button id='singGoogle' onClick={loginWithGoogle}><i className="fa-brands fa-google"></i></button>
 

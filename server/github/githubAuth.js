@@ -8,7 +8,7 @@ const UserSchema = require("../schema/UserSchema");
 
 router.get("/getAccessToken", async (req, res) => {
     // Adding the necessary parameaters
-    const params = "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SEC + "&code=" + req.query.code + "&state=chat-app&token_type=bearer";
+    const params = "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SEC + "&code=" + req.query.code;
 
     // Returning the the goted reasults
     await fetch("https://github.com/login/oauth/access_token" + params, {
@@ -21,10 +21,12 @@ router.get("/getAccessToken", async (req, res) => {
             return response.json();
         })
         .then(data => {
-            console.log(data);
             return res.json(data);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.json({errors: "Some server error occerd"});
+        });
 });
 
 // Getting the user data and sending responce according to the email existence
