@@ -8,7 +8,7 @@ const UserSchema = require("../schema/UserSchema");
 
 router.get("/getAccessToken", async (req, res) => {
     // Adding the necessary parameaters
-    const params = "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SEC + "&code=" + req.query.code+ "&token_type=bearer&scope=user";
+    const params = "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SEC + "&code=" + req.query.code + "&token_type=bearer&scope=user";
 
     // Returning the the goted reasults
     await fetch("https://github.com/login/oauth/access_token" + params, {
@@ -25,7 +25,7 @@ router.get("/getAccessToken", async (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.json({errors: "Some server error occerd"});
+            res.json({ errors: "Some server error occerd" });
         });
 });
 
@@ -41,15 +41,21 @@ router.post("/getUserData", async (req, res) => {
 
         const data = await responce.json();
         if (!data.email) return res.json({ errors: "Please verify your current email on github" });
-        
+
+        const { email } = data
+
         // If the email already exist then just sending email for login else sending the data for creating a new user
-        const isEmailExist = await UserSchema.find({email: data.email});
-        if(isEmailExist) res.json({loginUser: data.email})
-        else res.json({newUser: data});
+        const isEmailExist = await UserSchema.findOne({ email });
+
+        if (isEmailExist) {
+            res.json({ loginUser: email })
+            console.log(isEmailExist)
+        }
+        else res.json({ newUser: data });
 
     } catch (error) {
         console.log(error);
-        res.json({errors: "Some server error occerd"});
+        res.json({ errors: "Some server error occerd" });
     }
 });
 

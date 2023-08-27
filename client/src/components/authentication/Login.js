@@ -139,7 +139,7 @@ function Login({ callApi }) {
       const data = await res.json();
       if (data.errors) alert(data.errors) // If we can't get user's email sending alert
       else if (data.loginUser) loginUser({ email: data.loginUser, password: data.loginUser }) // If email already exist then runing loging user function
-      else alert("No user exists with this email"); // If its a new user then alerting him
+      else if (data.newUser) alert("No user exists with this email"); // If its a new user then alerting him
     };
   };
 

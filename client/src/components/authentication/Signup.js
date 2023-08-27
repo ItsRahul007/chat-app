@@ -118,7 +118,7 @@ function Singup({ callApi }) {
       const data = await res.json();
       if (data.errors) alert(data.errors) // If we can't get user's email sending alert
       else if (data.loginUser) alert("A user with this email already exists") // If email already exist then alerting him
-      else signupUser({ name: data.name, email: data.email, password: data.email }); // If its a new user then signup him
+      else if (data.newUser) signupUser({ name: data.newUser.name, email: data.newUser.email, password: data.newUser.email }); // If its a new user then signup him
     };
   };
 
