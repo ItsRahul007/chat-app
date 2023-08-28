@@ -133,14 +133,14 @@
   font-weight: 550;
   cursor: pointer;
   position: relative;
-  transition: ease .6s;
+  transition: ease 0.6s;
 }
 
 @keyframes dropdown {
-  from{
+  from {
     opacity: 0;
   }
-  to{
+  to {
     opacity: 100;
   }
 }
@@ -153,7 +153,7 @@
   width: 95px;
   top: 44px;
   z-index: 20;
-  transition: ease .6s;
+  transition: ease 0.6s;
   animation: dropdown 1s 1 ease;
   background-color: #181c1f;
   padding: 5px;
@@ -161,15 +161,15 @@
   border-radius: 10px;
 }
 
-.dropdown-option{
+.dropdown-option {
   height: 25px;
   border-radius: 5px;
   margin-bottom: 10px;
   text-align: center;
-  transition: ease .5s;
+  transition: ease 0.5s;
 }
 
-.dropdown-option:hover{
+.dropdown-option:hover {
   background-color: #4b5561;
   color: #72c976;
 }
@@ -233,7 +233,13 @@
   margin: 10px;
   padding: 13px;
   border-radius: 16px;
-  position: relative;
+}
+
+.msg-box img {
+  max-height: 300px;
+  max-width: 400px;
+  border-radius: 25px;
+  cursor: zoom-in;
 }
 
 .msg-right {
@@ -244,6 +250,26 @@
 .msg-left {
   align-self: flex-start;
   background: #4b5561;
+}
+
+.time {
+  color: rgba(255, 255, 255, 0.548);
+  font-size: 12px;
+  padding: 25px;
+  position: relative;
+}
+
+.time span {
+  position: absolute;
+  bottom: 20px;
+  right: -2px;
+}
+
+.image-time{  
+  color: rgba(255, 255, 255, 0.548);
+  font-size: 12px;
+  align-self: flex-end;
+  padding-top: 10px;
 }
 
 .msg-sender {
@@ -319,25 +345,43 @@
 
 @media only screen and (max-width: 530px) {
   .msg-box {
-    min-width: 150px;
     max-width: 300px;
     font-size: 15px;
+  }
+
+  .msg-box img {
+    max-width: 300px;
   }
 
   .menu-icon {
     padding-right: 20px;
   }
 
-  .dropdown{
+  .dropdown {
     right: 0;
+  }
+
+  #emojiBtn {
+    display: none;
   }
 }
 
 @media only screen and (max-width: 390px) {
   .msg-box {
-    min-width: 100px;
     max-width: 250px;
     font-size: 13px;
+  }
+
+  .msg-box img {
+    max-width: 250px;
+  }
+
+  .msg-box > span {
+    font-size: 10px;
+  }
+
+  .time{
+    padding-left: 15px;
   }
 
   .user-name {

@@ -119,7 +119,7 @@ function Chat({ setChatWith, toggleMenu }) {
                             const isBlocked = blockSlice.blockedChat.includes(_id);
                             const isBlockedByUser = blockSlice.blockedBy.includes(_id);
 
-                            return (chatId.includes(_id) && allMsg.length >= 0 &&
+                            return (chatId.includes(_id) && allMsg && allMsg.length >= 0 &&
                                 <li key={_id} onClick={() => clickedChat(data)}>
 
                                     <span className='profile-img' style={{ background: image ? "black" : avatar }}>

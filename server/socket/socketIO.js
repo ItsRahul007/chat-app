@@ -10,6 +10,13 @@ function getKeyByValue(value) {
   return Object.keys(users).find(key => users[key] === value);
 };
 
+function getTiem(){    
+  const date = new Date().toLocaleTimeString();
+  const splitDate = date.split(" ")
+  const timestamp = splitDate[0].slice(0, 4) + splitDate[1].toLocaleLowerCase();
+  return timestamp;
+}
+
 function socketServer(io) {
   io.on("connection", socket => {
 
@@ -45,10 +52,11 @@ function socketServer(io) {
 
     // When send msg emittied, emiting recive msg function
     socket.on("send_msg", async ({ text, id, msgId }) => {
+      const timestamp = getTiem();
       // Checking if the user online or not
       let objectKey = getKeyByValue(id);
       if (objectKey) {
-        io.to(id).emit("recive-msg", { id: users[socket.id], msg: text, msgId });
+        io.to(id).emit("recive-msg", { id: users[socket.id], msg: text, msgId, timestamp });
       }
       else { // If user is offline the saving the messages on database
         try {
@@ -56,7 +64,8 @@ function socketServer(io) {
             senderId: users[socket.id],
             reciverId: id,
             message: text,
-            msgId
+            msgId,
+            timestamp
           });
           await newMSG.save();
         }
@@ -126,10 +135,11 @@ function socketServer(io) {
     });
 
     socket.on("send-image", async (obj) => {
+      const timestamp = getTiem();
       // Checking if the user online or not
       let objectKey = getKeyByValue(obj.id);
       if (objectKey) {
-        io.to(obj.id).emit("recive-image", { id: users[socket.id], img: obj.img, msgId: obj.msgId });
+        io.to(obj.id).emit("recive-image", { id: users[socket.id], img: obj.img, msgId: obj.msgId, timestamp });
       }
       else {
         // If user is offline the saving the messages on database
@@ -138,7 +148,8 @@ function socketServer(io) {
             senderId: users[socket.id],
             reciverId: obj.id,
             image: obj.img,
-            msgId: obj.msgId
+            msgId: obj.msgId,
+            timestamp
           });
           await newMSG.save();
         }

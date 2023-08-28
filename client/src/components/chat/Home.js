@@ -57,63 +57,64 @@ function Home() {
         // Maping the message object and storing the messages and images in state
         messageObject[keyId].map(obj => {
           if (obj.msg) {
-            const { id, msg, msgId } = obj;
-            return updateMessageState(keyId, id, msg, msgId);
+            const { id, msg, msgId, timestamp } = obj;
+            return updateMessageState(keyId, id, msg, msgId, timestamp);
           }
           else if (obj.img) {
-            const { id, img, msgId } = obj;
-            return storeImage(keyId, id, img, msgId);
+            const { id, img, msgId, timestamp } = obj;
+            return storeImage(keyId, id, img, msgId, timestamp);
           }
         });
       };
-    }
+    };
   };
 
   // Updating the message state
-  function updateMessageState(keyId, id, msg, msgId) {
+  function updateMessageState(keyId, id, msg, msgId, timestamp) {
     // Setting and storing the messages in redux state
-    dispatch(setMessage({ keyId, id, msg, msgId }));
+    dispatch(setMessage({ keyId, id, msg, msgId, timestamp }));
   };
 
   // Updating the message state but with images
-  function storeImage(keyId, id, img, msgId) {
-    dispatch(setImage({ keyId, id, img, msgId }));
+  function storeImage(keyId, id, img, msgId, timestamp) {
+    dispatch(setImage({ keyId, id, img, msgId, timestamp }));
     dispatch(storeImagesToSlice({ img }));
   };
 
   // Storing the messages in local storage and also updating them
-  function updateLocalMessages(keyId, id, msg, msgId) {
+  function updateLocalMessages(keyId, id, msg, msgId, timestamp) {
     const userId = localStorage.getItem("userId");
+    // const timestamp = time? time : getTime();
     // Storing the messages in local storage
     if (userId) {
       const localItem = localStorage.getItem(userId);
       if (localItem) {
         const parsedItem = JSON.parse(localItem);
-        parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, msg, msgId }];
+        parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, msg, msgId, timestamp }];
         localStorage.setItem(userId, JSON.stringify(parsedItem));
       }
       else {
         const obj = {};
-        obj[keyId] = [{ id, msg, msgId }];
+        obj[keyId] = [{ id, msg, msgId, timestamp }];
         localStorage.setItem(userId, JSON.stringify(obj));
       };
     };
   };
 
   // Storing the images in local storage with messages
-  function updateLocalImages(keyId, id, img, msgId) {
+  function updateLocalImages(keyId, id, img, msgId, timestamp) {
     const userId = localStorage.getItem("userId");
     // Storing the messages in local storage
     if (userId) {
       const localItem = localStorage.getItem(userId);
       if (localItem) {
         const parsedItem = JSON.parse(localItem);
-        parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, img, msgId }];
+        parsedItem[keyId] = [...(parsedItem[keyId] || []), { id, img, msgId, timestamp }];
         localStorage.setItem(userId, JSON.stringify(parsedItem));
       }
       else {
         const obj = {};
-        obj[keyId] = [{ id, img, msgId }];
+        obj[keyId] = [{ id, img, msgId, timestamp }];
         localStorage.setItem(userId, JSON.stringify(obj));
       };
     };
@@ -146,8 +147,8 @@ function Home() {
 
     // Receving the sended message and adding the message in the frontend
     socket.on("recive-msg", obj => {
-      updateMessageState(obj.id, obj.id, obj.msg, obj.msgId);
-      updateLocalMessages(obj.id, obj.id, obj.msg, obj.msgId);
+      updateMessageState(obj.id, obj.id, obj.msg, obj.msgId, obj.timestamp);
+      updateLocalMessages(obj.id, obj.id, obj.msg, obj.msgId, obj.timestamp);
     });
 
     // Reciving the undelivered messages
@@ -156,13 +157,13 @@ function Home() {
       msg.map(obj => {
         if (obj.message) {
           // Setting the messages
-          updateMessageState(obj.senderId, obj.senderId, obj.message, obj.msgId);
-          updateLocalMessages(obj.senderId, obj.senderId, obj.message, obj.msgId);
+          updateMessageState(obj.senderId, obj.senderId, obj.message, obj.msgId, obj.timestamp);
+          updateLocalMessages(obj.senderId, obj.senderId, obj.message, obj.msgId, obj.timestamp);
         }
         else if (obj.image) {
           // Setting the images
-          storeImage(obj.senderId, obj.senderId, obj.image, obj.msgId);
-          updateLocalImages(obj.senderId, obj.senderId, obj.image, obj.msgId);
+          storeImage(obj.senderId, obj.senderId, obj.image, obj.msgId, obj.timestamp);
+          updateLocalImages(obj.senderId, obj.senderId, obj.image, obj.msgId, obj.timestamp);
         }
 
         // Fro deleting stored messages
@@ -207,9 +208,9 @@ function Home() {
 
     // Reciving image
     socket.on("recive-image", obj => {
-      const { id, img, msgId } = obj;
-      storeImage(id, id, img, msgId);
-      updateLocalImages(id, id, img, msgId);
+      const { id, img, msgId, timestamp } = obj;
+      storeImage(id, id, img, msgId, timestamp);
+      updateLocalImages(id, id, img, msgId, timestamp);
     });
 
     // Listning if any one blocked

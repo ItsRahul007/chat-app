@@ -51,13 +51,13 @@ const messageSlice = createSlice({
     reducers: {
         // Storing messages in state
         setMessage(state, action) {
-            const { keyId, id, msg, msgId } = action.payload;
-            state[keyId] = [...(state[keyId] || []), { id, msg, msgId }];
+            const { keyId, id, msg, msgId, timestamp } = action.payload;
+            state[keyId] = [...(state[keyId] || []), { id, msg, msgId, timestamp }];
         },
 
         setImage(state, action){
-            const { keyId, id, img, msgId } = action.payload;
-            state[keyId] = [...(state[keyId] || []), { id, img, msgId }];
+            const { keyId, id, img, msgId, timestamp } = action.payload;
+            state[keyId] = [...(state[keyId] || []), { id, img, msgId, timestamp }];
         },
 
         // Filtering through the message id and remove it

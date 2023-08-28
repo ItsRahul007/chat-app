@@ -19,6 +19,9 @@ const UnsendMSG = new Schema({
     msgId: {
         type: String,
         require: true
+    },
+    timestamp: {
+        type: String
     }
 });
 

@@ -6,7 +6,14 @@ import Toast from '../micro-compos/Toast';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import { deleteWholeChat } from '../../../store/slices/messageSlice';
-import {blockUser, unBlockUser} from "../../../store/slices/blockSlice";
+import { blockUser, unBlockUser } from "../../../store/slices/blockSlice";
+
+function getTime(){
+  const date = new Date().toLocaleTimeString();
+  const splitDate = date.split(" ")
+  const timestamp = splitDate[0].slice(0, 4) + splitDate[1].toLocaleLowerCase();
+  return timestamp;
+}
 
 function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
 
@@ -89,7 +96,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         emojiPicker.style.display = "none";
       });
     };
-
+    
   }, []);
 
   // Emoji piker clicked function
@@ -101,8 +108,9 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   function sendMsg() {
     const msgId = generateUniqueID();
     socket.emit('send_msg', { text, id: _id, msgId });
-    updateMessageState(_id, userId, text, msgId);
-    updateLocalMessages(_id, userId, text, msgId);
+    const timestamp = getTime();
+    updateMessageState(_id, userId, text, msgId, timestamp);
+    updateLocalMessages(_id, userId, text, msgId, timestamp);
     setText('');
     scrollBottom();
   };
@@ -127,13 +135,14 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   function sendFile(e) {
     const file = e.target.files[0];
     const msgId = generateUniqueID();
+    const timestamp = getTime();
 
     const reader = new FileReader();
     reader.onload = (fileEvent) => {
       const imageData = fileEvent.target.result;
 
-      storeImage(_id, userId, imageData, msgId);
-      updateLocalImages(_id, userId, imageData, msgId);
+      storeImage(_id, userId, imageData, msgId, timestamp);
+      updateLocalImages(_id, userId, imageData, msgId, timestamp);
       socket.emit("send-image", { id: _id, img: imageData, msgId });
     };
     reader.readAsDataURL(file);
@@ -176,7 +185,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
                 Delete chat
               </div>
               {
-                !isBlockedByUser && 
+                !isBlockedByUser &&
                 <div className="dropdown-option" onClick={isBlocked ? unblock : block} >
                   {isBlocked ? 'Unblock' : 'Block'}
                 </div>
@@ -199,10 +208,14 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
                 {obj.msg ?
                   <div onClick={() => options(obj)} key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`}>
                     {obj.msg}
+                    <span className='time'><span>{obj.timestamp}</span></span>
                   </div>
                   :
                   <PhotoView src={obj.img}>
-                    <img src={obj.img} alt='' key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} style={{ maxHeight: '300px', borderRadius: "25px" }} />
+                    <div key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} style={{display: "flex", flexDirection: "column"}}>
+                      <img src={obj.img} alt='' />
+                      <span className='image-time'><span>{obj.timestamp}</span></span>
+                    </div>
                   </PhotoView>
                 }
               </PhotoProvider>
