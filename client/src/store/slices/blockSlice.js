@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import clearData from "../actions/clearData";
 
 const blockSlice = createSlice({
     name: "block slice",
@@ -12,7 +13,7 @@ const blockSlice = createSlice({
         },
 
         unBlockUser(state, action) {
-            const newArr = state.blockedChat;            
+            const newArr = state.blockedChat;
             state.blockedChat = newArr.filter(id => id !== action.payload);
             return state;
         },
@@ -26,6 +27,14 @@ const blockSlice = createSlice({
             state.blockedBy = newArr.filter(id => id !== action.payload);
             return state;
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(clearData, () => {
+            return {
+                blockedChat: [],
+                blockedBy: []
+            }
+        })
     }
 });
 

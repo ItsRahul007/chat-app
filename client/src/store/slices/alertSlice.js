@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import clearData from "../actions/clearData";
 
 const alertSlice = createSlice({
     name: 'alert',
@@ -10,6 +11,11 @@ const alertSlice = createSlice({
         removeAlert() {
             return [];
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(clearData, () => {
+            return []
+        })
     }
 });
 export const { showAlert, removeAlert } = alertSlice.actions;

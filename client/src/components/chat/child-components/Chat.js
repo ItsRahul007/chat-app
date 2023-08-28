@@ -13,8 +13,11 @@ function Chat({ setChatWith, toggleMenu }) {
     const [value, setValue] = useState([]);
     const [searchInput, setSearchInput] = useState('');
     const [filterValue, setFilterValue] = useState([]);
+    const [chatId, setChatId] = useState([]);
 
-    let chatId = Object.keys(messageStore); // Getting the keys that I'm chated with
+    useEffect(() => { 
+        setChatId(Object.keys(messageStore));
+    }, [messageStore]);
 
     // Changing images in hover
     useEffect(() => {
@@ -31,7 +34,7 @@ function Chat({ setChatWith, toggleMenu }) {
     }, []);
 
     // Filltering the persons that I'm chat with
-    function filterPerson() {
+    useEffect(() => {
         setValue([]);
         if (allusers.data) {
             allusers.data.map(data => {
@@ -43,12 +46,7 @@ function Chat({ setChatWith, toggleMenu }) {
                     });
             });
         };
-    };
-
-    // Runing the filter person when allusers.data id avaliable for displaying persons
-    useEffect(() => {
-        filterPerson();
-    }, [allusers.data], filterPerson);
+    }, [allusers, chatId]);
 
     // Displaying Searched Filltered persons
     function SearchValues() {
@@ -66,17 +64,22 @@ function Chat({ setChatWith, toggleMenu }) {
 
                         return (
                             <li key={_id} onClick={() => clickedChat(data)}>
+
                                 <span className='profile-img' style={{ background: image ? "black" : avatar }}>
                                     {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                                 </span>
+
                                 {!(isBlocked || isBlockedByUser) && [onlineId.includes(_id) && <div className='online-symbol'></div>]}
+
                                 <span className='name-msg'>
                                     <div className='name'>{name}</div>
                                     <div className='last-msg'>
                                         {lastMsg ? [lastMsg.msg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "image"] : "Hello there. I'm using chat-app"}
                                     </div>
                                 </span>
+
                             </li>
+
                         );
                     })
                 }
@@ -118,16 +121,20 @@ function Chat({ setChatWith, toggleMenu }) {
 
                             return (chatId.includes(_id) && allMsg.length >= 0 &&
                                 <li key={_id} onClick={() => clickedChat(data)}>
+
                                     <span className='profile-img' style={{ background: image ? "black" : avatar }}>
                                         {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                                     </span>
+
                                     {!(isBlocked || isBlockedByUser) && [onlineId.includes(_id) && <div className='online-symbol'></div>]}
+
                                     <span className='name-msg'>
                                         <div className='name'>{name}</div>
                                         <div className='last-msg'>
                                             {lastMsg ? [lastMsg.msg ? [lastMsg.msg.length <= 32 ? lastMsg.msg : lastMsg.msg.slice(0, 30) + '...'] : "image"] : "Hello there. I'm using chat-app"}
                                         </div>
                                     </span>
+
                                 </li>
                             );
                         })

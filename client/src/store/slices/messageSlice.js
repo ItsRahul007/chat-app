@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import clearData from "../actions/clearData";
 
 // Deleting a message from local storage
 function deleteMessageFromLocalStorage(keyId, msgId) {
@@ -94,6 +95,11 @@ const messageSlice = createSlice({
             deleteChat(keyId);
             return newChat;
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(clearData, () => {
+            return {};
+        });
     }
 });
 

@@ -61,18 +61,23 @@ input::placeholder{
 
 .login-other{
     margin-bottom: 20px;
-    text-align: center;
 }
 
 .login-other span{
     display: block;
-    font-size: 16px;
-    margin-bottom: 17px;
-    margin-right: 10px;
-    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 15px 10px 4px 0;
+    color: rgba(255, 255, 255, 0.781);
 }
 
-.login-other button{
+.login-other > div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-other > div a{
     padding: 8px;
     margin: 10px;
     background: transparent;

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import clearData from '../actions/clearData';
 
 const onlineSlice = createSlice({
     name: 'online',
@@ -11,6 +12,11 @@ const onlineSlice = createSlice({
         removeOnlineId(state, action){
             return state.filter(e => e !== action.payload);
         }
+    },
+    extraReducers: builder => {
+        builder.addCase(clearData, () => {
+            return []
+        })
     }
 });
 

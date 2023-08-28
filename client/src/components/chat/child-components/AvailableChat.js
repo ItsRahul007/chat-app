@@ -48,15 +48,18 @@ function AvailableChat({ setChatWith, toggleMenu }) {
 
             return (
               <li key={_id} onClick={() => clickedChat(data)}>
+
                 <span className='profile-img' style={{ background: image ? "black" : avatar }}>
                   {image ? <img src={`http://localhost:4000/images/` + image} alt='profile' /> : name.slice(0, 2)}
                 </span>
+
                 <span className='name-msg'>
                   <div className='name'>{name}</div>
                   <div className='last-msg'>
                     {about ? [about.length <= 32 ? about : about.slice(0, 30) + '...'] : "Hello there. I'm using chat-app"}
                   </div>
                 </span>
+
               </li>
             );
           })
@@ -105,7 +108,7 @@ function AvailableChat({ setChatWith, toggleMenu }) {
             })
           }
           {
-            searchValue.length >= 0 && <SearchValues />
+            searchValue.length >= 1 && <SearchValues />
           }
         </ul>
 

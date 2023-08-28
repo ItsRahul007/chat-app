@@ -25,15 +25,15 @@ function Home() {
   const [pixle, setPixle] = useState(0);
   const dispatch = useDispatch();
 
-  // When a user loged in or open the app emiting user-online function
+  // When a user loged in or open the app emiting user-online function and also storing the all block id
   useEffect(() => {
     if (userData.data) {
       const userId = userData.data._id;
       socket.emit('user-online', userId);
       localStorage.setItem("userId", userId);
-    };
 
-    if (userData.data) {
+      getLocalMessages(userId);
+
       userData.data.block.blockedChat.map(id => {
         return dispatch(blockUser(id));
       });
@@ -43,6 +43,31 @@ function Home() {
       });
     };
   }, [userData.data]);
+
+  // Geting and storing all local messages in state
+  function getLocalMessages(userId) {
+    const localItem = localStorage.getItem(userId);
+    const messageObject = JSON.parse(localItem);
+    // Looping through the keys and getting the messageObject
+    if (messageObject) {
+      const keyArray = Object.keys(messageObject);
+      for (let i = 0; i < keyArray.length; i++) {
+        const keyId = keyArray[i];
+
+        // Maping the message object and storing the messages and images in state
+        messageObject[keyId].map(obj => {
+          if (obj.msg) {
+            const { id, msg, msgId } = obj;
+            return updateMessageState(keyId, id, msg, msgId);
+          }
+          else if (obj.img) {
+            const { id, img, msgId } = obj;
+            return storeImage(keyId, id, img, msgId);
+          }
+        });
+      };
+    }
+  };
 
   // Updating the message state
   function updateMessageState(keyId, id, msg, msgId) {
@@ -94,6 +119,7 @@ function Home() {
     };
   };
 
+  // Reciving all socket events
   useEffect(() => {
     // When a new user signup dispatching fetchAllUsers
     socket.on("new-user-signup", () => {
@@ -231,35 +257,12 @@ function Home() {
     }
   };
 
+  // Runing the loader
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    if (userId) {
-      const localItem = localStorage.getItem(userId);
-      const messageObject = JSON.parse(localItem);
-      // Looping through the keys and getting the messageObject
-      if (messageObject) {
-        const keyArray = Object.keys(messageObject);
-        for (let i = 0; i < keyArray.length; i++) {
-          const keyId = keyArray[i];
-
-          // Maping the message object and storing the messages and images in state
-          messageObject[keyId].map(obj => {
-            if (obj.msg) {
-              const { id, msg, msgId } = obj;
-              return updateMessageState(keyId, id, msg, msgId);
-            }
-            else if (obj.img) {
-              const { id, img, msgId } = obj;
-              return storeImage(keyId, id, img, msgId);
-            }
-          });
-        };
-      }
-    };
 
     setTimeout(() => {
       const loader = document.getElementById("loader");
-      if(loader) loader.style.display = "none";
+      if (loader) loader.style.display = "none";
     }, 1500);
 
   }, []);

@@ -7,7 +7,7 @@ import { showAlert, removeAlert } from '../../store/slices/alertSlice';
 import axios from "axios";
 import { socket } from "../chat/socket/socketIO";
 import { useGoogleLogin } from '@react-oauth/google';
-import Facebook from "facebook-js-sdk";
+import { LoginSocialFacebook } from "reactjs-social-login";
 
 function Login({ callApi }) {
   const [inputValue, setInputValue] = useState({ name: '', password: '' });
@@ -125,7 +125,7 @@ function Login({ callApi }) {
     window.location.href = authUrl;
   };
 
-  // When user logedin fetching access token and after that fetching his details 
+  // When user logedin with github fetching access token and after that fetching his details 
   async function getAccessToken(codeParam) {
     const res = await fetch("http://localhost:4000/github/getAccessToken?code=" + codeParam);
     const parsedData = await res.json();
@@ -137,25 +137,10 @@ function Login({ callApi }) {
         }
       });
       const data = await res.json();
+      console.log(data);
       if (data.errors) alert(data.errors) // If we can't get user's email sending alert
       else if (data.loginUser) loginUser({ email: data.loginUser, password: data.loginUser }) // If email already exist then runing loging user function
       else if (data.newUser) alert("No user exists with this email"); // If its a new user then alerting him
-    };
-  };
-
-  // For facebook authentication
-  function handleFacebookLogin() {
-    const facebook = new Facebook({
-      appId: "1094803578156515",
-      appSecret: "73935974eeee75726485042c578048d8",
-      redirectUrl: "http://localhost:3000",
-      graphVersion: "v17.0",
-    });
-
-    const url = facebook.getLoginUrl(["email"]);
-    console.log(url);
-    if(url){
-      window.location.href = url;
     };
   };
 
@@ -163,7 +148,10 @@ function Login({ callApi }) {
     <div className='log'>
       <h1>Login</h1>
       <p>Get logged in to the chat-app <br /> Chat with anyone anytime</p>
-      <form className='login-form' autoComplete='off' onSubmit={signupUser}>
+      <form className='login-form' autoComplete='off' onSubmit={e => {
+        e.preventDefault();
+        loginUser({ email: inputValue.email, password: inputValue.password })
+      }}>
 
         <input className='inputs' autoComplete='off' type='email' name='email' value={inputValue.email} placeholder='Enter your email' required onChange={onChange} />
         <input className='inputs' autoComplete='off' type='password' name='password' value={inputValue.password} placeholder='Enter password' required minLength={8} onChange={onChange} />
@@ -173,9 +161,24 @@ function Login({ callApi }) {
       <div className='login-other'>
 
         <span>or login with</span>
-        <button target='_blank' onClick={handleFacebookLogin}><i className="fa-brands fa-facebook"></i></button>
-        <button target='_blank' onClick={loginWithGithub}><i className="ri-github-fill"></i></button>
-        <button target='_blank' id='singGoogle' onClick={loginWithGoogle}><i className="fa-brands fa-google"></i></button>
+
+        <div>
+          <LoginSocialFacebook
+            isOnlyGetToken
+            appId='1094803578156515'
+            onResolve={({ provider, data }) => {
+              console.log(provider)
+              console.log(data)
+            }}
+            onReject={(err) => {
+              console.log(err)
+            }}
+          >
+            <a href="/" target='_blank'><i className="fa-brands fa-facebook"></i></a>
+          </LoginSocialFacebook>
+          <a target='_blank' onClick={loginWithGithub}><i className="ri-github-fill"></i></a>
+          <a target='_blank' id='singGoogle' onClick={loginWithGoogle}><i className="fa-brands fa-google"></i></a>
+        </div>
 
       </div>
       <div className='noAccount'>

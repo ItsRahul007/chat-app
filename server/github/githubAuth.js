@@ -49,7 +49,6 @@ router.post("/getUserData", async (req, res) => {
 
         if (isEmailExist) {
             res.json({ loginUser: email })
-            console.log(isEmailExist)
         }
         else res.json({ newUser: data });
 
