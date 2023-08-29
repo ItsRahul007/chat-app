@@ -5,6 +5,7 @@ import messageSlice from "./slices/messageSlice";
 import onlineSlice from "./slices/onlineSlice";
 import mediaSlice from "./slices/mediaSlice";
 import blockSlice from "./slices/blockSlice";
+import unreadMessage from "./slices/unreadMessage";
 
 const store = configureStore({
     reducer:{
@@ -13,7 +14,8 @@ const store = configureStore({
         messageSlice,
         onlineSlice,
         mediaSlice,
-        blockSlice
+        blockSlice,
+        unreadMessage
     },
 });
 

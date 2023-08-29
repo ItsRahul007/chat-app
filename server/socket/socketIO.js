@@ -13,9 +13,9 @@ function getKeyByValue(value) {
 function getTiem(){    
   const date = new Date().toLocaleTimeString();
   const splitDate = date.split(" ")
-  const timestamp = splitDate[0].slice(0, 4) + splitDate[1].toLocaleLowerCase();
+  const timestamp = splitDate[0].slice(0, 5) + splitDate[1].toLocaleLowerCase();
   return timestamp;
-}
+};
 
 function socketServer(io) {
   io.on("connection", socket => {

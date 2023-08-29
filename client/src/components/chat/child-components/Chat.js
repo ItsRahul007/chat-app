@@ -9,6 +9,9 @@ function Chat({ setChatWith, toggleMenu }) {
     const onlineId = useSelector(state => state.onlineSlice);
     const messageStore = useSelector(state => state.messageSlice);
     const blockSlice = useSelector(state => state.blockSlice);
+    const unreadMessage = useSelector(state => state.unreadMessage);
+
+    console.log(unreadMessage);
 
     const [value, setValue] = useState([]);
     const [searchInput, setSearchInput] = useState('');
@@ -135,6 +138,8 @@ function Chat({ setChatWith, toggleMenu }) {
                                         </div>
                                     </span>
 
+                                    {unreadMessage[_id] && <span className='unread-amount'>{unreadMessage[_id].length}</span>}
+                                    
                                 </li>
                             );
                         })

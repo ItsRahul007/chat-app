@@ -7,13 +7,14 @@ import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import { deleteWholeChat } from '../../../store/slices/messageSlice';
 import { blockUser, unBlockUser } from "../../../store/slices/blockSlice";
+import { removeUnreadMsgAmmount } from '../../../store/slices/unreadMessage';
 
 function getTime(){
   const date = new Date().toLocaleTimeString();
   const splitDate = date.split(" ")
-  const timestamp = splitDate[0].slice(0, 4) + splitDate[1].toLocaleLowerCase();
+  const timestamp = splitDate[0].slice(0, 5) + splitDate[1].toLocaleLowerCase();
   return timestamp;
-}
+};
 
 function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
 
@@ -38,6 +39,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     const allUsers = allPersons.data;
     const user = allUsers.filter(obj => obj._id === _id);
     setInfo(user[0]);
+    dispatch(removeUnreadMsgAmmount(_id));
   }, [_id, allPersons]);
 
   function toggleDropDown() {

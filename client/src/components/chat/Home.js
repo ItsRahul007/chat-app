@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './home.css';
 import { useSelector, useDispatch } from 'react-redux';
 import LeftComp from "./parent-compos/LeftComp";
@@ -15,6 +15,7 @@ import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
 import { fetchAllUsers } from '../../store/slices/userSlice';
 import { storeImagesToSlice } from '../../store/slices/mediaSlice';
 import { blockEdBy, blockUser, unBlockEdBy } from '../../store/slices/blockSlice';
+import { addUnreadMsgAmmount } from '../../store/slices/unreadMessage';
 
 function Home() {
   // The store state variables
@@ -149,6 +150,7 @@ function Home() {
     socket.on("recive-msg", obj => {
       updateMessageState(obj.id, obj.id, obj.msg, obj.msgId, obj.timestamp);
       updateLocalMessages(obj.id, obj.id, obj.msg, obj.msgId, obj.timestamp);
+      dispatch(addUnreadMsgAmmount(obj.id));
     });
 
     // Reciving the undelivered messages
@@ -246,14 +248,14 @@ function Home() {
   };
 
   // toggling menu
-  const menuCompo = useRef(null)
   function toggleMenu() {
+    const menuCompo = document.getElementById("menuCompo");
     if (pixle === 0) {
-      menuCompo.current.style.left = pixle + "px";
+      menuCompo.style.left = pixle + "px";
       setPixle(-500)
     }
     else {
-      menuCompo.current.style.left = pixle + "px";
+      menuCompo.style.left = pixle + "px";
       setPixle(0)
     }
   };
@@ -274,7 +276,7 @@ function Home() {
         <div><div></div></div>
       </div>
       <div>
-        <div ref={menuCompo} className='two-compo'>
+        <div id='menuCompo' className='two-compo'>
           <LeftComp changeCompo={changeCompo} closeMenu={toggleMenu} />
           <MiddleComp compo={compo} />
         </div>
