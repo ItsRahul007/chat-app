@@ -15,7 +15,7 @@ import { pushOnlineId, removeOnlineId } from '../../store/slices/onlineSlice';
 import { fetchAllUsers } from '../../store/slices/userSlice';
 import { storeImagesToSlice } from '../../store/slices/mediaSlice';
 import { blockEdBy, blockUser, unBlockEdBy } from '../../store/slices/blockSlice';
-import { addUnreadMsgAmmount } from '../../store/slices/unreadMessage';
+import { addUnreadMsgAmmount, getAllUnreadMsg } from '../../store/slices/unreadMessage';
 
 function Home() {
   // The store state variables
@@ -34,6 +34,7 @@ function Home() {
       localStorage.setItem("userId", userId);
 
       getLocalMessages(userId);
+      dispatch(getAllUnreadMsg());
 
       userData.data.block.blockedChat.map(id => {
         return dispatch(blockUser(id));
@@ -141,7 +142,7 @@ function Home() {
       }
     });
 
-    // When user will be offline
+    // When user will be offline removing him from the online array
     socket.on("user-offline", id => {
       dispatch(removeOnlineId(id));
     });
@@ -150,7 +151,7 @@ function Home() {
     socket.on("recive-msg", obj => {
       updateMessageState(obj.id, obj.id, obj.msg, obj.msgId, obj.timestamp);
       updateLocalMessages(obj.id, obj.id, obj.msg, obj.msgId, obj.timestamp);
-      dispatch(addUnreadMsgAmmount(obj.id));
+      dispatch(addUnreadMsgAmmount(obj.id)); // Storing amount of messages in store
     });
 
     // Reciving the undelivered messages
@@ -167,6 +168,9 @@ function Home() {
           storeImage(obj.senderId, obj.senderId, obj.image, obj.msgId, obj.timestamp);
           updateLocalImages(obj.senderId, obj.senderId, obj.image, obj.msgId, obj.timestamp);
         }
+
+        // Storing amount of messages in store
+        dispatch(addUnreadMsgAmmount(obj.senderId));
 
         // Fro deleting stored messages
         return socket.emit("recived-unsend-msg", obj._id);

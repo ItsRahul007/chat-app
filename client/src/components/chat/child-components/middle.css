@@ -127,11 +127,13 @@
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background-color: rgb(0 255 10 / 72%);
-  margin-top: 15px;
-  margin-left: 78px;
+  background-color: rgba(4, 219, 11, 0.72);
+  top: 25px;
+  right: 18px;
   font-size: 13px;
   text-align: center;
+  color: white;
+  position: absolute;
 }
 
 /* -------------------------------------profile compo------------------------------------- */

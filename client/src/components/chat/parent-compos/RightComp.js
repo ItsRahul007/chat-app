@@ -9,7 +9,7 @@ import { deleteWholeChat } from '../../../store/slices/messageSlice';
 import { blockUser, unBlockUser } from "../../../store/slices/blockSlice";
 import { removeUnreadMsgAmmount } from '../../../store/slices/unreadMessage';
 
-function getTime(){
+function getTime() {
   const date = new Date().toLocaleTimeString();
   const splitDate = date.split(" ")
   const timestamp = splitDate[0].slice(0, 5) + splitDate[1].toLocaleLowerCase();
@@ -39,12 +39,12 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     const allUsers = allPersons.data;
     const user = allUsers.filter(obj => obj._id === _id);
     setInfo(user[0]);
-    dispatch(removeUnreadMsgAmmount(_id));
+    dispatch(removeUnreadMsgAmmount(_id)); // Deleting the id from ureadMessage slice
   }, [_id, allPersons]);
 
   function toggleDropDown() {
     setOpen(!open);
-  }
+  };
 
   //For scrolled to the bottom message
   function scrollBottom() {
@@ -61,22 +61,25 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     return `${timestamp}-${randomString}`;
   };
 
-  useEffect(() => scrollBottom(), [chatWith]); // When ever clicked on any chat scrolling down
+  useEffect(() => scrollBottom(), [chatWith]); // When ever clicked on any chat scrolling down  
 
-  // If chatWith is not null scrolling down the page whenever get any messages or images
+  // If chatWith is not null then scrolling down the page whenever get any messages or images, and also dispatch removeUnreadMsgAmmount if the person that I'm chatting with, sends any messages
   useEffect(() => {
-    socket.on("recive-msg", () => {
+    function removeUnread(obj){
       scrollBottom();
-    });
+      // Deleting the id from ureadMessage slice
+      if(obj.id === _id) dispatch(removeUnreadMsgAmmount(_id));
+    };
 
-    socket.on("recive-image", () => {
-      scrollBottom();
-    });
+    socket.on("recive-msg", removeUnread);
+
+    socket.on("recive-image", removeUnread);
 
     return () => {
-      socket.disconnect();
+      socket.off("recive-msg", removeUnread);
+      socket.off("recive-image", removeUnread);
     };
-  }, []);
+  }, [_id]);
 
   useEffect(() => {
 
@@ -98,7 +101,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
         emojiPicker.style.display = "none";
       });
     };
-    
+
   }, []);
 
   // Emoji piker clicked function
@@ -214,7 +217,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
                   </div>
                   :
                   <PhotoView src={obj.img}>
-                    <div key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} style={{display: "flex", flexDirection: "column"}}>
+                    <div key={obj.msgId} className={`msg-box ${obj.id === userId ? "msg-right" : "msg-left"}`} style={{ display: "flex", flexDirection: "column" }}>
                       <img src={obj.img} alt='' />
                       <span className='image-time'><span>{obj.timestamp}</span></span>
                     </div>
