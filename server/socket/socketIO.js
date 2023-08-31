@@ -3,18 +3,25 @@ const collectedMSG = require("../schema/UnsendMSG");
 const UpdateMSG = require("../schema/UpdateMSG");
 const UserSchema = require("../schema/UserSchema");
 
-const users = {}; // For storing users with the key of socket id and the value of their mondoDB id 
+const users = {}; // For storing users with the key of socket id and the value of their mondoDB id
+const lastSeen = {}; // For storing the user's last seen
 
 // Finding the object key with his value
 function getKeyByValue(value) {
   return Object.keys(users).find(key => users[key] === value);
 };
 
-function getTiem(){    
+function getTime() {
   const date = new Date().toLocaleTimeString();
-  const splitDate = date.split(" ")
-  const timestamp = splitDate[0].slice(0, 5) + splitDate[1].toLocaleLowerCase();
-  return timestamp;
+  const splitDate = date.split(" ");
+  if (splitDate[0].length === 7) {
+    const timestamp = splitDate[0].slice(0, 4) + splitDate[1].toLocaleLowerCase();
+    return timestamp;
+  }
+  else {
+    const timestamp = splitDate[0].slice(0, 5) + splitDate[1].toLocaleLowerCase()
+    return timestamp;
+  };
 };
 
 function socketServer(io) {
@@ -29,7 +36,8 @@ function socketServer(io) {
     socket.on("user-online", async (userId) => {
       users[socket.id] = userId;
       socket.broadcast.emit("new-user-online", userId);
-      socket.join(userId); // Join the users on their specified rooms with the name of their id's
+      socket.join(userId); // Joining the user on his specified rooms with the name of their id's
+      if (lastSeen[userId]) delete lastSeen[userId]; // Deleting the last seen of user
 
       // Checking if user has some pending messages and pending deleted message or updated messages or not
       const messages = await collectedMSG.find({ reciverId: userId });
@@ -52,7 +60,7 @@ function socketServer(io) {
 
     // When send msg emittied, emiting recive msg function
     socket.on("send_msg", async ({ text, id, msgId }) => {
-      const timestamp = getTiem();
+      const timestamp = getTime();
       // Checking if the user online or not
       let objectKey = getKeyByValue(id);
       if (objectKey) {
@@ -135,7 +143,7 @@ function socketServer(io) {
     });
 
     socket.on("send-image", async (obj) => {
-      const timestamp = getTiem();
+      const timestamp = getTime();
       // Checking if the user online or not
       let objectKey = getKeyByValue(obj.id);
       if (objectKey) {
@@ -230,9 +238,17 @@ function socketServer(io) {
       };
     });
 
+    socket.on("get-last-seen", id => {
+      socket.emit("last-seen", lastSeen[id]);
+    });
+
     // When user disconnect 
     socket.on("disconnect", () => {
+      const date = new Date();
+      const time = date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear() + " " + getTime();
+      console.log(time);
       socket.broadcast.emit("user-offline", users[socket.id]);
+      lastSeen[users[socket.id]] = time;
       delete users[socket.id];
     });
   });

@@ -217,6 +217,7 @@ function Home() {
       const { id, img, msgId, timestamp } = obj;
       storeImage(id, id, img, msgId, timestamp);
       updateLocalImages(id, id, img, msgId, timestamp);
+      dispatch(addUnreadMsgAmmount(id)); // Storing amount of messages in store
     });
 
     // Listning if any one blocked

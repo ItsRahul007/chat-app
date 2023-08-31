@@ -11,9 +11,15 @@ import { removeUnreadMsgAmmount } from '../../../store/slices/unreadMessage';
 
 function getTime() {
   const date = new Date().toLocaleTimeString();
-  const splitDate = date.split(" ")
-  const timestamp = splitDate[0].slice(0, 5) + splitDate[1].toLocaleLowerCase();
-  return timestamp;
+  const splitDate = date.split(" ");
+  if (splitDate[0].length === 7) {
+    const timestamp = splitDate[0].slice(0, 4) + splitDate[1].toLocaleLowerCase();
+    return timestamp;
+  }
+  else {
+    const timestamp = splitDate[0].slice(0, 5) + splitDate[1].toLocaleLowerCase()
+    return timestamp;
+  };
 };
 
 function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocalMessages, storeImage, updateLocalImages }) {
@@ -23,6 +29,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
   const [info, setInfo] = useState({ name: '', avatar: '', image: '' });
   const { name, avatar, image } = info;
   const [open, setOpen] = useState(false); // For opening or closing the options
+  const [lastSeen, setLastSeen] = useState(null);
   const { _id } = chatWith; // The id of the person that I'm chatting with
   const dispatch = useDispatch();
 
@@ -65,21 +72,47 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
   // If chatWith is not null then scrolling down the page whenever get any messages or images, and also dispatch removeUnreadMsgAmmount if the person that I'm chatting with, sends any messages
   useEffect(() => {
-    function removeUnread(obj){
+    function removeUnread(obj) {
       scrollBottom();
       // Deleting the id from ureadMessage slice
-      if(obj.id === _id) dispatch(removeUnreadMsgAmmount(_id));
+      if (obj.id === _id) dispatch(removeUnreadMsgAmmount(_id));
     };
 
     socket.on("recive-msg", removeUnread);
-
     socket.on("recive-image", removeUnread);
+    socket.emit("get-last-seen", _id)
 
     return () => {
       socket.off("recive-msg", removeUnread);
       socket.off("recive-image", removeUnread);
     };
   }, [_id]);
+
+  // Getting the last seen of user and also adding some checks
+  useEffect(() => {
+    socket.on("last-seen", seen => {
+      // Checking if the user offline today or not
+      const date = new Date();
+      const time = date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();
+      if (seen) {
+        const splitTime = seen.split(" ");
+        if (splitTime[0] === time) {
+          setLastSeen(splitTime[1]);
+        }
+        else {
+          setLastSeen(seen);
+        };
+      }
+      // If we dont have the last seen of user
+      else {
+        setLastSeen(null);
+      };
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [])
 
   useEffect(() => {
 
@@ -179,7 +212,9 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
           </span>
           <span>
             <div className='user-name'>{name}</div>
-            <div className='user-status'>{!(isBlocked || isBlockedByUser) && [onlineId.includes(_id) ? "Online" : "Offline"]}</div>
+            <div className='user-status'>
+              {!(isBlocked || isBlockedByUser) && [onlineId.includes(_id) ? "Online" : [lastSeen ? lastSeen : "Offline"]]}
+            </div>
           </span>
         </div>
         <div className='menu-icon' onClick={toggleDropDown}>
