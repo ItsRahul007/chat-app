@@ -246,9 +246,9 @@ function socketServer(io) {
     socket.on("disconnect", () => {
       const date = new Date();
       const time = date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear() + " " + getTime();
-      console.log(time);
       socket.broadcast.emit("user-offline", users[socket.id]);
       lastSeen[users[socket.id]] = time;
+      socket.broadcast.emit("user-discon", lastSeen);
       delete users[socket.id];
     });
   });

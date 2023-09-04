@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { showAlert } from '../../../store/slices/alertSlice';
 
-function Collaps({ name, about, email, avatar, image, onUserChange, setUser, user, dispatch, setDisplay }) {
+function Collaps({ onUserChange, setUser, user, dispatch, setDisplay }) {
+    const { name, about, email, avatar, image } = user;
 
     const [pass, setPass] = useState({ oldPassword: '', password: '', conPassword: '' });
     const { oldPassword, password, conPassword } = pass;
@@ -15,7 +16,7 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
     async function changePassword() {
         let obj = {};
         if (password.length < 5 || oldPassword.length < 5) return dispatch(showAlert("Fill the password form"));
-        
+
         if (password !== conPassword) return dispatch(showAlert("Given password didn't matched"));
 
         obj.password = password;
@@ -44,9 +45,8 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
     function changeColor(choosedColor) {
         const avatarCon = document.querySelector(".collap-img");
         const avatarImage = document.getElementById("avatar-image");
-        if(avatarImage) avatarImage.style.display = "none";
+        if (avatarImage) avatarImage.style.opacity = "0";
         avatarCon.style.background = choosedColor;
-        avatarCon.innerText = name.slice(0, 2);
         setUser({ ...user, avatar: choosedColor });
     };
 
@@ -57,8 +57,9 @@ function Collaps({ name, about, email, avatar, image, onUserChange, setUser, use
                 <label htmlFor='avatar-img'>Profile Picture</label>
                 <div className='content'>
                     <div className='collap-profile'>
-                        <span className='profile-img collap-img' style={{ background: image? "black" : avatar }}>
-                            {image ? <img src={`http://localhost:4000/images/` + image} alt='' id='avatar-image' /> : name.length !== 0 && name.slice(0, 2)}
+                        <span className='profile-img collap-img' style={{ background: image ? "black" : avatar }}>                       
+                            <img src={`http://localhost:4000/images/` + image} alt='' id='avatar-image' style={{display: !image && "none"}} />
+                            {!image && name.length >= 1 && name.slice(0, 2)}
                         </span>
                         <div onClick={() => setDisplay("flex")}>
                             <i className="ri-edit-2-fill"></i>

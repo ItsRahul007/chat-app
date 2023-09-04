@@ -80,11 +80,46 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
 
     socket.on("recive-msg", removeUnread);
     socket.on("recive-image", removeUnread);
-    socket.emit("get-last-seen", _id)
+    socket.emit("get-last-seen", _id);
+
+    socket.on("user-discon", obj => {
+      if(obj[_id]){
+        // Checking if the user offline today or not
+        const date = new Date();
+        const time = date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();        
+        const splitTime = obj[_id].split(" ");
+        if (splitTime[0] === time) {
+          setLastSeen(splitTime[1]);
+        }
+        else {
+          setLastSeen(obj[_id]);
+        };
+      }
+      else{
+        setLastSeen(null);
+      }
+    });
 
     return () => {
       socket.off("recive-msg", removeUnread);
       socket.off("recive-image", removeUnread);
+      socket.off("user-discon", obj => {
+        if(obj[_id]){
+          // Checking if the user offline today or not
+          const date = new Date();
+          const time = date.getDay() + "/" + date.getMonth() + "/" + date.getFullYear();        
+          const splitTime = obj[_id].split(" ");
+          if (splitTime[0] === time) {
+            setLastSeen(splitTime[1]);
+          }
+          else {
+            setLastSeen(obj[_id]);
+          };
+        }
+        else{
+          setLastSeen(null);
+        }
+      });
     };
   }, [_id]);
 
@@ -112,7 +147,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
     return () => {
       socket.disconnect();
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
 
@@ -262,7 +297,7 @@ function RightComp({ openMenu, chatWith, userId, updateMessageState, updateLocal
             );
           })
             :
-            <h1>No chats</h1>
+            <h5 className='noChat-test' >Send <span>Hi !</span></h5>
         }
 
       </div>

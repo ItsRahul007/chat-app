@@ -7,14 +7,15 @@ import CropImage from '../micro-compos/CropImage';
 
 function Setting() {
   const [user, setUser] = useState({ name: '', about: '', email: '', avatar: '', image: '' });
-  const { name, about, email, avatar, image } = user;
+  const { name, about, avatar, image } = user;
   const [display, setDisplay] = useState("none");
 
   const dispatch = useDispatch();
   const userData = useSelector(state => state.user.userData);
 
   useEffect(() => {
-    setUser(userData.data)
+    setUser(userData.data);
+    console.log(userData.data)
   }, [userData.data]);
 
   function onUserChange(e) {
@@ -71,7 +72,7 @@ function Setting() {
       <CropImage display={display} setDisplay={setDisplay} />
       <span className='collap-compo'>
         <ul className='collaps'>
-          <Collaps name={name} about={about} email={email} avatar={avatar} image={image} onUserChange={onUserChange} setUser={setUser} user={user} dispatch={dispatch} setDisplay={setDisplay} />
+          <Collaps onUserChange={onUserChange} setUser={setUser} user={user} dispatch={dispatch} setDisplay={setDisplay} />
         </ul>
       </span>
       <button className='setting-btn' onClick={updateUser}>Save Changes</button>

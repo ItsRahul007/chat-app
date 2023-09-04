@@ -49,7 +49,7 @@ function Profile({ chatWith }) {
         {
           userData.data &&
           <div className='user-profile'>
-            <span className='profile-img chat-avatar' style={{ background: chatWithProfile.avatar }}>
+            <span className='profile-img chat-avatar' style={{ background: chatWithProfile.avatar, fontSize: "41px" }}>
               {chatWithProfile.image ?
                 <PhotoView src={`http://localhost:4000/images/` + chatWithProfile.image} >
                   <img src={`http://localhost:4000/images/` + chatWithProfile.image} alt='' />
