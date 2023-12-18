@@ -5,7 +5,7 @@ const { body, validationResult } = require('express-validator');
 const bcrypt = require("bcryptjs");
 const fetchUser = require("../middleware/fetchUser");
 var jwt = require('jsonwebtoken');
-require("dotenv").config();
+require("dotenv").config({ path: `.env.local`, override: true });
 const JWT_SEC = process.env.JWT_SEC;
 const pickColor = require('./avatarColor');
 

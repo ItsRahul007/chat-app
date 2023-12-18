@@ -1,5 +1,5 @@
 var jwt = require('jsonwebtoken');
-require("dotenv").config();
+require("dotenv").config({ path: `.env.local`, override: true });
 const JWT_SEC = process.env.JWT_SEC;
 
 const fetchUser = (req, res, next) => {
